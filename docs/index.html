@@ -796,14 +796,35 @@
   <div class="biome-scroll-track" id="biome-scroll-track">
     <div class="biome-sticky">
 
-      <!-- Background layers — one per biome -->
-      <img class="biome-bg-layer active" id="biome-bg-0" src="assets/screenshots/ancient-canopy.jpg" alt="">
-      <img class="biome-bg-layer"        id="biome-bg-1" src="assets/screenshots/ancient-canopy.jpg" alt="">
-      <img class="biome-bg-layer"        id="biome-bg-2" src="assets/screenshots/frosted-peaks.jpg" alt="">
-      <img class="biome-bg-layer"        id="biome-bg-3" src="assets/screenshots/coral-skyland-aerial.jpg" alt="">
-      <img class="biome-bg-layer"        id="biome-bg-4" src="assets/screenshots/volcanic-abyss.jpg" alt="">
-      <img class="biome-bg-layer"        id="biome-bg-5" src="assets/screenshots/rift-lord.jpg" alt="">
-      <img class="biome-bg-layer"        id="biome-bg-6" src="assets/screenshots/sky-ruins.jpg" alt="">
+      <!-- Background layers — poster = fallback image while video loads / if video missing -->
+      <video class="biome-bg-layer active" id="biome-bg-0" muted playsinline preload="auto"
+             poster="assets/screenshots/ancient-canopy.jpg">
+        <source src="assets/video/ancient-canopy.mp4" type="video/mp4">
+      </video>
+      <video class="biome-bg-layer" id="biome-bg-1" muted playsinline preload="none"
+             poster="assets/screenshots/ancient-canopy.jpg">
+        <source src="assets/video/wildspire-waste.mp4" type="video/mp4">
+      </video>
+      <video class="biome-bg-layer" id="biome-bg-2" muted playsinline preload="none"
+             poster="assets/screenshots/frosted-peaks.jpg">
+        <source src="assets/video/frosted-peaks.mp4" type="video/mp4">
+      </video>
+      <video class="biome-bg-layer" id="biome-bg-3" muted playsinline preload="none"
+             poster="assets/screenshots/coral-skyland-aerial.jpg">
+        <source src="assets/video/coral-skyland.mp4" type="video/mp4">
+      </video>
+      <video class="biome-bg-layer" id="biome-bg-4" muted playsinline preload="none"
+             poster="assets/screenshots/volcanic-abyss.jpg">
+        <source src="assets/video/volcanic-abyss.mp4" type="video/mp4">
+      </video>
+      <video class="biome-bg-layer" id="biome-bg-5" muted playsinline preload="none"
+             poster="assets/screenshots/rift-lord.jpg">
+        <source src="assets/video/rotten-hollow.mp4" type="video/mp4">
+      </video>
+      <video class="biome-bg-layer" id="biome-bg-6" muted playsinline preload="none"
+             poster="assets/screenshots/sky-ruins.jpg">
+        <source src="assets/video/sky-ruins.mp4" type="video/mp4">
+      </video>
 
       <div class="biome-overlay-gradient"></div>
 
@@ -1087,11 +1108,25 @@ const biomeName   = document.getElementById('biome-name');
 const biomeDesc   = document.getElementById('biome-desc');
 const biomeBoss   = document.getElementById('biome-boss');
 
-let currentBiome  = 0;
+let currentBiome    = 0;
+const preloadedVids = new Set([0]); /* track which videos have been told to preload */
+
+function preloadAdjacentVideos(idx) {
+  [idx - 1, idx, idx + 1].forEach(i => {
+    if (i >= 0 && i < bgLayers.length && !preloadedVids.has(i)) {
+      const el = bgLayers[i];
+      if (el && el.tagName === 'VIDEO') {
+        el.preload = 'auto';
+        el.load();
+        preloadedVids.add(i);
+      }
+    }
+  });
+}
 
 function updateBiomeTelling() {
-  const rect    = track.getBoundingClientRect();
-  const navH    = 56;
+  const rect     = track.getBoundingClientRect();
+  const navH     = 56;
   const scrolled = Math.max(0, -(rect.top - navH));
   const total    = track.offsetHeight - (window.innerHeight - navH);
   const progress = Math.min(scrolled / total, 1);
@@ -1100,17 +1135,31 @@ function updateBiomeTelling() {
   /* progress bar fill */
   fillBar.style.width = (progress * 100) + '%';
 
-  /* subtle parallax within current biome */
-  const localP  = (progress * biomes.length) % 1;
+  /* local progress within the current biome (0 → 1) */
+  const localP = (progress * biomes.length) % 1;
+
+  /* parallax drift + VIDEO SCRUBBING on the active layer */
   const drift   = (localP - 0.5) * 40;
-  const activeL = document.querySelector('.biome-bg-layer.active');
-  if (activeL) activeL.style.transform = `scale(1.08) translateY(${drift}px)`;
+  const activeL = bgLayers[idx];
+  if (activeL) {
+    activeL.style.transform = `scale(1.08) translateY(${drift}px)`;
+
+    if (activeL.tagName === 'VIDEO') {
+      const d = activeL.duration;
+      if (activeL.readyState >= 2 && d && isFinite(d)) {
+        activeL.currentTime = localP * d;
+      }
+    }
+  }
 
   if (idx === currentBiome) return;
   currentBiome = idx;
 
-  /* swap background layers */
+  /* swap visible layer */
   bgLayers.forEach((l, i) => l.classList.toggle('active', i === idx));
+
+  /* start loading the next/prev video before the user gets there */
+  preloadAdjacentVideos(idx);
 
   /* update dots */
   dots.forEach((d, i) => d.classList.toggle('active', i === idx));
