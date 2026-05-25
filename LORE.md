@@ -100,11 +100,13 @@ The Guild's primary frontier outpost. Built into the cliffs at the convergence p
 
 Veilwatch has stood for one hundred and forty years. It has nearly fallen seven times.
 
-The Guild Hall has a saying carved above its gate in Old Aethori script:
+The central Hall has a saying carved above its gate in Old Aethori script:
 
 > *"The monster you do not understand is the one that kills you."*
 
-### Guild Ranks
+Veilwatch is not one guild. It is a **town of guilds** — six active hunting factions with their own halls, their own boards, their own aesthetics and philosophies, all operating under the shared Guild rank system. You choose one when you arrive. They all respect each other, mostly. Competition is fierce, friendly, and very loud.
+
+### Guild Ranks (shared across all factions)
 
 | Rank | Access | Status |
 |---|---|---|
@@ -116,15 +118,128 @@ The Guild Hall has a saying carved above its gate in Old Aethori script:
 
 ---
 
-## The Player — The Rift Shard Hunter
+## The Six Guilds (+ One Secret)
 
-You arrived at Veilwatch with no rank, a worn weapon, and something the Guild's Elder Scholar noticed immediately:
+Every hunter in Veilwatch belongs to a guild. Rank is shared — Guild rank gates biome access regardless of faction. What guilds change is *how* you hunt, *what* you craft, and *who* your people are.
 
-A **Rift Shard** — a sliver of crystallized Void energy — embedded in your left palm, sealed under scar tissue. You do not remember how it got there. You were told not to ask. You asked anyway.
+You choose once. Your room is in your guild's hall. Your name goes on their board.
 
-The Elder Scholar has never seen one this size embedded in a living person. Rift Shards exist — there are perhaps a dozen documented in the world — but they are kept in sealed vaults, studied from a distance, never touched with bare hands. Prolonged contact is supposed to be fatal.
+---
 
-You are inconveniently alive.
+### The Veilwatch Wardens
+
+*"Hold the line. Seal the Rift. Come home."*
+
+The oldest faction and the closest to the original Guild mission. The Wardens run the Rift monitoring stations, maintain the largest section of the Field Codex, and are the first called when an Elder moves unexpectedly. They are not the most exciting guild to join. They are the most reliable.
+
+The Wardens' hall is the largest in Veilwatch — stone walls covered in maps, expedition logs, and the names of hunters who didn't come back. The Warden leader, **Commander Aldis**, is a G4 Warden who has been at this post for twenty-two years and has the demeanor of someone who has seen everything and is still here because someone has to be.
+
+**Stat bonus:** +1 faint allowed per quest (4 total), Rift energy detection radius +60%
+**Signature mechanic:** *Rift Pulse* — activate to reveal all monster positions within a zone radius. 90-second cooldown.
+**Exclusive gear:** Warden Plate — heavy defensive armor, strong on `guard_up` and `recovery_speed` skills
+**Community feel:** Quiet celebration when biomes open. Shared relief more than excitement. They know what it cost.
+
+---
+
+### The Crimson Claw
+
+*"First kill. Best time. Loudest roar."*
+
+The Crimson Claw keeps a scoreboard. Not an official one — just a chalkboard near the bar that someone updates after every hunt with kill times, faint counts, and damage records. It is aggressively unofficial. It is always accurate.
+
+They are not malicious competitors. When a Crimson Claw hunter clears a new monster first, they buy drinks for whoever came second. The rivalry is real, the celebration is louder. Their hall smells like smoke, meat, and adrenaline. The leader, **Karas**, beat the standing kill-time record last season and has been waiting since for someone to beat hers.
+
+**Stat bonus:** +12% attack speed, +8% critical hit chance
+**Signature mechanic:** *Style Bonus* — landing 3 hits in a row without taking damage triggers a combo multiplier. Taking damage resets it. The multiplier caps at 1.4×.
+**Exclusive gear:** Crimson Plate — light offensive armor, strong on `attack_boost` and `weakness_exploit` skills. Red-tinted colorway.
+**Community feel:** Explosively excited when a new biome opens. Immediate race to be first. Will absolutely narrate their hunt to anyone nearby afterward.
+
+---
+
+### The Ironveil Crafters
+
+*"The weapon remembers every monster that made it."*
+
+The Crafters do not consider themselves hunters. They are **makers** who hunt because the best materials come from the source. Their hall is a workshop first — the bar is in the corner, next to the forge, and you can hear hammering at any hour.
+
+They are the most knowledgeable guild on crafting combinations. They share discoveries openly within the guild, maintain a wall of partial recipes, and argue at length about material quality. The leader, **Master Doram** *(yes, that Doram — he used to run the main Blacksmith before handing it off and starting his own hall)*, believes the craft outlasts the hunter and acts accordingly.
+
+**Stat bonus:** Crafting partial-success rate +30%, fine/perfect material drop rate +10%
+**Signature mechanic:** *Guild Blueprint* — Ironveil members can submit discovered recipes to a shared guild board. Other Ironveil hunters can copy one shared recipe per day as a partial hint.
+**Exclusive gear:** Ironveil Forge Suit — utility armor, strong on `elemental_attack` and `constitution` skills. Includes unique tool back-pieces.
+**Community feel:** Very excited about new biomes because new monsters = new materials. Immediately theoretical about what can be crafted from them.
+
+---
+
+### The Skyborn
+
+*"The sky is where we come from. We are going back."*
+
+The Skyborn are Aethori descendants — not all of them, but enough that their hall is decorated with Sky Kingdom artifacts, Aethori script on the walls, and a founder's portrait that is clearly not human in scale. They believe aerial combat is humanity's birthright, stolen by the Sundering. They are working to take it back.
+
+Their hall sits on the highest point of Veilwatch — a platform extending out over the cliff face. On clear days you can see three biomes from it. The leader, **Elder Vyn**, is old enough to have met someone who knew someone who was alive during the Sundering. She does not discuss it.
+
+**Stat bonus:** Aerial damage +20%, back-piece ability cooldown -40%
+**Signature mechanic:** *Sky Tether* — while in an updraft zone, Skyborn hunters can anchor position and remain airborne indefinitely (no updraft timer).
+**Exclusive gear:** Skyborn Silk Armor — light aerial armor, maximizes `airborne` and `evasion_window` skills. Includes unique Aethori-tech back-pieces not available elsewhere.
+**Community feel:** Opening Coral Skyland or Elder Sky Ruins is a spiritual event for the Skyborn. They hold a ceremony. It's sincere.
+
+---
+
+### The Hollowroot Lodge
+
+*"Know the animal. Know the land. Then, if you must, know the fight."*
+
+The Lodge came to Veilwatch from the Ancient Canopy — a guild of naturalists, trackers, and field researchers who believe that understanding Veilborn behavior is more valuable than killing them efficiently. They kill efficiently anyway. They just know why the monster did what it did before it died.
+
+Their hall is the smallest in Veilwatch but the most lived-in — herbs growing in the windows, field journals stacked everywhere, a map of known Veilkin migration routes taking up an entire wall. The leader, **Wren**, has spent more time in the field than anyone in Veilwatch and has the mud on her boots to prove it.
+
+**Stat bonus:** Monster aggro range -30%, Codex pattern info unlocks 2 hunts earlier, loot quality tier +1 on common drops
+**Signature mechanic:** *Track and Mark* — spend 30 seconds near a monster (without being detected) to flag its next 3 attacks with visible warning indicators. Must be redone if detected.
+**Exclusive gear:** Lodge Weave Armor — medium stamina-focused armor, strong on `constitution` and `recovery_speed`. Includes unique consumable back-packs with larger capacity.
+**Community feel:** Excited about new biomes from a research angle. Immediately want to document the new ecosystem before the Crimson Claw hunts everything.
+
+---
+
+### The Ember Pact
+
+*"We burned. We healed. We're still here."*
+
+The Ember Pact grew up around the Volcanic Abyss outpost before Veilwatch existed. They are the oldest unofficial guild, formed by hunters who simply refused to leave a post everyone else had abandoned. The burns and heat-scars they carry are worn openly — they are not damage, they are proof.
+
+The Pact's hall in Veilwatch is warm. Always. The forge runs hotter than Doram's, by Pact tradition. The leader, **Ignas**, lost three fingers to a Ignadrake ambush at G1 and considered it a reasonable cost. He is not reckless — he is someone who has calculated every risk and accepted the math.
+
+**Stat bonus:** Status resistance +50%, heat zone damage immunity, +15% damage on the attack immediately following a hit received
+**Signature mechanic:** *Ember Stance* — upon taking a hit, enter a 1.5-second stance where the next attack deals an additional 40% damage. Does not stack. Resets on use.
+**Exclusive gear:** Ember Pact Plate — heavy counter-focused armor, strong on `guard_up` and `attack_boost`. Includes volcanic-material weapons with innate fire element.
+**Community feel:** Celebrating new biomes by immediately planning the hardest possible hunt. Competitive in the quieter, more dangerous way — they don't brag, they just do it.
+
+---
+
+### The Voidwalkers *(secret — G3 unlock)*
+
+*"The Rift is a door. We learned to knock."*
+
+Nobody in Veilwatch will tell you about the Voidwalkers. Not because they're forbidden — because most people don't know they exist. Their hall is not on the main street. There is no sign. You find it after your third faint on a G3 hunt, when a quiet hunter you've seen in the field twice offers to buy you a drink and asks if you've noticed anything strange about how the Rift energy moves near the Rotten Hollow entrance.
+
+The Voidwalkers are former hunters who got close to an Elder or a Rift tear and came back with a different understanding of how Rift energy works. Not corrupted — not Cult members. Just changed. Their leader, **Sable**, doesn't discuss their backstory and doesn't need to.
+
+Available only after reaching G3 rank. Switching to the Voidwalkers means leaving your previous guild — they require full commitment.
+
+**Stat bonus:** Rift-element damage +25%, i-frame duration +20%
+**Signature mechanic:** *Void Step* — a short-range blink through Rift space that bypasses physical space entirely. Passes through monster hitboxes. 14-second cooldown. Cannot be reduced.
+**Exclusive gear:** Voidwalker Shroud — medium armor built for Rift energy attunement, strong on `evasion_window` and `elemental_attack` (Rift type). Void-crystal craft materials only found near active Rifts.
+**Community feel:** Small, quiet, extremely competent. They notice things. They don't explain what they notice until you're ready to hear it.
+
+---
+
+## The Player
+
+You are a hunter. Not the hunter — *a* hunter. You arrived at Veilwatch because the frontier pays well and the work is honest and somewhere in the back of your mind you wanted to see what an Elder actually looks like up close.
+
+You carry a **Rift Shard** embedded in your left palm. It is strange and the Scholar finds it interesting. You are not the first person this has happened to — there are perhaps a dozen known Rift Shards in the world, and at least four people alive who carry one. What makes you different is not the Shard. What makes you different is what you do with the next few hundred hours.
+
+Your guild is your home. The hunters you meet are your people. The monsters you've faced are your story. None of this was written for you. You're writing it.
 
 ### What the Shard Does
 

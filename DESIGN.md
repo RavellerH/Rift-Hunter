@@ -506,18 +506,60 @@ Loot also varies by **kill condition**:
 
 ## Guild Hub — Veilwatch
 
-The living hub between hunts. Not just a menu — a place with character.
+Veilwatch is a town, not a menu. Six guild halls line the main street, each with its own personality, board, and bar. Shared infrastructure (Blacksmith, Chef Suni, Scholar Voss, Merchant Athe) sits in the central district. Players belong to one guild — their room is there, their name is on that board.
 
-### NPCs
+### Guild Selection
+
+Offered once at game start, after the intro hunt. Cannot be changed (one guild per playthrough). Each guild leader gives a brief pitch when you arrive. The choice is permanent and meaningful — guild NPCs remember you, their story arc unfolds around your presence.
+
+The Voidwalkers are not offered at start — they approach the player at G3.
+
+### Shared Veilwatch NPCs (all guilds use these)
 
 | NPC | Role | Dialogue Style |
 |---|---|---|
-| **Yela — Guild Receptionist** | Quest board, rank advancement, urgent dispatches | Warm, professional, quietly worried about the Cult activity |
-| **Doram — Master Blacksmith** | Weapon and armor crafting, shows what you can make now | Gruff, proud of his work, secretly terrified of Elders |
-| **Chef Suni** | Pre-hunt meals, grants timed buffs (attack, defense, stamina) | Enthusiastic, treats every meal like a ceremony |
-| **Elder Scholar Voss** | Monster Field Codex, lore, Rift Shard research | Ancient, calm, knows more than he says |
-| **Merchant Athe** | Buys excess materials, sells common components, trades | Cheerful opportunist, hints at Cult presence in passing |
-| **Ryn — Fellow Hunter (NPC)** | Optional companion AI, recruitable after G2 | Talks constantly in the field, surprisingly effective |
+| **Yela — Central Receptionist** | Guild rank advancement, urgent dispatches, cross-guild news | Warm, professional, knows everyone, quietly worried |
+| **Chef Suni** | Pre-hunt meals, timed buffs | Enthusiastic, every meal is a ceremony |
+| **Elder Scholar Voss** | Field Codex, lore, Rift research | Ancient, calm, knows more than he says |
+| **Merchant Athe** | Buys materials, sells components | Cheerful opportunist, hints at Cult activity |
+
+### Guild-Specific NPCs (3–4 per guild)
+
+Each guild has its own leader, a junior hunter (story companion), a crafting specialist, and one wildcard NPC. Relationships build through quests and conversation — high relationship unlocks personal quests, unique dialogue, and crafting hints.
+
+| Guild | Leader | Junior Hunter | Specialist |
+|-------|--------|--------------|-----------|
+| Veilwatch Wardens | Commander Aldis | Fen (cautious, thoughtful) | Sora (Codex researcher) |
+| Crimson Claw | Karas | Brix (competitive, loudly supportive) | Nem (trap and coating expert) |
+| Ironveil Crafters | Master Doram | Lira (obsessed with rare materials) | Cael (ancient weapon historian) |
+| Skyborn | Elder Vyn | Tae (half-Aethori descent, conflicted) | Ova (back-piece engineer) |
+| Hollowroot Lodge | Wren | Pip (youngest hunter, brilliant naturalist) | Holt (poison and herb specialist) |
+| Ember Pact | Ignas | Ryn (yes, that Ryn — she's Ember Pact) | Hessa (volcanic materials expert) |
+| Voidwalkers | Sable | — | Mira (Rift energy analyst, unsettling) |
+
+### Player Room & Home Decor
+
+Every hunter has a personal room in their guild hall. The room starts bare — a bed, a weapon rack, one window.
+
+Decorations are obtained through:
+- **Monster trophies** — automatically awarded after certain kills (Thornmane head mount, Verdanthos scale wall piece, etc.)
+- **Crafted furniture** — made from common biome materials at Doram's workshop
+- **Quest rewards** — guild leaders give unique decorations as relationship rewards
+- **Rank achievements** — a board updates automatically with your rank milestones
+
+Decorations are cosmetic only. The room is a record of your hunts — a visual autobiography. Other guild members comment on new additions when you return from a hunt.
+
+### Biome Unlock Events
+
+When a gatekeeper boss is defeated for the first time (opening a new biome), the whole guild reacts:
+- **Crimson Claw:** Immediate celebration. Someone starts a pool on who gets the first G2/G3 kill.
+- **Hollowroot Lodge:** Excited field team immediately deploys to catalogue the new biome.
+- **Skyborn:** If it's an aerial biome, they hold a ceremony. Vyn makes a speech.
+- **Ironveil Crafters:** Theoretical discussion about what the new monsters will drop.
+- **Ember Pact:** Quiet toasts. They've been here before. They're genuinely happy.
+- **Wardens:** The board updates. A new zone is logged. Someone pins a note about new Rift monitoring needs.
+
+These are ambient dialogue events, not cutscenes — the guild hall changes when you walk in after a major unlock.
 
 ### Meals (Pre-Hunt Buffs)
 
