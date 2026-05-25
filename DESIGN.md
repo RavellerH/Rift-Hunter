@@ -69,14 +69,58 @@ Each piece of gear has 1–2 skill slots. A skill activates the moment the gear 
 
 ### Gear Slots
 
-```
-Head armor    → 1 skill slot
-Chest armor   → 2 skill slots
-Arms armor    → 1 skill slot
-Legs armor    → 1 skill slot
-Charm         → 1 skill slot (crafted separately, cross-biome materials)
-```
-Total: 6 active skill slots per build. Mix-sets are valid and often optimal.
+| Slot | Type | Skill Slots | Extra Effect |
+|------|------|-------------|-------------|
+| **Helm** | Armor | 1 | — |
+| **Chest** | Armor | 2 | — |
+| **Arms** | Armor | 1 | — |
+| **Greaves** (legs/shoes) | Armor | 1 | — |
+| **Backpack** | Utility | 1 | Consumable capacity + loadout (see below) |
+| **Back-piece** | Mobility | 1 | Movement ability unlocked (see below) |
+| **Charm** | Accessory | 1 | Crafted separately, cross-biome materials |
+| **Weapon** | Weapon | 1 (passive only) | Moveset + weapon passive skill |
+
+**Total: 9 active skill slots per build.** Mix-sets across armor, backpack, and back-piece are valid and often optimal.
+
+Full set bonus: equipping all 4 **armor pieces** (Helm/Chest/Arms/Greaves) from the same monster grants +1 bonus skill slot. Does not apply to backpack, back-piece, or charm.
+
+### Backpack Slot
+
+The backpack determines two things simultaneously:
+
+**1. Consumable capacity and loadout**
+
+| Backpack Type | Consumable Slots | Max Per Type | Passive Skill |
+|--------------|-----------------|-------------|---------------|
+| Scout Pack | 3 types | 3 each | `swiftness` |
+| Medic Pack | 5 types | 5 each | `recovery_speed` |
+| Combat Pack | 3 types | 3 each | `attack_boost` |
+| Alchemist Pack | 4 types | 4 each | `elemental_attack` |
+| Ironhide Pack | 2 types | 2 each | `guard_up` |
+
+Consumables include: healing potions, stamina draughts, elemental coatings (for Bow), status antidotes, trap components, flash bombs, smoke bombs.
+
+**2. Passive skill** — stacks with armor skills using the same Lv1/Lv2/Lv3 system.
+
+Backpacks are crafted from utility materials (ores, hides, woven biome plants) — not monster boss parts. They upgrade on the same discovery-crafting system.
+
+### Back-piece Slot (Mobility Device)
+
+Any weapon can equip any back-piece. The back-piece grants one active movement ability, usable on a cooldown governed by the `Constitution` skill. It also contributes one passive skill slot.
+
+| Back-piece | Movement Ability | Passive Skill | Crafted From |
+|-----------|-----------------|---------------|-------------|
+| **Rift Glider** | Glide (fall slowly, steer horizontally) | `airborne` | Glacewing membrane + Rift crystal |
+| **Grapple Anchor** | Fire hook to monster — pull yourself to it | `weakness_exploit` | Thornmane thorns + iron chain |
+| **Rift Burst Pack** | Short vertical burst jump, then fall | `evasion_window` | Rift Shard fragment + ore |
+| **Sky Membrane** | Full slowfall + one horizontal air dash | `airborne` | Namielle-Keth wing cloth |
+| **Volcanic Thruster** | Ground dash burst (faster than dodge, no i-frames) | `constitution` | Ashmaul plate + ember ore |
+| **Shadow Step** | Short-range blink teleport (bypasses melee counter range) | `evasion_window` | Chaoskrel tendril + void crystal |
+| **Aethori Flight Harness** | Sustained flight for 8 seconds before cooldown | `airborne` | Aethori War-Wyvern parts |
+
+Back-pieces do **not** grant the aerial moveset of the Insect Glaive — they grant aerial access only. A Great Sword player with a Rift Glider can glide and perform aerial light/heavy, but not the Glaive's vault combo. Aerial specialists still benefit from Insect Glaive, but aerial access is no longer locked to it.
+
+Back-piece cooldown: 12 seconds base, reduced by `Constitution` skill level.
 
 ---
 
@@ -181,9 +225,80 @@ On **first encounter only**, a monster triggers its intro:
 
 ---
 
-## Combat System
+## Monster Pattern System
 
-### Camera — Dynamic Zoom
+### Design Principle
+
+Combat is a knowledge game, not a reaction game. Every monster has a fixed, learnable attack pattern. A player who understands the pattern can clear a fight with no faints. A player who goes in without knowledge will fail consistently — not because of bad luck, but because the pattern is punishing in predictable, avoidable ways.
+
+There is no randomness in monster move selection. Monsters choose attacks based on **state conditions**: distance to player, player's last action, monster HP, and internal cooldown timers. The same conditions always produce the same result. This means death is never unfair — it is always information.
+
+### Pattern Structure
+
+Each monster has:
+- **2–4 attacks**, each with a distinct wind-up tell
+- **1–2 counter-attack windows** (close range triggers) — see Combat System
+- **State transitions** that change available moves (enrage unlocks new attacks, doesn't replace old ones)
+- **Openings** — specific frames after certain attacks where the monster is fully vulnerable
+
+Example — Thornmane full pattern:
+
+```
+If player is CLOSE (< 70px) and monster just took a hit:
+  → Tail Sweep (purple flash wind-up, 24 frames)
+    → Opening: 18 frames after tail sweep if it misses
+
+If player is MID RANGE (70–200px):
+  → Charge Windup (crouch + orange flash, 33 frames)
+    → Charge lasts 0.55s
+    → Opening: 22 frames immediately after charge ends (regardless of hit)
+
+If player is FAR (> 200px) and monster is enraged:
+  → Thorn Launch (new enrage move — fires 3 projectile thorns, no melee wind-up)
+    → No melee counter window, but projectiles can be dodged through
+
+Idle conditions (no attack):
+  → If player outside aggro range: patrol
+  → If player just dodged through an attack: 1.2s reset before next attack
+```
+
+This means a skilled player learns: dodge the charge → punish immediately → back off before Tail Sweep triggers → repeat. The loop is clear, consistent, and satisfying to master.
+
+### Codex Pattern Learning
+
+The Field Codex entry for each monster fills in progressively based on hunt experience:
+
+| Milestone | Codex Info Unlocked |
+|-----------|-------------------|
+| First sighting | Name, biome, tier |
+| First hit landed | Weakpoint locations highlighted on diagram |
+| First death (or 1 completed hunt) | Attack names listed |
+| 3 hunts total | Wind-up descriptions ("orange flash on shoulders before charge") |
+| 5 hunts total | Timing notes ("18-frame opening after failed tail sweep") |
+| Part break achieved | That part's function in the pattern noted |
+| Elder Scholar Voss consulted | One free full-pattern hint per monster |
+
+The Codex does not hand the player the answers immediately — it rewards engagement. A player who dies repeatedly learns faster than one who avoids a monster entirely.
+
+### Environmental Tells
+
+Beyond wind-up animations, the environment communicates monster state:
+
+- **Sound**: Thornmane growls low before a charge. Velkhrath's exhale mist thickens before a stomp. Chaoskrel goes silent before a tentacle reach.
+- **Particles**: Dust rises under Thornmane's feet when charging. Ice crystals shed off Velkhrath during blizzard windup.
+- **Music**: Combat music tempo increases when monster enters a combo chain. Returns to base tempo during monster's reset window.
+
+Players who turn off music and watch carefully can read patterns faster. Players who fight with audio get the musical cues as a secondary layer.
+
+### Difficulty Philosophy
+
+**No stat wall** — a player at G1 gear can theoretically defeat a G3 monster if they understand the pattern perfectly. Gear makes it more forgiving, not more possible.
+
+**Death teaches** — the first encounter with any monster should result in at least one faint for most players. This is expected and intentional. The game is telling you: watch, learn, return.
+
+**Headlong yolo fails consistently** — monsters are tuned so that three consecutive random attacks, all connected, exhaust roughly 60–70% of base HP. A player who doesn't dodge will exhaust three faints in under two minutes. A player who dodges correctly can fight indefinitely.
+
+**No softlocks** — if a player is genuinely stuck on a monster, Ryn (companion NPC, G2) can be recruited. Ryn is a competent fighter who also draws some aggro. The fight becomes easier, but Ryn is never strong enough to carry it alone.
 
 The camera responds to the space between player and monster:
 

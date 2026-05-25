@@ -165,6 +165,99 @@ extends Resource
 @export var craft_materials: Dictionary  # { "material_id": quantity }
 ```
 
+### Resource Schema — `BackpackItem.tres`
+
+```gdscript
+class_name BackpackItem
+extends Resource
+
+@export var item_name: String
+@export var consumable_slot_count: int       # how many different consumable types
+@export var consumable_max_per_type: int     # stack limit per type
+@export var skill_slot: String               # one passive skill contributed
+@export var sprite: Texture2D
+@export var craft_materials: Dictionary
+```
+
+### Resource Schema — `BackPieceItem.tres`
+
+```gdscript
+class_name BackPieceItem
+extends Resource
+
+@export var item_name: String
+@export var ability_id: String           # matches ability in BackPieceAbility enum
+@export var ability_cooldown: float      # base seconds, reduced by constitution skill
+@export var skill_slot: String           # one passive skill contributed
+@export var sprite: Texture2D
+@export var craft_materials: Dictionary
+```
+
+### Back-piece Ability IDs (enum in Constants.gd)
+
+```gdscript
+enum BackPieceAbility {
+    RIFT_GLIDER,      # hold jump mid-air → glide, steer horizontally
+    GRAPPLE_ANCHOR,   # fire hook to nearest monster → reel in
+    RIFT_BURST,       # vertical burst jump, consumes stamina on use
+    SKY_MEMBRANE,     # slowfall + one horizontal air dash per airtime
+    VOLCANIC_THRUST,  # ground burst dash, no i-frames (different from dodge)
+    SHADOW_STEP,      # short blink teleport, bypasses counter range
+    AETHORI_HARNESS,  # sustained flight 8s, then full cooldown
+}
+```
+
+### GameState.gd — Equipment Fields (updated)
+
+```gdscript
+# Equipment (add to existing GameState)
+var equipped_weapon: WeaponData = null
+var equipped_helm: ArmorPiece = null
+var equipped_chest: ArmorPiece = null
+var equipped_arms: ArmorPiece = null
+var equipped_greaves: ArmorPiece = null
+var equipped_backpack: BackpackItem = null
+var equipped_back_piece: BackPieceItem = null
+var equipped_charm: ArmorPiece = null
+
+# Consumable loadout (populated from backpack capacity)
+var consumable_slots: Array[ConsumableSlot] = []
+```
+
+### EquipmentSystem.gd — Updated Skill Computation
+
+```gdscript
+func _recompute_skills() -> void:
+    skill_counts.clear()
+    var all_pieces = [
+        equipped_helm, equipped_chest, equipped_arms, equipped_greaves,
+        equipped_backpack, equipped_back_piece, equipped_charm
+    ]
+    for piece in all_pieces:
+        if piece == null: continue
+        var skills = piece.skill_slots if piece.has_method("get") else [piece.skill_slot]
+        for skill_id in skills:
+            skill_counts[skill_id] = skill_counts.get(skill_id, 0) + 1
+    # Weapon passive
+    if equipped_weapon:
+        skill_counts[equipped_weapon.passive_skill] = \
+            skill_counts.get(equipped_weapon.passive_skill, 0) + 1
+    # Full armor set bonus
+    if _is_full_armor_set():
+        var bonus_skill := _full_set_bonus_skill()
+        skill_counts[bonus_skill] = skill_counts.get(bonus_skill, 0) + 1
+    active_skills = {}
+    for skill_id in skill_counts:
+        active_skills[skill_id] = min(skill_counts[skill_id], 3)
+    Events.skills_updated.emit(active_skills)
+
+func _is_full_armor_set() -> bool:
+    var pieces = [equipped_helm, equipped_chest, equipped_arms, equipped_greaves]
+    if pieces.any(func(p): return p == null): return false
+    var monster_id = equipped_helm.source_monster
+    return pieces.all(func(p): return p.source_monster == monster_id)
+```
+
 ### Skill Activation Logic
 
 ```
@@ -200,6 +293,75 @@ EquipmentSystem._recompute_skills():
 ---
 
 ## 7. Monster System
+
+### Monster Pattern Data — `MonsterAttack` Resource
+
+```gdscript
+class_name MonsterAttack
+extends Resource
+
+@export var attack_id: String
+@export var damage: int
+@export var windup_frames: int           # frames before hitbox activates
+@export var active_frames: int           # frames hitbox is live
+@export var recovery_frames: int         # frames monster is vulnerable after
+@export var counter_range: float         # 0 = no counter; >0 = triggers if player within px
+@export var windup_vfx_color: Color      # flash color during windup (player learns this)
+@export var windup_sound: String         # sound cue ID
+@export var is_enrage_only: bool = false # only available post-enrage
+```
+
+### Monster State Conditions (select_attack logic)
+
+```gdscript
+# MonsterAI.gd — deterministic attack selection
+# Same conditions always → same attack. No randomness.
+func _select_attack() -> String:
+    var dist := _dist_to_player()
+    var last_player_action := GameState.player_last_action  # "dodge", "attack", "idle"
+
+    # Priority order: check most specific condition first
+    if dist < data.counter_range_close and last_player_action == "attack":
+        return "counter_attack"    # always triggers if conditions met
+
+    if dist < 80.0:
+        return "close_attack"      # e.g. tail sweep
+
+    if dist < 200.0:
+        return "mid_attack"        # e.g. charge
+
+    if is_enraged and dist >= 200.0:
+        return "ranged_attack"     # e.g. thorn launch (enrage only)
+
+    return ""  # no attack, reset timer
+```
+
+### Codex Pattern Tracking
+
+```gdscript
+# In GameState.gd
+var codex_entries: Dictionary = {}
+# { "thornmane": { "hunts": 3, "deaths": 1, "parts_broken": ["tail"], "unlocked_info": [...] } }
+
+# In GuildSystem.gd
+func _update_codex(monster_id: String, event: String) -> void:
+    var entry = codex_entries.get(monster_id, { "hunts": 0, "deaths": 0, "parts_broken": [] })
+    match event:
+        "hunt_complete": entry.hunts += 1
+        "player_died":   entry.deaths += 1
+        "part_broken":   entry.parts_broken.append(event_data)
+    codex_entries[monster_id] = entry
+    Events.codex_updated.emit(monster_id)
+
+func get_codex_unlock_level(monster_id: String) -> int:
+    var e = codex_entries.get(monster_id, {})
+    var hunts  = e.get("hunts", 0)
+    var deaths = e.get("deaths", 0)
+    if hunts >= 5:  return 5   # full pattern notes
+    if hunts >= 3:  return 4   # timing notes
+    if hunts >= 1 or deaths >= 1: return 3  # attack names
+    return 1   # name + biome only
+```
 
 ### Monster Data Resource — `MonsterData.tres`
 
