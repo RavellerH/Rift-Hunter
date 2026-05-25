@@ -166,7 +166,7 @@ Deep volcanic caldera, lava rivers, ash clouds, superheated air pockets. Lava zo
 - **Unique mechanic**: Heat zones — armor with fire resistance reduces damage; fire resistance skill is near-required
 - **Veilkin**: Ash Beetles, Ember Hounds
 - **Riftborn (mid-boss)**: Ignadrake — fire-breathing drake, lava surf attack
-- **Elder (boss)**: Ashmaul — massive Elder grown enormous by Cult feeding, lava pools, tremor slams (story-relevant)
+- **Elder (boss)**: Ashmaul — the largest documented living Veilborn, sustained by Reclamation feeding, lava pools, tremor slams (story-critical)
 
 ### 6. Rotten Hollow (G3)
 Deep underground decay zone, bioluminescent fungi, poison swamps, narrow tunnels. Permanent low light. Poison status is constant environmental threat.
@@ -174,10 +174,10 @@ Deep underground decay zone, bioluminescent fungi, poison swamps, narrow tunnels
 - **Unique mechanic**: Darkness — areas of true dark; bioluminescent materials light the way, some monsters use darkness to ambush
 - **Veilkin**: Rot Grubs, Hollow Crawlers
 - **Riftborn (mid-boss)**: Venomfang — spider-type, webs block paths, poison spit
-- **Elder (boss)**: Chaoskrel — long-dormant deep Elder, multiple phases, tentacle reach, Rift energy corruption
+- **Elder (boss)**: Chaoskrel — long-dormant deep Elder, multiple phases, never before documented (first-contact fight)
 
 ### 7. Elder Sky Ruins (G4)
-The ruins of the Aethori Sky Kingdom, still floating above the clouds. Permanent aerial zone — no ground floor. Ancient mechanisms still partially function. Most dangerous biome.
+The ruins of the Aethori Sky Kingdom, still floating above the clouds. Permanent aerial zone — no ground floor. Ancient mechanisms still partially function. Crystal spires humming after three centuries. The most extraordinary biome.
 
 - **Unique mechanic**: Partial gravity — lower gravity throughout, all characters move with more arc. Some platforms drift.
 - **Veilkin**: Ruin Sprites, Sky Phantoms
@@ -673,7 +673,7 @@ G2 — Frosted Peaks + Coral Skyland
   → Rank up to G3
 
 G3 — Volcanic Abyss + Rotten Hollow
-  → Story accelerates, Cult becomes visible threat
+  → Story accelerates, the Reclamation's plan comes into focus
   → Rank up to G4
 
 G4 — Elder Sky Ruins

@@ -59,22 +59,22 @@ They are not monsters in the way the word is meant. They are the **apex of a wor
 | **Lesser** | Veilkin | Small, territorial, not aggressive unless threatened. Ecosystem anchors — their presence stabilizes Rift energy in a zone. |
 | **Marked** | Riftborn | Mid-sized, intelligent enough to remember specific hunters. Will alter patrol routes after an encounter. |
 | **Elder** | Veilborn Elder | Ancient and vast. Partially merged with the Rift — their presence warps local reality. Some have lived longer than recorded civilization. |
-| **Sovereign** | Rift Lord | So old they *are* the Rift. Killing one tears a permanent scar in physical reality. Cannot be destroyed — only sealed. |
+| **Sovereign** | Rift Lord | So old they *are* the Rift. Documented twice in recorded history. The Guild's protocol is observation only — they are guided, never fought directly. |
 
 ### The Crucial Truth
 
-Killing a Veilborn Elder releases Rift energy. A **Surge**. Surges tear open new Rifts, letting more Veilborn through.
+Understanding a Veilborn Elder is harder than fighting one — and worth far more.
 
 The monsters are not the problem. The Rifts are the problem. The monsters are what live near them.
 
-The Guild learned this the hard way. The first generation of hunters killed every Elder they could find and nearly ended the world in the process. The Rift Surge of Year 47 swallowed an entire coastal province. No one hunts Elders for sport anymore.
+Early hunters who went after Elders without understanding them found out quickly that it made things considerably worse for everyone. The Guild's founding principle — observe, document, understand, then act — came directly from those early lessons. Elders are not hunted for sport. They are studied, mapped, and engaged only when necessary.
 
 ### Veilborn Behavior
 
 - Veilkin follow migratory patterns tied to Rift energy flows — they are drawn to unstable areas
 - Riftborn are territorial but not expansionist — they fight to hold ground, not to take it
 - Elders do not attack unless their core territory is breached or they are disturbed from a dormant state
-- Rift Lords do not move. They have not moved in recorded history. Finding one awake means something has gone catastrophically wrong.
+- Rift Lords have not moved in recorded history. Finding one awake is an event the Field Codex has exactly two entries for.
 
 ---
 
@@ -112,7 +112,7 @@ Six guild halls ring the main street, each with its own board, its own bar, and 
 | G2 — Scout | Frosted Peaks, Coral Skyland | Proven hunter |
 | G3 — Veteran | Volcanic Abyss, Rotten Hollow | Trusted field agent |
 | G4 — Warden | Elder Sky Ruins | Senior hunter, rare |
-| Elder Rank | All zones + Sovereign protocol | Fewer than twenty alive |
+| Elder Rank | All zones + Sovereign protocol | Rare and deeply respected |
 
 ---
 
@@ -130,12 +130,12 @@ You choose once. Your room is in your guild's hall. Your name goes on their boar
 
 The oldest faction and the closest to the original Guild mission. The Wardens run the Rift monitoring stations, maintain the largest section of the Field Codex, and are the first called when an Elder moves unexpectedly. They are not the most exciting guild to join. They are the most reliable.
 
-The Wardens' hall is the largest in Veilwatch — stone walls covered in maps, expedition logs, and the names of hunters who didn't come back. The Warden leader, **Commander Aldis**, is a G4 Warden who has been at this post for twenty-two years and has the demeanor of someone who has seen everything and is still here because someone has to be.
+The Wardens' hall is the largest in Veilwatch — stone walls covered in maps, expedition logs, and every Rift seal and biome discovery made in the last century. The Warden leader, **Commander Aldis**, is a G4 Warden who has been at this post for twenty-two years and has the steady confidence of someone who has seen everything and finds that mostly useful.
 
 **Stat bonus:** +1 faint allowed per quest (4 total), Rift energy detection radius +60%
 **Signature mechanic:** *Rift Pulse* — activate to reveal all monster positions within a zone radius. 90-second cooldown.
 **Exclusive gear:** Warden Plate — heavy defensive armor, strong on `guard_up` and `recovery_speed` skills
-**Community feel:** Quiet celebration when biomes open. Shared relief more than excitement. They know what it cost.
+**Community feel:** Measured celebration when biomes open. They log it, document it thoroughly, and then someone quietly opens a good bottle they've been saving for the occasion.
 
 ---
 
@@ -205,7 +205,7 @@ Their hall is the smallest in Veilwatch but the most lived-in — herbs growing 
 
 The Ember Pact grew up around the Volcanic Abyss outpost before Veilwatch existed. They are the oldest unofficial guild, formed by hunters who simply refused to leave a post everyone else had abandoned. The burns and heat-scars they carry are worn openly — they are not damage, they are proof.
 
-The Pact's hall in Veilwatch is warm. Always. The forge runs hotter than Doram's, by Pact tradition. The leader, **Ignas**, lost three fingers to a Ignadrake ambush at G1 and considered it a reasonable cost. He is not reckless — he is someone who has calculated every risk and accepted the math.
+The Pact's hall in Veilwatch is warm. Always. The forge runs hotter than Doram's, by Pact tradition. The leader, **Ignas**, has been hunting the Volcanic Abyss since his G1 days and has the scars to show for it — all of them worn openly, none of them discussed unless asked. He is not reckless. He has calculated every risk and accepted the math, which in his experience comes out fine if you're paying attention.
 
 **Stat bonus:** Status resistance +50%, heat zone damage immunity, +15% damage on the attack immediately following a hit received
 **Signature mechanic:** *Ember Stance* — upon taking a hit, enter a 1.5-second stance where the next attack deals an additional 40% damage. Does not stack. Resets on use.
@@ -220,7 +220,7 @@ The Pact's hall in Veilwatch is warm. Always. The forge runs hotter than Doram's
 
 Nobody in Veilwatch will tell you about the Voidwalkers. Not because they're forbidden — because most people don't know they exist. Their hall is not on the main street. There is no sign. You find it after your third faint on a G3 hunt, when a quiet hunter you've seen in the field twice offers to buy you a drink and asks if you've noticed anything strange about how the Rift energy moves near the Rotten Hollow entrance.
 
-The Voidwalkers are former hunters who got close to an Elder or a Rift tear and came back with a different understanding of how Rift energy works. Not corrupted — not Cult members. Just changed. Their leader, **Sable**, doesn't discuss their backstory and doesn't need to.
+The Voidwalkers are former hunters who got close to an Elder or a Rift tear and came back with a different understanding of how Rift energy works. Not corrupted. Not lost. Just changed — in a way that turns out to be useful. Their leader, **Sable**, doesn't discuss their backstory and doesn't need to.
 
 Available only after reaching G3 rank. Switching to the Voidwalkers means leaving your previous guild — they require full commitment.
 
