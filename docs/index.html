@@ -73,7 +73,20 @@
       transition: color 0.15s;
     }
 
-    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover,
+    .nav-links a.active-section { color: var(--white); }
+
+    /* ── SCROLL PROGRESS BAR ── */
+    .scroll-bar {
+      position: fixed;
+      top: 56px; left: 0;
+      height: 2px;
+      width: 0%;
+      background: #fff;
+      z-index: 300;
+      pointer-events: none;
+      transition: width 0.08s linear;
+    }
 
     /* ── HERO ── */
     .hero {
@@ -195,6 +208,43 @@
 
     @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
 
+    /* ── HERO ENTRANCE ── */
+    .hero-eyebrow,
+    .hero-title,
+    .hero-body,
+    .hero-btn,
+    .hero-scroll {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 1s cubic-bezier(0.22,1,0.36,1),
+                  transform 1s cubic-bezier(0.22,1,0.36,1);
+    }
+    .hero-eyebrow.in { opacity:1; transform:translateY(0); }
+    .hero-title.in   { opacity:1; transform:translateY(0); transition-delay:0.18s; }
+    .hero-body.in    { opacity:1; transform:translateY(0); transition-delay:0.34s; }
+    .hero-btn.in     { opacity:1; transform:translateY(0); transition-delay:0.5s; }
+    .hero-scroll.in  { opacity:1; transform:translateY(0); transition-delay:0.7s; }
+
+    /* ── SCROLL REVEALS ── */
+    [data-r] {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.85s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.85s cubic-bezier(0.22,1,0.36,1);
+    }
+    [data-r="left"]  { transform: translateX(-30px); }
+    [data-r="right"] { transform: translateX(30px); }
+    [data-r="scale"] { transform: scale(0.96) translateY(16px); }
+    [data-r].in { opacity:1; transform:none; }
+
+    [data-d="1"] { transition-delay:0.08s; }
+    [data-d="2"] { transition-delay:0.16s; }
+    [data-d="3"] { transition-delay:0.24s; }
+    [data-d="4"] { transition-delay:0.32s; }
+    [data-d="5"] { transition-delay:0.40s; }
+    [data-d="6"] { transition-delay:0.48s; }
+    [data-d="7"] { transition-delay:0.56s; }
+
     /* ── SIDEBAR LAYOUT ── */
     .sidebar-layout {
       display: flex;
@@ -280,10 +330,11 @@
       object-fit: cover;
       display: block;
       filter: brightness(0.5);
-      transition: filter 0.4s;
       position: absolute;
       inset: 0;
+      transition: opacity 0.45s ease, filter 0.4s;
     }
+    .biome-img.fading { opacity: 0; }
 
     .biome-info-overlay {
       position: absolute;
@@ -327,6 +378,10 @@
 
     .biome-boss strong { color: var(--gray); }
 
+    #biome-rank, #biome-name, #biome-desc, #biome-boss {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
     /* ── GALLERY ── */
     #screenshots {
       background: var(--black);
@@ -359,7 +414,10 @@
       position: relative;
       overflow: hidden;
       cursor: pointer;
+      clip-path: inset(100% 0 0 0);
+      transition: clip-path 0.9s cubic-bezier(0.22,1,0.36,1);
     }
+    .gallery-featured.in { clip-path: inset(0% 0 0 0); }
 
     .gallery-featured img {
       width: 100%;
@@ -390,7 +448,15 @@
       overflow: hidden;
       cursor: pointer;
       background: var(--mid);
+      clip-path: inset(100% 0 0 0);
+      transition: clip-path 0.9s cubic-bezier(0.22,1,0.36,1);
     }
+    .gallery-cell.in { clip-path: inset(0% 0 0 0); }
+
+    .gallery-cell[data-d="1"] { transition-delay:0.06s; }
+    .gallery-cell[data-d="2"] { transition-delay:0.13s; }
+    .gallery-cell[data-d="3"] { transition-delay:0.20s; }
+    .gallery-cell[data-d="4"] { transition-delay:0.27s; }
 
     .gallery-cell img {
       width: 100%;
@@ -657,7 +723,7 @@
 
     /* ── LIGHTBOX ── */
     .lightbox {
-      display: none;
+      display: flex;
       position: fixed;
       inset: 0;
       z-index: 999;
@@ -665,9 +731,14 @@
       align-items: center;
       justify-content: center;
       cursor: zoom-out;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease, visibility 0.3s;
     }
-
-    .lightbox.active { display: flex; }
+    .lightbox.active {
+      visibility: visible;
+      opacity: 1;
+    }
 
     .lightbox img {
       max-width: 92vw;
@@ -685,6 +756,15 @@
       color: var(--dim);
       cursor: pointer;
     }
+
+    /* ── SECTION DIVIDER LINES (animated width) ── */
+    .reveal-line {
+      height: 1px;
+      background: #222;
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal-line.in { width: 100%; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
@@ -723,6 +803,7 @@
     <li><a href="https://github.com/ravellerh/rift-hunter" target="_blank">GitHub ↗</a></li>
   </ul>
 </nav>
+<div class="scroll-bar" id="scroll-bar"></div>
 
 <!-- HERO -->
 <div class="hero">
@@ -777,7 +858,7 @@
 
 <!-- GALLERY -->
 <section id="screenshots">
-  <div class="gallery-header">
+  <div class="gallery-header" data-r>
     <h2>Concept Art</h2>
     <span class="gallery-count">10 images</span>
   </div>
@@ -788,45 +869,45 @@
   </div>
 
   <div class="gallery-grid gallery-grid-3" style="margin-top:2px">
-    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/ancient-canopy.jpg')">
+    <div class="gallery-cell" data-d="1" onclick="openLightbox('assets/screenshots/ancient-canopy.jpg')">
       <img src="assets/screenshots/ancient-canopy.jpg" alt="Ancient Canopy" loading="lazy">
       <div class="cell-label">Ancient Canopy</div>
     </div>
-    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/volcanic-abyss.jpg')">
+    <div class="gallery-cell" data-d="2" onclick="openLightbox('assets/screenshots/volcanic-abyss.jpg')">
       <img src="assets/screenshots/volcanic-abyss.jpg" alt="Volcanic Abyss" loading="lazy">
       <div class="cell-label">Volcanic Abyss</div>
     </div>
-    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/frosted-peaks.jpg')">
+    <div class="gallery-cell" data-d="3" onclick="openLightbox('assets/screenshots/frosted-peaks.jpg')">
       <img src="assets/screenshots/frosted-peaks.jpg" alt="Frosted Peaks" loading="lazy">
       <div class="cell-label">Frosted Peaks</div>
     </div>
   </div>
 
   <div class="gallery-grid gallery-grid-2" style="margin-top:2px">
-    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/coral-skyland-aerial.jpg')">
+    <div class="gallery-cell" data-d="1" onclick="openLightbox('assets/screenshots/coral-skyland-aerial.jpg')">
       <img src="assets/screenshots/coral-skyland-aerial.jpg" alt="Coral Skyland" loading="lazy">
       <div class="cell-label">Coral Skyland — Aerial Combat</div>
     </div>
-    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/sky-ruins.jpg')">
+    <div class="gallery-cell" data-d="2" onclick="openLightbox('assets/screenshots/sky-ruins.jpg')">
       <img src="assets/screenshots/sky-ruins.jpg" alt="Elder Sky Ruins" loading="lazy">
       <div class="cell-label">Elder Sky Ruins</div>
     </div>
   </div>
 
   <div class="gallery-grid gallery-grid-4" style="margin-top:2px">
-    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/forest-combat-crit.jpg')">
+    <div class="gallery-cell" data-d="1" onclick="openLightbox('assets/screenshots/forest-combat-crit.jpg')">
       <img src="assets/screenshots/forest-combat-crit.jpg" alt="Ground Combat" loading="lazy">
       <div class="cell-label">Ground Combat</div>
     </div>
-    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/aerial-combat-insectglaive.jpg')">
+    <div class="gallery-cell" data-d="2" onclick="openLightbox('assets/screenshots/aerial-combat-insectglaive.jpg')">
       <img src="assets/screenshots/aerial-combat-insectglaive.jpg" alt="Aerial Combat" loading="lazy">
       <div class="cell-label">Aerial Combat</div>
     </div>
-    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/combat-ui.jpg')">
+    <div class="gallery-cell" data-d="3" onclick="openLightbox('assets/screenshots/combat-ui.jpg')">
       <img src="assets/screenshots/combat-ui.jpg" alt="Combat UI" loading="lazy">
       <div class="cell-label">Combat System</div>
     </div>
-    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/guild-hall.jpg')">
+    <div class="gallery-cell" data-d="4" onclick="openLightbox('assets/screenshots/guild-hall.jpg')">
       <img src="assets/screenshots/guild-hall.jpg" alt="Veilwatch Guild Hall" loading="lazy">
       <div class="cell-label">Veilwatch Guild Hall</div>
     </div>
@@ -837,34 +918,34 @@
 <div id="story">
   <div class="story-sidebar">
     <p class="story-label">Game Info</p>
-    <div class="story-stat">
+    <div class="story-stat" data-r data-d="1">
       <div class="story-stat-key">Genre</div>
       <div class="story-stat-val">Solo Action RPG</div>
     </div>
-    <div class="story-stat">
+    <div class="story-stat" data-r data-d="2">
       <div class="story-stat-key">Platform</div>
       <div class="story-stat-val">Desktop</div>
     </div>
-    <div class="story-stat">
+    <div class="story-stat" data-r data-d="3">
       <div class="story-stat-key">Engine</div>
       <div class="story-stat-val">Godot 4</div>
     </div>
-    <div class="story-stat">
+    <div class="story-stat" data-r data-d="4">
       <div class="story-stat-key">Perspective</div>
       <div class="story-stat-val">2.5D Side-Scroll</div>
     </div>
-    <div class="story-stat">
+    <div class="story-stat" data-r data-d="5">
       <div class="story-stat-key">Biomes</div>
       <div class="story-stat-val">Seven</div>
     </div>
-    <div class="story-stat">
+    <div class="story-stat" data-r data-d="6">
       <div class="story-stat-key">Status</div>
       <div class="story-stat-val">Phase I — Prototype</div>
     </div>
   </div>
 
   <div class="story-main">
-    <div class="story-text-block">
+    <div class="story-text-block" data-r="left">
       <h2>The World of Aethara</h2>
       <blockquote>"The sky remembers what the earth has forgotten."</blockquote>
       <p class="story-text">Three hundred years ago, an ancient civilization called the Aethori pushed through the membrane between their world and the Primordial Void. The creatures that followed — the Veilborn — are not evil. They are simply primordial. Impossibly old, and violently territorial.</p>
@@ -872,7 +953,7 @@
       <br>
       <a class="btn btn-fill" href="https://github.com/ravellerh/rift-hunter/blob/main/LORE.md" target="_blank">Read the Full Lore ↗</a>
     </div>
-    <div class="story-img-block">
+    <div class="story-img-block" data-r="right" data-d="2">
       <img src="assets/screenshots/sky-ruins.jpg" alt="Elder Sky Ruins">
     </div>
   </div>
@@ -881,43 +962,43 @@
 <!-- STATUS -->
 <section id="status">
   <div class="status-inner">
-    <div class="status-header">
+    <div class="status-header" data-r>
       <span class="status-heading">Development Status</span>
       <span class="status-sub">Godot 4 · GDScript · All systems documented</span>
     </div>
 
     <div class="phases">
-      <div class="phase active">
+      <div class="phase active" data-r data-d="1">
         <div class="phase-num">Current</div>
         <div class="phase-name">Prototype</div>
       </div>
-      <div class="phase">
+      <div class="phase" data-r data-d="2">
         <div class="phase-num">Phase II</div>
         <div class="phase-name">Core Systems</div>
       </div>
-      <div class="phase">
+      <div class="phase" data-r data-d="3">
         <div class="phase-num">Phase III</div>
         <div class="phase-name">Biomes</div>
       </div>
-      <div class="phase">
+      <div class="phase" data-r data-d="4">
         <div class="phase-num">Phase IV</div>
         <div class="phase-name">Guild Hub</div>
       </div>
-      <div class="phase">
+      <div class="phase" data-r data-d="5">
         <div class="phase-num">Phase V</div>
         <div class="phase-name">Content</div>
       </div>
-      <div class="phase">
+      <div class="phase" data-r data-d="6">
         <div class="phase-num">Phase VI</div>
         <div class="phase-name">Polish</div>
       </div>
-      <div class="phase">
+      <div class="phase" data-r data-d="7">
         <div class="phase-num">Phase VII</div>
         <div class="phase-name">Launch</div>
       </div>
     </div>
 
-    <div class="status-btns">
+    <div class="status-btns" data-r data-d="2">
       <a class="btn btn-fill" href="https://github.com/ravellerh/rift-hunter" target="_blank">View on GitHub</a>
       <a class="btn btn-ghost" href="https://github.com/ravellerh/rift-hunter/blob/main/ROADMAP.md" target="_blank">Full Roadmap</a>
       <a class="btn btn-ghost" href="https://github.com/ravellerh/rift-hunter/blob/main/DESIGN.md" target="_blank">Game Design Doc</a>
@@ -943,69 +1024,133 @@
 </div>
 
 <script>
+  /* ── BIOME DATA ── */
   const biomes = [
     {
       img: 'assets/screenshots/ancient-canopy.jpg',
       rank: 'Rank G1 · Starting Region',
       name: 'Ancient Canopy',
       desc: 'Dense jungle canopy with towering ancient trees, shafts of golden light, and bioluminescent plants. Rain cycles reduce visibility. Vine traversal connects upper and lower zones.',
-      boss: 'Elder Boss: <strong>Verdanthos</strong> — Ancient serpentine Elder that controls the canopy itself'
+      boss: 'Elder Boss: <strong>Verdanthos</strong> &nbsp;—&nbsp; Ancient serpentine Elder that controls the canopy itself'
     },
     {
       img: 'assets/screenshots/ancient-canopy.jpg',
       rank: 'Rank G1 · Starting Region',
       name: 'Wildspire Waste',
       desc: 'Desert surface transitioning into toxic swamp lowlands. Flash floods reshape terrain every few minutes. High heat in the desert, miasma in the marsh.',
-      boss: 'Elder Boss: <strong>Diablorak</strong> — Massive horned Elder that burrows and charges from below'
+      boss: 'Elder Boss: <strong>Diablorak</strong> &nbsp;—&nbsp; Massive horned Elder that burrows and charges from below'
     },
     {
       img: 'assets/screenshots/frosted-peaks.jpg',
       rank: 'Rank G2',
       name: 'Frosted Peaks',
       desc: 'Blizzard-swept mountain range, ice caves, frozen waterfalls. Slick ground reduces traction. Blizzard cycles drop visibility to near zero.',
-      boss: 'Elder Boss: <strong>Velkhrath</strong> — Enormous mammoth Elder that generates blizzards and ice pillars'
+      boss: 'Elder Boss: <strong>Velkhrath</strong> &nbsp;—&nbsp; Enormous mammoth Elder that generates blizzards and ice pillars'
     },
     {
       img: 'assets/screenshots/coral-skyland-aerial.jpg',
       rank: 'Rank G2',
       name: 'Coral Skyland',
       desc: 'Floating coral islands connected by wind currents, deep ocean far below. Natural updraft columns launch players into aerial combat. Vibrant and unlike any other biome.',
-      boss: 'Elder Boss: <strong>Namielle-Keth</strong> — Bioluminescent flying Elder, floods platforms, arcs electricity'
+      boss: 'Elder Boss: <strong>Namielle-Keth</strong> &nbsp;—&nbsp; Bioluminescent flying Elder, floods platforms, arcs electricity'
     },
     {
       img: 'assets/screenshots/volcanic-abyss.jpg',
       rank: 'Rank G3',
       name: 'Volcanic Abyss',
       desc: 'Deep volcanic caldera, lava rivers, ash clouds, superheated air pockets. Lava zones deal damage over time. Ash reduces stamina regeneration.',
-      boss: 'Elder Boss: <strong>Ashmaul</strong> — Ancient Elder grown enormous by Cult feeding. Story-critical fight.'
+      boss: 'Elder Boss: <strong>Ashmaul</strong> &nbsp;—&nbsp; Ancient Elder grown enormous by Cult feeding. Story-critical fight.'
     },
     {
       img: 'assets/screenshots/rift-lord.jpg',
       rank: 'Rank G3',
       name: 'Rotten Hollow',
       desc: 'Deep underground decay zone, bioluminescent fungi, poison swamps, narrow tunnels. Permanent low light. True darkness zones require careful navigation.',
-      boss: 'Elder Boss: <strong>Chaoskrel</strong> — Long-dormant deep Elder with tentacle reach and Rift energy corruption'
+      boss: 'Elder Boss: <strong>Chaoskrel</strong> &nbsp;—&nbsp; Long-dormant deep Elder with tentacle reach and Rift energy corruption'
     },
     {
       img: 'assets/screenshots/sky-ruins.jpg',
       rank: 'Rank G4 · Final Region',
       name: 'Elder Sky Ruins',
       desc: 'The ruins of the Aethori Sky Kingdom, still floating above the clouds. Permanent aerial zone — no ground floor. Ancient mechanisms still partially function.',
-      boss: 'Final Boss: <strong>Serath + The Sovereign</strong> — Two-phase story climax. See LORE.md.'
+      boss: 'Final Boss: <strong>Serath + The Sovereign</strong> &nbsp;—&nbsp; Two-phase story climax. See LORE.md.'
     }
   ];
 
+  /* ── SCROLL PROGRESS BAR ── */
+  const scrollBar = document.getElementById('scroll-bar');
+  window.addEventListener('scroll', () => {
+    const scrolled = document.documentElement.scrollTop /
+      (document.documentElement.scrollHeight - document.documentElement.clientHeight);
+    scrollBar.style.width = (scrolled * 100) + '%';
+  }, { passive: true });
+
+  /* ── HERO ENTRANCE ── */
+  window.addEventListener('load', () => {
+    const heroEls = document.querySelectorAll(
+      '.hero-eyebrow, .hero-title, .hero-body, .hero-btn, .hero-scroll'
+    );
+    heroEls.forEach(el => el.classList.add('in'));
+  });
+
+  /* ── INTERSECTION OBSERVER — SCROLL REVEALS ── */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -48px 0px' });
+
+  document.querySelectorAll(
+    '[data-r], .gallery-featured, .gallery-cell, .reveal-line'
+  ).forEach(el => revealObserver.observe(el));
+
+  /* ── SCROLL SPY ── */
+  const spyTargets = document.querySelectorAll('#biomes, #screenshots, #story, #status');
+  const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navAnchors.forEach(a => a.classList.remove('active-section'));
+        const link = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+        if (link) link.classList.add('active-section');
+      }
+    });
+  }, { rootMargin: '-35% 0px -55% 0px' });
+
+  spyTargets.forEach(s => spyObserver.observe(s));
+
+  /* ── BIOME SWITCHER WITH CROSSFADE ── */
   function showBiome(index, el) {
     const b = biomes[index];
-    document.getElementById('biome-img').src = b.img;
-    document.getElementById('biome-rank').textContent = b.rank;
-    document.getElementById('biome-name').textContent = b.name;
-    document.getElementById('biome-desc').textContent = b.desc;
-    document.getElementById('biome-boss').innerHTML = 'Elder Boss: <strong>' + b.boss.split('<strong>')[1].split('</strong>')[0] + '</strong> — ' + b.boss.split('</strong>')[1].replace(' — ', '').trim();
+    const img   = document.getElementById('biome-img');
+    const rank  = document.getElementById('biome-rank');
+    const name  = document.getElementById('biome-name');
+    const desc  = document.getElementById('biome-desc');
+    const boss  = document.getElementById('biome-boss');
+    const texts = [rank, name, desc, boss];
+
+    img.classList.add('fading');
+    texts.forEach(t => { t.style.opacity = '0'; t.style.transform = 'translateY(6px)'; });
+
+    setTimeout(() => {
+      img.src = b.img;
+      img.classList.remove('fading');
+      rank.textContent = b.rank;
+      name.textContent = b.name;
+      desc.textContent = b.desc;
+      boss.innerHTML   = b.boss;
+      texts.forEach(t => { t.style.opacity = ''; t.style.transform = ''; });
+    }, 320);
+
     document.querySelectorAll('#biome-nav li').forEach(li => li.classList.remove('active'));
     el.closest('li').classList.add('active');
   }
 
+  /* ── LIGHTBOX ── */
   function openLightbox(src) {
     document.getElementById('lightbox-img').src = src;
     document.getElementById('lightbox').classList.add('active');
