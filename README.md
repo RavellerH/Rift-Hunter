@@ -4,6 +4,33 @@
 
 A desktop solo ARPG inspired by Monster Hunter — 2.5D side-scrolling exploration across seven distinct biomes, aerial combat, equipment-driven skills, crafting from monster parts, and a living Guild hub. No skill trees. No grinding for 20 hours. Just hunting, crafting, and getting stronger.
 
+**[View Promo Site](https://ravellerh.github.io/rift-hunter)**
+
+---
+
+## Screenshots
+
+<div align="center">
+  <img src="docs/assets/screenshots/rift-lord.jpg" width="49%" alt="Boss Encounter — Azkathor the Rift Lord">
+  <img src="docs/assets/screenshots/sky-ruins.jpg" width="49%" alt="Elder Sky Ruins">
+</div>
+<div align="center">
+  <img src="docs/assets/screenshots/ancient-canopy.jpg" width="49%" alt="Ancient Canopy Exploration">
+  <img src="docs/assets/screenshots/volcanic-abyss.jpg" width="49%" alt="Volcanic Abyss">
+</div>
+<div align="center">
+  <img src="docs/assets/screenshots/coral-skyland-aerial.jpg" width="49%" alt="Coral Skyland Aerial Combat">
+  <img src="docs/assets/screenshots/frosted-peaks.jpg" width="49%" alt="Frosted Peaks">
+</div>
+<div align="center">
+  <img src="docs/assets/screenshots/forest-combat-crit.jpg" width="32%" alt="Critical Strike Combat">
+  <img src="docs/assets/screenshots/aerial-combat-insectglaive.jpg" width="32%" alt="Insect Glaive Aerial">
+  <img src="docs/assets/screenshots/guild-hall.jpg" width="32%" alt="Veilwatch Guild Hall">
+</div>
+<div align="center">
+  <img src="docs/assets/screenshots/combat-ui.jpg" width="49%" alt="Full Combat HUD">
+</div>
+
 ---
 
 ## Concept

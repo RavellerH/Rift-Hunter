@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rift Hunter — Solo ARPG</title>
+  <meta name="description" content="A solo ARPG inspired by Monster Hunter. Hunt ancient Veilborn across seven biomes, craft powerful gear, and master aerial combat in the world of Aethara.">
+  <meta property="og:title" content="Rift Hunter">
+  <meta property="og:description" content="Hunt. Craft. Master the Rift.">
+  <meta property="og:image" content="assets/screenshots/rift-lord.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #07070f;
+      --bg2:      #0d0c1a;
+      --bg3:      #12101f;
+      --purple:   #8b5cf6;
+      --purple-l: #a78bfa;
+      --gold:     #f59e0b;
+      --gold-l:   #fcd34d;
+      --red:      #dc2626;
+      --text:     #e2d9f3;
+      --dim:      #7c6d8f;
+      --border:   rgba(139,92,246,0.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(7,7,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.7rem;
+      color: var(--purple-l);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--dim);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('assets/screenshots/rift-lord.jpg');
+      background-size: cover;
+      background-position: center 30%;
+      filter: brightness(0.35) saturate(1.2);
+      transform: scale(1.05);
+    }
+
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(7,7,15,0.3) 0%,
+        transparent 40%,
+        rgba(7,7,15,0.7) 80%,
+        var(--bg) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 1.5rem;
+      max-width: 800px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      color: #fff;
+      line-height: 1.3;
+      text-shadow: 0 0 60px rgba(139,92,246,0.6), 0 4px 20px rgba(0,0,0,0.8);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title span { color: var(--purple-l); }
+
+    .hero-tagline {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: rgba(226,217,243,0.7);
+      font-style: italic;
+      letter-spacing: 0.05em;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-badges {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.85rem;
+      border-radius: 2px;
+    }
+
+    .badge-engine { background: rgba(139,92,246,0.2); border: 1px solid var(--purple); color: var(--purple-l); }
+    .badge-status { background: rgba(245,158,11,0.15); border: 1px solid var(--gold); color: var(--gold-l); }
+    .badge-platform { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: var(--dim); }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--purple);
+      color: #fff;
+      padding: 0.85rem 2rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .hero-cta:hover { background: var(--purple-l); transform: translateY(-2px); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--dim);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 6rem 2rem; }
+
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.3em;
+      color: var(--purple);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-sub {
+      color: var(--dim);
+      font-size: 1rem;
+      max-width: 560px;
+      margin-bottom: 3rem;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ── SCREENSHOTS ── */
+    #screenshots { background: var(--bg2); }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+
+    .gallery-grid .wide {
+      grid-column: span 2;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      aspect-ratio: 16/9;
+      background: var(--bg3);
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease, filter 0.4s ease;
+      filter: brightness(0.92) saturate(1.05);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.04);
+      filter: brightness(1) saturate(1.15);
+    }
+
+    .gallery-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.6rem 0.85rem;
+      background: linear-gradient(transparent, rgba(7,7,15,0.9));
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--dim);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .gallery-item:hover .gallery-caption { opacity: 1; }
+
+    /* ── FEATURES ── */
+    #features { background: var(--bg); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.75rem;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+
+    .feature-card:hover {
+      border-color: var(--purple);
+      transform: translateY(-3px);
+    }
+
+    .feature-icon {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .feature-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold-l);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-desc {
+      color: var(--dim);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    /* ── BIOMES ── */
+    #biomes { background: var(--bg2); }
+
+    .biomes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .biome-card {
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      height: 140px;
+      background: var(--bg3);
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .biome-card-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.5) saturate(1.1);
+      transition: filter 0.3s, transform 0.3s;
+    }
+
+    .biome-card:hover .biome-card-img {
+      filter: brightness(0.65) saturate(1.3);
+      transform: scale(1.05);
+    }
+
+    .biome-info {
+      position: relative;
+      z-index: 2;
+      padding: 0.75rem 1rem;
+      width: 100%;
+      background: linear-gradient(transparent, rgba(7,7,15,0.95));
+    }
+
+    .biome-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .biome-rank {
+      font-size: 0.65rem;
+      color: var(--gold);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .biome-card-placeholder {
+      background: linear-gradient(135deg, var(--bg3), var(--bg));
+    }
+
+    /* ── STORY ── */
+    #story {
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #story::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .story-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .story-image {
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      aspect-ratio: 16/9;
+    }
+
+    .story-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.9) saturate(1.1);
+    }
+
+    .story-quote {
+      font-family: 'Cinzel', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--purple-l);
+      border-left: 2px solid var(--purple);
+      padding-left: 1.25rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .story-text {
+      color: var(--dim);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    /* ── STATUS ── */
+    #status { background: var(--bg2); }
+
+    .phases {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    .phase {
+      padding: 0.5rem 1rem;
+      border-radius: 2px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+    }
+
+    .phase-active {
+      background: rgba(139,92,246,0.2);
+      border-color: var(--purple);
+      color: var(--purple-l);
+    }
+
+    .phase-done {
+      background: rgba(245,158,11,0.1);
+      border-color: rgba(245,158,11,0.3);
+      color: var(--gold);
+    }
+
+    .phase-upcoming {
+      background: rgba(255,255,255,0.03);
+      border-color: var(--border);
+      color: var(--dim);
+    }
+
+    .status-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--purple);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: var(--purple-l); transform: translateY(-2px); }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--dim);
+    }
+
+    .btn-ghost:hover { border-color: var(--purple); color: var(--text); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.6rem;
+      color: var(--purple);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-text {
+      color: var(--dim);
+      font-size: 0.8rem;
+    }
+
+    .footer-text a {
+      color: var(--purple-l);
+      text-decoration: none;
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(0,0,0,0.92);
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      cursor: zoom-out;
+    }
+
+    .lightbox.active { display: flex; }
+
+    .lightbox img {
+      max-width: 100%;
+      max-height: 90vh;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      object-fit: contain;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      color: var(--dim);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid .wide { grid-column: span 1; }
+      .story-layout { grid-template-columns: 1fr; gap: 2rem; }
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 1.4rem; }
+      section { padding: 4rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Rift Hunter</a>
+  <ul class="nav-links">
+    <li><a href="#screenshots">Screenshots</a></li>
+    <li><a href="#biomes">Biomes</a></li>
+    <li><a href="#story">Story</a></li>
+    <li><a href="#status">Dev Status</a></li>
+    <li><a href="https://github.com/ravellerh/rift-hunter" target="_blank">GitHub</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-gradient"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">A Solo ARPG &nbsp;|&nbsp; Godot 4 &nbsp;|&nbsp; In Development</p>
+    <h1 class="hero-title">RIFT<br><span>HUNTER</span></h1>
+    <p class="hero-tagline">"The sky remembers what the earth has forgotten."</p>
+    <div class="hero-badges">
+      <span class="badge badge-engine">Godot 4</span>
+      <span class="badge badge-status">Phase 1 — Prototype</span>
+      <span class="badge badge-platform">Desktop</span>
+    </div>
+    <a href="#screenshots" class="hero-cta">See Screenshots ↓</a>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <span>↓</span>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SCREENSHOTS -->
+<section id="screenshots">
+  <div class="section-inner">
+    <p class="section-label">Gallery</p>
+    <h2 class="section-title">Screenshots</h2>
+    <p class="section-sub">Concept art and visual targets across all biomes and game systems.</p>
+
+    <div class="gallery-grid">
+      <div class="gallery-item wide" onclick="openLightbox(this)">
+        <img src="assets/screenshots/rift-lord.jpg" alt="Rift Lord Boss Encounter" loading="lazy">
+        <span class="gallery-caption">Boss Encounter — Azkathor, The Rift Lord</span>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/screenshots/sky-ruins.jpg" alt="Elder Sky Ruins" loading="lazy">
+        <span class="gallery-caption">Elder Sky Ruins — Final Biome</span>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/screenshots/ancient-canopy.jpg" alt="Ancient Canopy Exploration" loading="lazy">
+        <span class="gallery-caption">Ancient Canopy — Exploration</span>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/screenshots/volcanic-abyss.jpg" alt="Volcanic Abyss" loading="lazy">
+        <span class="gallery-caption">Volcanic Abyss — Lava Depths</span>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/screenshots/frosted-peaks.jpg" alt="Frosted Peaks" loading="lazy">
+        <span class="gallery-caption">Frosted Peaks — Blizzard Traverse</span>
+      </div>
+
+      <div class="gallery-item wide" onclick="openLightbox(this)">
+        <img src="assets/screenshots/coral-skyland-aerial.jpg" alt="Coral Skyland Aerial Combat" loading="lazy">
+        <span class="gallery-caption">Coral Skyland — Aerial Combat</span>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/screenshots/aerial-combat-insectglaive.jpg" alt="Insect Glaive Aerial" loading="lazy">
+        <span class="gallery-caption">Insect Glaive — Aerial Boost</span>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/screenshots/forest-combat-crit.jpg" alt="Forest Combat Critical Hit" loading="lazy">
+        <span class="gallery-caption">Ancient Canopy — Critical Strike</span>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/screenshots/combat-ui.jpg" alt="Combat UI" loading="lazy">
+        <span class="gallery-caption">Combat System — Full HUD</span>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="assets/screenshots/guild-hall.jpg" alt="Guild Hall — Veilwatch" loading="lazy">
+        <span class="gallery-caption">Veilwatch — Guild Hall</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-inner">
+    <p class="section-label">Gameplay</p>
+    <h2 class="section-title">Key Features</h2>
+    <p class="section-sub">A Monster Hunter-inspired loop built for solo play on desktop.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">⚔️</span>
+        <h3 class="feature-title">Equipment-Driven Skills</h3>
+        <p class="feature-desc">No skill trees. Your armor and weapon define your abilities. Stack the same skill across multiple pieces to level it up — mix-sets are always viable.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🐉</span>
+        <h3 class="feature-title">Veilborn Hunting</h3>
+        <p class="feature-desc">Hunt ancient creatures called Veilborn across seven biomes. Every monster has weakpoints, breakable parts, elemental resistances, and an enrage phase.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🌌</span>
+        <h3 class="feature-title">Aerial Combat</h3>
+        <p class="feature-desc">Flying monsters pull you into a sky combat layer with reduced gravity. The Insect Glaive unlocks permanent aerial mode. Bow hunters dominate the skies.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔨</span>
+        <h3 class="feature-title">Crafting from Parts</h3>
+        <p class="feature-desc">Every weapon and armor set is crafted from specific monster materials. You always know what you need and why. A full set takes 3–5 hunts, not 20.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🏰</span>
+        <h3 class="feature-title">Living Guild Hub</h3>
+        <p class="feature-desc">Veilwatch is a frontier outpost with named NPCs — a Guild Receptionist, Blacksmith, Chef, Elder Scholar, and more. Each has personality and lore to share.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🌍</span>
+        <h3 class="feature-title">Seven Biomes</h3>
+        <p class="feature-desc">Ancient Canopy, Wildspire Waste, Frosted Peaks, Coral Skyland, Volcanic Abyss, Rotten Hollow, and the Elder Sky Ruins — each with unique mechanics and monsters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- BIOMES -->
+<section id="biomes">
+  <div class="section-inner">
+    <p class="section-label">World</p>
+    <h2 class="section-title">Seven Biomes</h2>
+    <p class="section-sub">Unlock new regions as your Guild Rank grows. Each biome has its own rules.</p>
+
+    <div class="biomes-grid">
+      <div class="biome-card">
+        <img class="biome-card-img" src="assets/screenshots/ancient-canopy.jpg" alt="Ancient Canopy">
+        <div class="biome-info">
+          <div class="biome-name">Ancient Canopy</div>
+          <div class="biome-rank">G1 — Vine traversal, rain cycles</div>
+        </div>
+      </div>
+      <div class="biome-card biome-card-placeholder">
+        <div class="biome-info">
+          <div class="biome-name">Wildspire Waste</div>
+          <div class="biome-rank">G1 — Flash floods</div>
+        </div>
+      </div>
+      <div class="biome-card">
+        <img class="biome-card-img" src="assets/screenshots/frosted-peaks.jpg" alt="Frosted Peaks">
+        <div class="biome-info">
+          <div class="biome-name">Frosted Peaks</div>
+          <div class="biome-rank">G2 — Ice footing, blizzard cycles</div>
+        </div>
+      </div>
+      <div class="biome-card">
+        <img class="biome-card-img" src="assets/screenshots/coral-skyland-aerial.jpg" alt="Coral Skyland">
+        <div class="biome-info">
+          <div class="biome-name">Coral Skyland</div>
+          <div class="biome-rank">G2 — Updrafts, aerial combat</div>
+        </div>
+      </div>
+      <div class="biome-card">
+        <img class="biome-card-img" src="assets/screenshots/volcanic-abyss.jpg" alt="Volcanic Abyss">
+        <div class="biome-info">
+          <div class="biome-name">Volcanic Abyss</div>
+          <div class="biome-rank">G3 — Heat zones, lava rivers</div>
+        </div>
+      </div>
+      <div class="biome-card biome-card-placeholder">
+        <div class="biome-info">
+          <div class="biome-name">Rotten Hollow</div>
+          <div class="biome-rank">G3 — Darkness, poison swamps</div>
+        </div>
+      </div>
+      <div class="biome-card">
+        <img class="biome-card-img" src="assets/screenshots/sky-ruins.jpg" alt="Elder Sky Ruins">
+        <div class="biome-info">
+          <div class="biome-name">Elder Sky Ruins</div>
+          <div class="biome-rank">G4 — No ground. Rift energy everywhere.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- STORY -->
+<section id="story">
+  <div class="section-inner">
+    <div class="story-layout">
+      <div class="story-image">
+        <img src="assets/screenshots/sky-ruins.jpg" alt="Elder Sky Ruins">
+      </div>
+      <div>
+        <p class="section-label">Lore</p>
+        <h2 class="section-title">The World of Aethara</h2>
+        <blockquote class="story-quote">"The sky remembers what the earth has forgotten."</blockquote>
+        <p class="story-text">Three hundred years ago, an ancient civilization called the Aethori pushed through the membrane between their world and the Primordial Void. What came back was not them.</p>
+        <p class="story-text">The creatures that followed — the <strong>Veilborn</strong> — are not evil. They are simply <em>primordial</em>. Vast, territorial, and ancient beyond reckoning. They reorganized the world around their territories, and humanity learned to survive alongside them.</p>
+        <p class="story-text">You arrive at the frontier outpost of <strong>Veilwatch</strong> with a Rift Shard embedded in your palm. Someone is deliberately opening Rifts. The ancient balance is breaking.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- STATUS -->
+<section id="status">
+  <div class="section-inner">
+    <p class="section-label">Development</p>
+    <h2 class="section-title">In Active Development</h2>
+    <p class="section-sub">Built in Godot 4 with GDScript. All art is AI-generated concept work — final sprites TBD.</p>
+
+    <div class="phases">
+      <span class="phase phase-active">Phase 1 — Prototype</span>
+      <span class="phase phase-upcoming">Phase 2 — Core Systems</span>
+      <span class="phase phase-upcoming">Phase 3 — Biomes</span>
+      <span class="phase phase-upcoming">Phase 4 — Guild Hub</span>
+      <span class="phase phase-upcoming">Phase 5 — Content</span>
+      <span class="phase phase-upcoming">Phase 6 — Polish</span>
+      <span class="phase phase-upcoming">Phase 7 — Launch</span>
+    </div>
+
+    <div class="status-links">
+      <a class="btn btn-primary" href="https://github.com/ravellerh/rift-hunter" target="_blank">View on GitHub</a>
+      <a class="btn btn-ghost" href="https://github.com/ravellerh/rift-hunter/blob/main/ROADMAP.md" target="_blank">Full Roadmap</a>
+      <a class="btn btn-ghost" href="https://github.com/ravellerh/rift-hunter/blob/main/LORE.md" target="_blank">Read the Lore</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-logo">Rift Hunter</p>
+  <p class="footer-text">
+    An indie game in development &nbsp;|&nbsp;
+    <a href="https://github.com/ravellerh/rift-hunter" target="_blank">GitHub</a>
+    &nbsp;|&nbsp; Design docs in repo
+  </p>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  function openLightbox(el) {
+    const img = el.querySelector('img');
+    document.getElementById('lightbox-img').src = img.src;
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+
+</body>
+</html>
