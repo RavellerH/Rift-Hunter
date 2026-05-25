@@ -14,13 +14,12 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --black: #000;
-      --dark:  #0a0a0a;
-      --mid:   #141414;
-      --white: #ffffff;
-      --gray:  #888888;
-      --dim:   #555555;
-      --accent: #c0392b;
+      --black:  #000;
+      --dark:   #0a0a0a;
+      --mid:    #141414;
+      --white:  #ffffff;
+      --gray:   #888888;
+      --dim:    #555555;
     }
 
     html { scroll-behavior: smooth; }
@@ -33,6 +32,31 @@
       line-height: 1.6;
       overflow-x: hidden;
     }
+
+    /* ── FILM GRAIN ── */
+    .grain {
+      position: fixed;
+      inset: -100%;
+      width: 300%;
+      height: 300%;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.042;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      animation: grain-shift 0.32s steps(1) infinite;
+    }
+    @keyframes grain-shift {
+      0%   { transform: translate(0, 0); }
+      16%  { transform: translate(-5%, -8%); }
+      33%  { transform: translate(4%,  5%); }
+      50%  { transform: translate(-4%, 9%); }
+      66%  { transform: translate(8%, -4%); }
+      83%  { transform: translate(-8%, 4%); }
+    }
+    @media (prefers-reduced-motion: reduce) { .grain { animation: none; } }
+    @media (max-width: 680px) { .grain { display: none; } }
 
     /* ── NAV ── */
     nav {
@@ -47,7 +71,6 @@
       background: var(--black);
       border-bottom: 1px solid #1a1a1a;
     }
-
     .nav-logo {
       font-family: 'Cinzel Decorative', serif;
       font-size: 1rem;
@@ -56,13 +79,11 @@
       text-decoration: none;
       letter-spacing: 0.08em;
     }
-
     .nav-links {
       display: flex;
       gap: 2.5rem;
       list-style: none;
     }
-
     .nav-links a {
       color: var(--gray);
       text-decoration: none;
@@ -72,7 +93,6 @@
       text-transform: uppercase;
       transition: color 0.15s;
     }
-
     .nav-links a:hover,
     .nav-links a.active-section { color: var(--white); }
 
@@ -96,7 +116,6 @@
       margin-top: 56px;
       overflow: hidden;
     }
-
     .hero-img {
       position: absolute;
       inset: 0;
@@ -105,26 +124,19 @@
       object-fit: cover;
       object-position: center 20%;
       filter: brightness(0.55);
+      will-change: transform;
     }
-
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        to right,
-        rgba(0,0,0,0.85) 0%,
-        rgba(0,0,0,0.2) 60%,
-        rgba(0,0,0,0) 100%
-      );
+      background: linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
     }
-
     .hero-overlay-b {
       position: absolute;
       bottom: 0; left: 0; right: 0;
       height: 35%;
       background: linear-gradient(to top, #000, transparent);
     }
-
     .hero-content {
       position: absolute;
       bottom: 10%;
@@ -132,7 +144,6 @@
       max-width: 520px;
       z-index: 2;
     }
-
     .hero-eyebrow {
       font-size: 0.62rem;
       font-weight: 500;
@@ -141,7 +152,6 @@
       color: var(--gray);
       margin-bottom: 1rem;
     }
-
     .hero-title {
       font-family: 'Cinzel Decorative', serif;
       font-size: clamp(2.5rem, 6vw, 5rem);
@@ -151,7 +161,6 @@
       letter-spacing: 0.05em;
       margin-bottom: 1.25rem;
     }
-
     .hero-body {
       font-size: 0.9rem;
       color: #ccc;
@@ -159,7 +168,6 @@
       margin-bottom: 2rem;
       font-weight: 300;
     }
-
     .hero-btn {
       display: inline-block;
       background: #1e1e1e;
@@ -173,12 +181,7 @@
       border: 1px solid #333;
       transition: background 0.2s, border-color 0.2s;
     }
-
-    .hero-btn:hover {
-      background: #2a2a2a;
-      border-color: #555;
-    }
-
+    .hero-btn:hover { background: #2a2a2a; border-color: #555; }
     .hero-scroll {
       position: absolute;
       bottom: 2rem;
@@ -189,7 +192,6 @@
       align-items: center;
       gap: 0.4rem;
     }
-
     .hero-scroll span {
       font-size: 0.55rem;
       letter-spacing: 0.3em;
@@ -198,17 +200,15 @@
       writing-mode: vertical-rl;
       transform: rotate(180deg);
     }
-
     .hero-scroll-line {
       width: 1px;
       height: 48px;
       background: linear-gradient(to bottom, var(--dim), transparent);
       animation: pulse 2s ease-in-out infinite;
     }
-
     @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
 
-    /* ── HERO ENTRANCE — only when JS is active ── */
+    /* ── HERO ENTRANCE (JS-gated) ── */
     .js .hero-eyebrow,
     .js .hero-title,
     .js .hero-body,
@@ -216,8 +216,7 @@
     .js .hero-scroll {
       opacity: 0;
       transform: translateY(22px);
-      transition: opacity 1s cubic-bezier(0.22,1,0.36,1),
-                  transform 1s cubic-bezier(0.22,1,0.36,1);
+      transition: opacity 1s cubic-bezier(0.22,1,0.36,1), transform 1s cubic-bezier(0.22,1,0.36,1);
     }
     .hero-eyebrow.in { opacity:1; transform:translateY(0); }
     .hero-title.in   { opacity:1; transform:translateY(0); transition-delay:0.18s; }
@@ -225,12 +224,11 @@
     .hero-btn.in     { opacity:1; transform:translateY(0); transition-delay:0.5s; }
     .hero-scroll.in  { opacity:1; transform:translateY(0); transition-delay:0.7s; }
 
-    /* ── SCROLL REVEALS — only when JS is active ── */
+    /* ── SCROLL REVEALS (JS-gated) ── */
     .js [data-r] {
       opacity: 0;
       transform: translateY(30px);
-      transition: opacity 0.85s cubic-bezier(0.22,1,0.36,1),
-                  transform 0.85s cubic-bezier(0.22,1,0.36,1);
+      transition: opacity 0.85s cubic-bezier(0.22,1,0.36,1), transform 0.85s cubic-bezier(0.22,1,0.36,1);
     }
     .js [data-r="left"]  { transform: translateX(-30px); }
     .js [data-r="right"] { transform: translateX(30px); }
@@ -245,106 +243,93 @@
     [data-d="6"] { transition-delay:0.48s; }
     [data-d="7"] { transition-delay:0.56s; }
 
-    /* ── SIDEBAR LAYOUT ── */
-    .sidebar-layout {
-      display: flex;
-      min-height: 600px;
+    /* ── BIOME SCROLLYTELLING ── */
+    #biomes { position: relative; }
+
+    .biome-scroll-track {
+      height: 800vh;
+      position: relative;
     }
 
-    .sidebar {
-      width: 260px;
-      flex-shrink: 0;
-      background: var(--black);
-      border-right: 1px solid #1a1a1a;
-      padding: 3rem 0;
+    .biome-sticky {
       position: sticky;
       top: 56px;
       height: calc(100vh - 56px);
-      overflow-y: auto;
-    }
-
-    .sidebar-label {
-      font-size: 0.55rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--dim);
-      padding: 0 2rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .sidebar-list {
-      list-style: none;
-    }
-
-    .sidebar-list li a {
-      display: block;
-      padding: 0.7rem 2rem;
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gray);
-      text-decoration: none;
-      transition: color 0.15s, background 0.15s;
-    }
-
-    .sidebar-list li a:hover {
-      color: var(--white);
-      background: #111;
-    }
-
-    .sidebar-list li.active a {
-      background: var(--white);
-      color: var(--black);
-    }
-
-    .sidebar-divider {
-      height: 1px;
-      background: #1a1a1a;
-      margin: 1.5rem 2rem;
-    }
-
-    .sidebar-content {
-      flex: 1;
-      min-width: 0;
-    }
-
-    /* ── BIOMES PANEL ── */
-    #biomes { background: var(--black); }
-
-    .biome-panel {
-      display: flex;
-      min-height: 600px;
-    }
-
-    .biome-main {
-      flex: 1;
-      position: relative;
-      min-height: 600px;
       overflow: hidden;
     }
 
-    .biome-img {
+    .biome-bg-layer {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
-      filter: brightness(0.5);
+      filter: brightness(0.45);
+      opacity: 0;
+      transition: opacity 0.85s ease;
+      will-change: opacity, transform;
+    }
+    .biome-bg-layer.active { opacity: 1; }
+
+    .biome-overlay-gradient {
       position: absolute;
       inset: 0;
-      transition: opacity 0.45s ease, filter 0.4s;
+      background:
+        linear-gradient(to right, rgba(0,0,0,0.75) 0%, transparent 55%),
+        linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 45%);
+      pointer-events: none;
     }
-    .biome-img.fading { opacity: 0; }
 
-    .biome-info-overlay {
+    .biome-dots {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 4rem 3rem 3rem;
-      background: linear-gradient(transparent, rgba(0,0,0,0.92));
+      right: 2.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      z-index: 10;
+    }
+    .biome-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--dim);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s, height 0.3s;
+    }
+    .biome-dot.active {
+      background: var(--white);
+      transform: scale(1.6);
     }
 
+    .biome-progress-bar {
+      position: absolute;
+      left: 0; bottom: 0;
+      height: 2px;
+      background: rgba(255,255,255,0.15);
+      width: 100%;
+    }
+    .biome-progress-fill {
+      height: 100%;
+      background: rgba(255,255,255,0.6);
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .biome-content {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 5rem 3rem 3.5rem;
+      z-index: 5;
+    }
+    .biome-index-label {
+      font-size: 0.5rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 0.6rem;
+    }
     .biome-rank-badge {
       font-size: 0.55rem;
       letter-spacing: 0.3em;
@@ -352,34 +337,52 @@
       color: var(--gray);
       margin-bottom: 0.5rem;
     }
-
     .biome-title {
       font-family: 'Cinzel Decorative', serif;
-      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-size: clamp(1.8rem, 4vw, 3rem);
       color: var(--white);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.85rem;
+      line-height: 1.1;
     }
-
     .biome-desc {
       font-size: 0.85rem;
       color: #aaa;
-      max-width: 480px;
-      line-height: 1.7;
+      max-width: 440px;
+      line-height: 1.75;
       font-weight: 300;
+      margin-bottom: 0.85rem;
     }
-
     .biome-boss {
-      margin-top: 1rem;
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--dim);
     }
-
     .biome-boss strong { color: var(--gray); }
+
+    .biome-text-inner {
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+    .biome-text-inner.fading {
+      opacity: 0;
+      transform: translateY(8px);
+    }
 
     #biome-rank, #biome-name, #biome-desc, #biome-boss {
       transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .biome-scroll-hint {
+      position: absolute;
+      bottom: 3rem;
+      right: 3rem;
+      font-size: 0.52rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--dim);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      animation: pulse 2.5s ease-in-out infinite;
     }
 
     /* ── GALLERY ── */
@@ -387,14 +390,12 @@
       background: var(--black);
       padding: 0;
     }
-
     .gallery-header {
       padding: 4rem 3rem 2rem;
       display: flex;
       align-items: baseline;
       gap: 2rem;
     }
-
     .gallery-header h2 {
       font-size: 0.62rem;
       font-weight: 600;
@@ -402,27 +403,21 @@
       text-transform: uppercase;
       color: var(--white);
     }
-
     .gallery-count {
       font-size: 0.6rem;
       color: var(--dim);
       letter-spacing: 0.1em;
     }
-
     .gallery-featured {
       width: 100%;
       position: relative;
       overflow: hidden;
       cursor: pointer;
-      transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1),
-                  transform 0.9s cubic-bezier(0.22,1,0.36,1);
+      transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
+      transform-origin: center center;
     }
-    .js .gallery-featured {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    .gallery-featured.in { opacity:1; transform:none; }
-
+    .js .gallery-featured { opacity:0; transform:translateY(20px); }
+    .gallery-featured.in  { opacity:1; transform:none; }
     .gallery-featured img {
       width: 100%;
       aspect-ratio: 21/8;
@@ -431,20 +426,11 @@
       filter: brightness(0.85);
       transition: filter 0.4s, transform 0.6s;
     }
+    .gallery-featured:hover img { filter:brightness(1); transform:scale(1.015); }
 
-    .gallery-featured:hover img {
-      filter: brightness(1);
-      transform: scale(1.01);
-    }
-
-    .gallery-grid {
-      display: grid;
-      gap: 2px;
-      margin-top: 2px;
-    }
-
-    .gallery-grid-3 { grid-template-columns: repeat(3, 1fr); }
-    .gallery-grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .gallery-grid { display:grid; gap:2px; margin-top:2px; }
+    .gallery-grid-3 { grid-template-columns: repeat(3,1fr); }
+    .gallery-grid-4 { grid-template-columns: repeat(4,1fr); }
     .gallery-grid-2 { grid-template-columns: 3fr 2fr; }
 
     .gallery-cell {
@@ -452,15 +438,11 @@
       overflow: hidden;
       cursor: pointer;
       background: var(--mid);
-      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1),
-                  transform 0.7s cubic-bezier(0.22,1,0.36,1);
+      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+      transform-origin: center center;
     }
-    .js .gallery-cell {
-      opacity: 0;
-      transform: scale(0.97) translateY(16px);
-    }
-    .gallery-cell.in { opacity:1; transform:none; }
-
+    .js .gallery-cell { opacity:0; transform:scale(0.97) translateY(16px); }
+    .gallery-cell.in  { opacity:1; transform:none; }
     .gallery-cell[data-d="1"] { transition-delay:0.06s; }
     .gallery-cell[data-d="2"] { transition-delay:0.13s; }
     .gallery-cell[data-d="3"] { transition-delay:0.20s; }
@@ -474,15 +456,11 @@
       filter: brightness(0.78);
       transition: filter 0.3s, transform 0.5s;
     }
-
-    .gallery-cell:hover img {
-      filter: brightness(1);
-      transform: scale(1.04);
-    }
+    .gallery-cell:hover img { filter:brightness(1); transform:scale(1.04); }
 
     .cell-label {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
+      bottom:0; left:0; right:0;
       padding: 1.5rem 1rem 0.65rem;
       background: linear-gradient(transparent, rgba(0,0,0,0.8));
       font-size: 0.6rem;
@@ -492,17 +470,46 @@
       opacity: 0;
       transition: opacity 0.25s;
     }
-
     .gallery-cell:hover .cell-label,
-    .gallery-featured:hover .cell-label { opacity: 1; }
+    .gallery-featured:hover .cell-label { opacity:1; }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      background: #050505;
+      border-top: 1px solid #111;
+      border-bottom: 1px solid #111;
+      padding: 3.5rem 3rem;
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 0;
+    }
+    .stat-item {
+      text-align: center;
+      border-right: 1px solid #111;
+      padding: 0 1.5rem;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      font-size: 0.52rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
 
     /* ── STORY ── */
     #story {
       display: flex;
-      background: var(--black);
+      background: #02020c;
       border-top: 1px solid #1a1a1a;
     }
-
     .story-sidebar {
       width: 260px;
       flex-shrink: 0;
@@ -512,7 +519,6 @@
       flex-direction: column;
       gap: 0.5rem;
     }
-
     .story-label {
       font-size: 0.55rem;
       letter-spacing: 0.3em;
@@ -520,12 +526,10 @@
       color: var(--dim);
       margin-bottom: 1rem;
     }
-
     .story-stat {
       padding: 0.85rem 0;
       border-bottom: 1px solid #1a1a1a;
     }
-
     .story-stat-key {
       font-size: 0.55rem;
       letter-spacing: 0.2em;
@@ -533,13 +537,11 @@
       color: var(--dim);
       margin-bottom: 0.3rem;
     }
-
     .story-stat-val {
       font-size: 0.82rem;
       color: var(--white);
       font-weight: 400;
     }
-
     .story-main {
       flex: 1;
       padding: 4rem 3rem;
@@ -548,7 +550,6 @@
       gap: 4rem;
       align-items: start;
     }
-
     .story-text-block h2 {
       font-family: 'Cinzel Decorative', serif;
       font-size: clamp(1.4rem, 2.5vw, 2rem);
@@ -557,7 +558,6 @@
       font-weight: 700;
       letter-spacing: 0.04em;
     }
-
     blockquote {
       font-style: italic;
       font-size: 0.9rem;
@@ -568,6 +568,18 @@
       line-height: 1.65;
     }
 
+    /* ── WORD-BY-WORD REVEAL ── */
+    .js .word-reveal .wr {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .word-reveal.in .wr {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .story-text {
       font-size: 0.85rem;
       color: #999;
@@ -575,12 +587,10 @@
       font-weight: 300;
       margin-bottom: 0.85rem;
     }
-
     .story-img-block {
       position: relative;
       overflow: hidden;
     }
-
     .story-img-block img {
       width: 100%;
       aspect-ratio: 4/3;
@@ -591,23 +601,17 @@
 
     /* ── STATUS ── */
     #status {
-      background: var(--dark);
+      background: #020a06;
       border-top: 1px solid #1a1a1a;
       padding: 5rem 3rem;
     }
-
-    .status-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
+    .status-inner { max-width: 1100px; margin: 0 auto; }
     .status-header {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       margin-bottom: 3rem;
     }
-
     .status-heading {
       font-size: 0.62rem;
       font-weight: 600;
@@ -615,28 +619,21 @@
       text-transform: uppercase;
       color: var(--white);
     }
-
-    .status-sub {
-      font-size: 0.72rem;
-      color: var(--dim);
-    }
+    .status-sub { font-size: 0.72rem; color: var(--dim); }
 
     .phases {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(7,1fr);
       gap: 0;
       border: 1px solid #1a1a1a;
       margin-bottom: 3rem;
     }
-
     .phase {
       padding: 1.5rem 1rem;
       border-right: 1px solid #1a1a1a;
       text-align: center;
     }
-
     .phase:last-child { border-right: none; }
-
     .phase-num {
       font-size: 0.5rem;
       letter-spacing: 0.2em;
@@ -644,7 +641,6 @@
       text-transform: uppercase;
       margin-bottom: 0.5rem;
     }
-
     .phase-name {
       font-size: 0.65rem;
       font-weight: 500;
@@ -652,16 +648,11 @@
       text-transform: uppercase;
       color: var(--dim);
     }
-
-    .phase.active .phase-num { color: var(--white); }
+    .phase.active .phase-num,
     .phase.active .phase-name { color: var(--white); }
     .phase.active { background: #111; }
 
-    .status-btns {
-      display: flex;
-      gap: 0.75rem;
-    }
-
+    .status-btns { display: flex; gap: 0.75rem; }
     .btn {
       display: inline-block;
       font-size: 0.65rem;
@@ -672,21 +663,9 @@
       text-decoration: none;
       transition: all 0.2s;
     }
-
-    .btn-fill {
-      background: #1e1e1e;
-      color: var(--white);
-      border: 1px solid #333;
-    }
-
+    .btn-fill { background: #1e1e1e; color: var(--white); border: 1px solid #333; }
     .btn-fill:hover { background: #2a2a2a; border-color: #555; }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--gray);
-      border: 1px solid #222;
-    }
-
+    .btn-ghost { background: transparent; color: var(--gray); border: 1px solid #222; }
     .btn-ghost:hover { color: var(--white); border-color: #444; }
 
     /* ── FOOTER ── */
@@ -698,7 +677,6 @@
       align-items: center;
       justify-content: space-between;
     }
-
     .footer-logo {
       font-family: 'Cinzel Decorative', serif;
       font-size: 0.75rem;
@@ -706,13 +684,7 @@
       color: var(--white);
       text-decoration: none;
     }
-
-    .footer-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
     .footer-links a {
       font-size: 0.62rem;
       letter-spacing: 0.15em;
@@ -721,20 +693,15 @@
       text-decoration: none;
       transition: color 0.15s;
     }
-
     .footer-links a:hover { color: var(--white); }
-
-    .footer-copy {
-      font-size: 0.6rem;
-      color: var(--dim);
-    }
+    .footer-copy { font-size: 0.6rem; color: var(--dim); }
 
     /* ── LIGHTBOX ── */
     .lightbox {
       display: flex;
       position: fixed;
       inset: 0;
-      z-index: 999;
+      z-index: 9999;
       background: rgba(0,0,0,0.97);
       align-items: center;
       justify-content: center;
@@ -743,21 +710,11 @@
       opacity: 0;
       transition: opacity 0.3s ease, visibility 0.3s;
     }
-    .lightbox.active {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    .lightbox img {
-      max-width: 92vw;
-      max-height: 90vh;
-      object-fit: contain;
-    }
-
+    .lightbox.active { visibility: visible; opacity: 1; }
+    .lightbox img { max-width:92vw; max-height:90vh; object-fit:contain; }
     .lb-close {
       position: absolute;
-      top: 1.5rem;
-      right: 2rem;
+      top: 1.5rem; right: 2rem;
       font-size: 0.62rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
@@ -765,32 +722,23 @@
       cursor: pointer;
     }
 
-    /* ── SECTION DIVIDER LINES (animated width) ── */
-    .js .reveal-line {
-      height: 1px;
-      background: #222;
-      width: 0;
-      transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
-    }
-    .reveal-line.in { width: 100%; }
+    /* ── SECTION DIVIDER LINES ── */
+    .js .reveal-line { height:1px; background:#1a1a1a; width:0; transition: width 1.2s cubic-bezier(0.22,1,0.36,1); }
+    .reveal-line.in  { width:100%; }
 
-    /* ── PARALLAX ZOOM ── */
-    .hero-img {
-      will-change: transform;
-    }
-    .biome-img {
-      will-change: transform;
-    }
+    /* ── 3D TILT (desktop only via JS) ── */
+    .gallery-cell, .gallery-featured { transform-style: preserve-3d; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
-      .sidebar { display: none; }
-      .biome-panel { flex-direction: column; }
       .story-main { grid-template-columns: 1fr; gap: 2rem; }
       .story-sidebar { display: none; }
-      .phases { grid-template-columns: repeat(4, 1fr); }
+      .phases { grid-template-columns: repeat(4,1fr); }
+      .stats-strip { grid-template-columns: repeat(2,1fr); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(3) { border-top: 1px solid #111; }
+      .biome-dots { display: none; }
     }
-
     @media (max-width: 680px) {
       nav { padding: 0 1.25rem; }
       .nav-links { display: none; }
@@ -799,15 +747,19 @@
       .gallery-header { padding: 2.5rem 1.5rem 1.5rem; }
       .story-main { padding: 2.5rem 1.5rem; }
       .gallery-grid-3 { grid-template-columns: 1fr; }
-      .gallery-grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid-4 { grid-template-columns: repeat(2,1fr); }
       .gallery-grid-2 { grid-template-columns: 1fr; }
-      .phases { grid-template-columns: repeat(2, 1fr); }
+      .phases { grid-template-columns: repeat(2,1fr); }
+      .stats-strip { grid-template-columns: repeat(2,1fr); padding: 2.5rem 1.5rem; }
       footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+      .biome-content { padding: 4rem 1.5rem 2.5rem; }
+      .status-btns { flex-wrap: wrap; }
     }
   </style>
 </head>
 <body>
 <script>document.documentElement.classList.add('js');</script>
+<div class="grain"></div>
 
 <!-- NAV -->
 <nav>
@@ -824,7 +776,7 @@
 
 <!-- HERO -->
 <div class="hero">
-  <img class="hero-img" src="assets/screenshots/rift-lord.jpg" alt="Rift Hunter">
+  <img class="hero-img" id="hero-img" src="assets/screenshots/rift-lord.jpg" alt="Rift Hunter">
   <div class="hero-overlay"></div>
   <div class="hero-overlay-b"></div>
   <div class="hero-content">
@@ -839,36 +791,50 @@
   </div>
 </div>
 
-<!-- BIOMES — SIDEBAR LAYOUT -->
-<div id="biomes" class="sidebar-layout">
-  <nav class="sidebar" aria-label="Biomes">
-    <p class="sidebar-label">Biomes</p>
-    <ul class="sidebar-list" id="biome-nav">
-      <li class="active"><a href="#" onclick="showBiome(0,this);return false;">Ancient Canopy</a></li>
-      <li><a href="#" onclick="showBiome(1,this);return false;">Wildspire Waste</a></li>
-      <li><a href="#" onclick="showBiome(2,this);return false;">Frosted Peaks</a></li>
-      <li><a href="#" onclick="showBiome(3,this);return false;">Coral Skyland</a></li>
-      <li><a href="#" onclick="showBiome(4,this);return false;">Volcanic Abyss</a></li>
-      <li><a href="#" onclick="showBiome(5,this);return false;">Rotten Hollow</a></li>
-      <li><a href="#" onclick="showBiome(6,this);return false;">Elder Sky Ruins</a></li>
-      <div class="sidebar-divider"></div>
-      <li><a href="#screenshots">View Gallery</a></li>
-      <li><a href="#story">Story</a></li>
-      <li><a href="https://github.com/ravellerh/rift-hunter/blob/main/DESIGN.md" target="_blank">Design Doc ↗</a></li>
-    </ul>
-  </nav>
+<!-- BIOMES — SCROLLYTELLING -->
+<div id="biomes">
+  <div class="biome-scroll-track" id="biome-scroll-track">
+    <div class="biome-sticky">
 
-  <div class="sidebar-content">
-    <div class="biome-panel" id="biome-display">
-      <div class="biome-main">
-        <img class="biome-img" id="biome-img" src="assets/screenshots/ancient-canopy.jpg" alt="Ancient Canopy">
-        <div class="biome-info-overlay">
-          <p class="biome-rank-badge" id="biome-rank">Rank G1 &nbsp;·&nbsp; Starting Region</p>
-          <h2 class="biome-title" id="biome-name">Ancient Canopy</h2>
-          <p class="biome-desc" id="biome-desc">Dense jungle canopy with towering ancient trees, shafts of golden light, and bioluminescent plants. Rain cycles reduce visibility. Vine traversal connects upper and lower zones.</p>
-          <p class="biome-boss" id="biome-boss">Elder Boss: <strong>Verdanthos</strong> &nbsp;—&nbsp; Ancient serpentine Elder that controls the canopy itself</p>
+      <!-- Background layers — one per biome -->
+      <img class="biome-bg-layer active" id="biome-bg-0" src="assets/screenshots/ancient-canopy.jpg" alt="">
+      <img class="biome-bg-layer"        id="biome-bg-1" src="assets/screenshots/ancient-canopy.jpg" alt="">
+      <img class="biome-bg-layer"        id="biome-bg-2" src="assets/screenshots/frosted-peaks.jpg" alt="">
+      <img class="biome-bg-layer"        id="biome-bg-3" src="assets/screenshots/coral-skyland-aerial.jpg" alt="">
+      <img class="biome-bg-layer"        id="biome-bg-4" src="assets/screenshots/volcanic-abyss.jpg" alt="">
+      <img class="biome-bg-layer"        id="biome-bg-5" src="assets/screenshots/rift-lord.jpg" alt="">
+      <img class="biome-bg-layer"        id="biome-bg-6" src="assets/screenshots/sky-ruins.jpg" alt="">
+
+      <div class="biome-overlay-gradient"></div>
+
+      <!-- Progress dots -->
+      <div class="biome-dots" id="biome-dots">
+        <div class="biome-dot active" data-i="0"></div>
+        <div class="biome-dot" data-i="1"></div>
+        <div class="biome-dot" data-i="2"></div>
+        <div class="biome-dot" data-i="3"></div>
+        <div class="biome-dot" data-i="4"></div>
+        <div class="biome-dot" data-i="5"></div>
+        <div class="biome-dot" data-i="6"></div>
+      </div>
+
+      <!-- Text content -->
+      <div class="biome-content">
+        <div class="biome-text-inner" id="biome-text-inner">
+          <p class="biome-index-label" id="biome-index-label">01 / 07</p>
+          <p class="biome-rank-badge"  id="biome-rank">Rank G1 · Starting Region</p>
+          <h2 class="biome-title"     id="biome-name">Ancient Canopy</h2>
+          <p class="biome-desc"       id="biome-desc">Dense jungle canopy with towering ancient trees, shafts of golden light, and bioluminescent plants. Rain cycles reduce visibility. Vine traversal connects upper and lower zones.</p>
+          <p class="biome-boss"       id="biome-boss">Elder Boss: <strong>Verdanthos</strong> &nbsp;—&nbsp; Ancient serpentine Elder that controls the canopy itself</p>
         </div>
       </div>
+
+      <!-- Scroll progress line at bottom -->
+      <div class="biome-progress-bar">
+        <div class="biome-progress-fill" id="biome-fill"></div>
+      </div>
+
+      <div class="biome-scroll-hint">Scroll to explore</div>
     </div>
   </div>
 </div>
@@ -931,6 +897,26 @@
   </div>
 </section>
 
+<!-- STATS STRIP -->
+<div class="stats-strip" id="stats-strip">
+  <div class="stat-item" data-r data-d="1">
+    <div class="stat-num" data-target="7">0</div>
+    <div class="stat-label">Biomes</div>
+  </div>
+  <div class="stat-item" data-r data-d="2">
+    <div class="stat-num" data-target="6">0</div>
+    <div class="stat-label">Weapon Types</div>
+  </div>
+  <div class="stat-item" data-r data-d="3">
+    <div class="stat-num" data-target="14">0</div>
+    <div class="stat-label">Monsters</div>
+  </div>
+  <div class="stat-item" data-r data-d="4">
+    <div class="stat-num" data-target="4">0</div>
+    <div class="stat-label">Guild Ranks</div>
+  </div>
+</div>
+
 <!-- STORY -->
 <div id="story">
   <div class="story-sidebar">
@@ -964,7 +950,7 @@
   <div class="story-main">
     <div class="story-text-block" data-r="left">
       <h2>The World of Aethara</h2>
-      <blockquote>"The sky remembers what the earth has forgotten."</blockquote>
+      <blockquote class="word-reveal">"The sky remembers what the earth has forgotten."</blockquote>
       <p class="story-text">Three hundred years ago, an ancient civilization called the Aethori pushed through the membrane between their world and the Primordial Void. The creatures that followed — the Veilborn — are not evil. They are simply primordial. Impossibly old, and violently territorial.</p>
       <p class="story-text">You arrive at the frontier outpost of Veilwatch with a Rift Shard embedded in your palm. Rifts are opening where they shouldn't. The ancient balance is breaking. Someone is doing this deliberately.</p>
       <br>
@@ -983,7 +969,6 @@
       <span class="status-heading">Development Status</span>
       <span class="status-sub">Godot 4 · GDScript · All systems documented</span>
     </div>
-
     <div class="phases">
       <div class="phase active" data-r data-d="1">
         <div class="phase-num">Current</div>
@@ -1014,9 +999,8 @@
         <div class="phase-name">Launch</div>
       </div>
     </div>
-
     <div class="status-btns" data-r data-d="2">
-      <a class="btn btn-fill" href="https://github.com/ravellerh/rift-hunter" target="_blank">View on GitHub</a>
+      <a class="btn btn-fill"  href="https://github.com/ravellerh/rift-hunter" target="_blank">View on GitHub</a>
       <a class="btn btn-ghost" href="https://github.com/ravellerh/rift-hunter/blob/main/ROADMAP.md" target="_blank">Full Roadmap</a>
       <a class="btn btn-ghost" href="https://github.com/ravellerh/rift-hunter/blob/main/DESIGN.md" target="_blank">Game Design Doc</a>
     </div>
@@ -1041,186 +1025,280 @@
 </div>
 
 <script>
-  /* ── BIOME DATA ── */
-  const biomes = [
-    {
-      img: 'assets/screenshots/ancient-canopy.jpg',
-      rank: 'Rank G1 · Starting Region',
-      name: 'Ancient Canopy',
-      desc: 'Dense jungle canopy with towering ancient trees, shafts of golden light, and bioluminescent plants. Rain cycles reduce visibility. Vine traversal connects upper and lower zones.',
-      boss: 'Elder Boss: <strong>Verdanthos</strong> &nbsp;—&nbsp; Ancient serpentine Elder that controls the canopy itself'
-    },
-    {
-      img: 'assets/screenshots/ancient-canopy.jpg',
-      rank: 'Rank G1 · Starting Region',
-      name: 'Wildspire Waste',
-      desc: 'Desert surface transitioning into toxic swamp lowlands. Flash floods reshape terrain every few minutes. High heat in the desert, miasma in the marsh.',
-      boss: 'Elder Boss: <strong>Diablorak</strong> &nbsp;—&nbsp; Massive horned Elder that burrows and charges from below'
-    },
-    {
-      img: 'assets/screenshots/frosted-peaks.jpg',
-      rank: 'Rank G2',
-      name: 'Frosted Peaks',
-      desc: 'Blizzard-swept mountain range, ice caves, frozen waterfalls. Slick ground reduces traction. Blizzard cycles drop visibility to near zero.',
-      boss: 'Elder Boss: <strong>Velkhrath</strong> &nbsp;—&nbsp; Enormous mammoth Elder that generates blizzards and ice pillars'
-    },
-    {
-      img: 'assets/screenshots/coral-skyland-aerial.jpg',
-      rank: 'Rank G2',
-      name: 'Coral Skyland',
-      desc: 'Floating coral islands connected by wind currents, deep ocean far below. Natural updraft columns launch players into aerial combat. Vibrant and unlike any other biome.',
-      boss: 'Elder Boss: <strong>Namielle-Keth</strong> &nbsp;—&nbsp; Bioluminescent flying Elder, floods platforms, arcs electricity'
-    },
-    {
-      img: 'assets/screenshots/volcanic-abyss.jpg',
-      rank: 'Rank G3',
-      name: 'Volcanic Abyss',
-      desc: 'Deep volcanic caldera, lava rivers, ash clouds, superheated air pockets. Lava zones deal damage over time. Ash reduces stamina regeneration.',
-      boss: 'Elder Boss: <strong>Ashmaul</strong> &nbsp;—&nbsp; Ancient Elder grown enormous by Cult feeding. Story-critical fight.'
-    },
-    {
-      img: 'assets/screenshots/rift-lord.jpg',
-      rank: 'Rank G3',
-      name: 'Rotten Hollow',
-      desc: 'Deep underground decay zone, bioluminescent fungi, poison swamps, narrow tunnels. Permanent low light. True darkness zones require careful navigation.',
-      boss: 'Elder Boss: <strong>Chaoskrel</strong> &nbsp;—&nbsp; Long-dormant deep Elder with tentacle reach and Rift energy corruption'
-    },
-    {
-      img: 'assets/screenshots/sky-ruins.jpg',
-      rank: 'Rank G4 · Final Region',
-      name: 'Elder Sky Ruins',
-      desc: 'The ruins of the Aethori Sky Kingdom, still floating above the clouds. Permanent aerial zone — no ground floor. Ancient mechanisms still partially function.',
-      boss: 'Final Boss: <strong>Serath + The Sovereign</strong> &nbsp;—&nbsp; Two-phase story climax. See LORE.md.'
-    }
-  ];
-
-  /* ── SCROLL PROGRESS BAR ── */
-  const scrollBar = document.getElementById('scroll-bar');
-
-  /* ── PARALLAX ZOOM ── */
-  const heroImg   = document.querySelector('.hero-img');
-  const biomeImg  = document.getElementById('biome-img');
-  const heroEl    = document.querySelector('.hero');
-  const biomesEl  = document.getElementById('biomes');
-
-  let ticking = false;
-
-  function updateParallax() {
-    const scrollY = window.scrollY;
-    const winH    = window.innerHeight;
-
-    /* scroll progress bar */
-    const maxScroll = document.documentElement.scrollHeight - winH;
-    scrollBar.style.width = (scrollY / maxScroll * 100) + '%';
-
-    /* hero — zoom in + slow vertical drift as you scroll away */
-    if (heroEl && heroImg) {
-      const heroH   = heroEl.offsetHeight;
-      const progress = Math.min(scrollY / heroH, 1);
-      const scale    = 1 + progress * 0.12;
-      const drift    = scrollY * 0.28;
-      heroImg.style.transform = `scale(${scale}) translateY(${drift}px)`;
-    }
-
-    /* biome image — subtle upward parallax */
-    if (biomesEl && biomeImg) {
-      const rect = biomesEl.getBoundingClientRect();
-      if (rect.top < winH && rect.bottom > 0) {
-        const rel = -rect.top * 0.12;
-        biomeImg.style.transform = `translateY(${rel}px)`;
-      }
-    }
-
-    ticking = false;
+/* ═══════════════════════════════════════════
+   BIOME DATA
+═══════════════════════════════════════════ */
+const biomes = [
+  {
+    rank: 'Rank G1 · Starting Region',
+    name: 'Ancient Canopy',
+    desc: 'Dense jungle canopy with towering ancient trees, shafts of golden light, and bioluminescent plants. Rain cycles reduce visibility. Vine traversal connects upper and lower zones.',
+    boss: 'Elder Boss: <strong>Verdanthos</strong> &nbsp;—&nbsp; Ancient serpentine Elder that controls the canopy itself'
+  },
+  {
+    rank: 'Rank G1 · Starting Region',
+    name: 'Wildspire Waste',
+    desc: 'Desert surface transitioning into toxic swamp lowlands. Flash floods reshape terrain every few minutes. High heat in the desert, miasma in the marsh.',
+    boss: 'Elder Boss: <strong>Diablorak</strong> &nbsp;—&nbsp; Massive horned Elder that burrows and charges from below'
+  },
+  {
+    rank: 'Rank G2',
+    name: 'Frosted Peaks',
+    desc: 'Blizzard-swept mountain range, ice caves, frozen waterfalls. Slick ground reduces traction. Blizzard cycles drop visibility to near zero.',
+    boss: 'Elder Boss: <strong>Velkhrath</strong> &nbsp;—&nbsp; Enormous mammoth Elder that generates blizzards and ice pillars'
+  },
+  {
+    rank: 'Rank G2',
+    name: 'Coral Skyland',
+    desc: 'Floating coral islands connected by wind currents, deep ocean far below. Natural updraft columns launch players into aerial combat. Vibrant and unlike any other biome.',
+    boss: 'Elder Boss: <strong>Namielle-Keth</strong> &nbsp;—&nbsp; Bioluminescent flying Elder, floods platforms, arcs electricity'
+  },
+  {
+    rank: 'Rank G3',
+    name: 'Volcanic Abyss',
+    desc: 'Deep volcanic caldera, lava rivers, ash clouds, superheated air pockets. Lava zones deal damage over time. Ash reduces stamina regeneration.',
+    boss: 'Elder Boss: <strong>Ashmaul</strong> &nbsp;—&nbsp; Ancient Elder grown enormous by Cult feeding. Story-critical fight.'
+  },
+  {
+    rank: 'Rank G3',
+    name: 'Rotten Hollow',
+    desc: 'Deep underground decay zone, bioluminescent fungi, poison swamps, narrow tunnels. Permanent low light. True darkness zones require careful navigation.',
+    boss: 'Elder Boss: <strong>Chaoskrel</strong> &nbsp;—&nbsp; Long-dormant deep Elder with tentacle reach and Rift energy corruption'
+  },
+  {
+    rank: 'Rank G4 · Final Region',
+    name: 'Elder Sky Ruins',
+    desc: 'The ruins of the Aethori Sky Kingdom, still floating above the clouds. Permanent aerial zone — no ground floor. Ancient mechanisms still partially function.',
+    boss: 'Final Boss: <strong>Serath + The Sovereign</strong> &nbsp;—&nbsp; Two-phase story climax. See LORE.md.'
   }
+];
 
-  function onScroll() {
-    if (!ticking) {
-      requestAnimationFrame(updateParallax);
-      ticking = true;
-    }
-  }
+/* ═══════════════════════════════════════════
+   BIOME SCROLLYTELLING
+═══════════════════════════════════════════ */
+const track       = document.getElementById('biome-scroll-track');
+const bgLayers    = document.querySelectorAll('.biome-bg-layer');
+const dots        = document.querySelectorAll('.biome-dot');
+const fillBar     = document.getElementById('biome-fill');
+const textInner   = document.getElementById('biome-text-inner');
+const biomeIndex  = document.getElementById('biome-index-label');
+const biomeRank   = document.getElementById('biome-rank');
+const biomeName   = document.getElementById('biome-name');
+const biomeDesc   = document.getElementById('biome-desc');
+const biomeBoss   = document.getElementById('biome-boss');
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-  updateParallax(); /* run once on load */
+let currentBiome  = 0;
 
-  /* ── HERO ENTRANCE ── */
-  window.addEventListener('load', () => {
-    document.querySelectorAll(
-      '.hero-eyebrow, .hero-title, .hero-body, .hero-btn, .hero-scroll'
-    ).forEach(el => el.classList.add('in'));
+function updateBiomeTelling() {
+  const rect    = track.getBoundingClientRect();
+  const navH    = 56;
+  const scrolled = Math.max(0, -(rect.top - navH));
+  const total    = track.offsetHeight - (window.innerHeight - navH);
+  const progress = Math.min(scrolled / total, 1);
+  const idx      = Math.min(Math.floor(progress * biomes.length), biomes.length - 1);
+
+  /* progress bar fill */
+  fillBar.style.width = (progress * 100) + '%';
+
+  /* subtle parallax within current biome */
+  const localP  = (progress * biomes.length) % 1;
+  const drift   = (localP - 0.5) * 40;
+  const activeL = document.querySelector('.biome-bg-layer.active');
+  if (activeL) activeL.style.transform = `scale(1.08) translateY(${drift}px)`;
+
+  if (idx === currentBiome) return;
+  currentBiome = idx;
+
+  /* swap background layers */
+  bgLayers.forEach((l, i) => l.classList.toggle('active', i === idx));
+
+  /* update dots */
+  dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+
+  /* crossfade text */
+  textInner.classList.add('fading');
+  setTimeout(() => {
+    const b = biomes[idx];
+    biomeIndex.textContent  = String(idx + 1).padStart(2, '0') + ' / 07';
+    biomeRank.textContent   = b.rank;
+    biomeName.textContent   = b.name;
+    biomeDesc.textContent   = b.desc;
+    biomeBoss.innerHTML     = b.boss;
+    textInner.classList.remove('fading');
+  }, 240);
+}
+
+/* dot click — scroll to that biome's position */
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const i = parseInt(dot.dataset.i);
+    const navH  = 56;
+    const total = track.offsetHeight - (window.innerHeight - navH);
+    const targetProgress = (i + 0.05) / biomes.length;
+    const targetScroll   = track.offsetTop - navH + targetProgress * total;
+    window.scrollTo({ top: targetScroll, behavior: 'smooth' });
   });
+});
 
-  /* ── INTERSECTION OBSERVER — SCROLL REVEALS ── */
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.06, rootMargin: '0px 0px -32px 0px' });
+/* ═══════════════════════════════════════════
+   HERO PARALLAX ZOOM
+═══════════════════════════════════════════ */
+const heroImgEl = document.getElementById('hero-img');
+const heroEl    = document.querySelector('.hero');
 
+function updateHeroParallax(scrollY) {
+  if (!heroEl || !heroImgEl) return;
+  const heroH    = heroEl.offsetHeight;
+  const progress = Math.min(scrollY / heroH, 1);
+  const scale    = 1 + progress * 0.12;
+  const drift    = scrollY * 0.28;
+  heroImgEl.style.transform = `scale(${scale}) translateY(${drift}px)`;
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL PROGRESS BAR
+═══════════════════════════════════════════ */
+const scrollBar = document.getElementById('scroll-bar');
+
+function updateScrollBar(scrollY) {
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  scrollBar.style.width = (scrollY / maxScroll * 100) + '%';
+}
+
+/* ═══════════════════════════════════════════
+   UNIFIED SCROLL HANDLER (rAF)
+═══════════════════════════════════════════ */
+let ticking = false;
+
+function onScroll() {
+  if (!ticking) {
+    requestAnimationFrame(runScrollUpdate);
+    ticking = true;
+  }
+}
+
+function runScrollUpdate() {
+  const scrollY = window.scrollY;
+  updateScrollBar(scrollY);
+  updateHeroParallax(scrollY);
+  updateBiomeTelling();
+  ticking = false;
+}
+
+window.addEventListener('scroll', onScroll, { passive: true });
+runScrollUpdate();
+
+/* ═══════════════════════════════════════════
+   HERO ENTRANCE
+═══════════════════════════════════════════ */
+window.addEventListener('load', () => {
   document.querySelectorAll(
-    '[data-r], .gallery-featured, .gallery-cell, .reveal-line'
-  ).forEach(el => revealObserver.observe(el));
+    '.hero-eyebrow, .hero-title, .hero-body, .hero-btn, .hero-scroll'
+  ).forEach(el => el.classList.add('in'));
+});
 
-  /* ── SCROLL SPY ── */
-  const spyTargets = document.querySelectorAll('#biomes, #screenshots, #story, #status');
-  const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+/* ═══════════════════════════════════════════
+   INTERSECTION OBSERVER — SCROLL REVEALS
+═══════════════════════════════════════════ */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
 
-  const spyObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        navAnchors.forEach(a => a.classList.remove('active-section'));
-        const link = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
-        if (link) link.classList.add('active-section');
-      }
+      /* stat counter trigger */
+      const numEl = entry.target.querySelector('.stat-num');
+      if (numEl) animateCounter(numEl);
+
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.06, rootMargin: '0px 0px -32px 0px' });
+
+document.querySelectorAll(
+  '[data-r], .gallery-featured, .gallery-cell, .reveal-line, .word-reveal'
+).forEach(el => revealObserver.observe(el));
+
+/* ═══════════════════════════════════════════
+   STAT COUNTERS
+═══════════════════════════════════════════ */
+function animateCounter(el) {
+  const target   = parseInt(el.dataset.target, 10);
+  const duration = 1200;
+  let   start    = null;
+
+  function step(ts) {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3); /* ease-out cubic */
+    el.textContent = Math.floor(eased * target);
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(step);
+}
+
+/* ═══════════════════════════════════════════
+   WORD-BY-WORD REVEAL
+═══════════════════════════════════════════ */
+document.querySelectorAll('.word-reveal').forEach(el => {
+  const words = el.textContent.trim().split(/\s+/);
+  el.innerHTML = words.map((w, i) =>
+    `<span class="wr" style="transition-delay:${(i * 0.07).toFixed(2)}s">${w}</span>`
+  ).join(' ');
+});
+
+/* ═══════════════════════════════════════════
+   SCROLL SPY
+═══════════════════════════════════════════ */
+const spyTargets = document.querySelectorAll('#biomes, #screenshots, #story, #status');
+const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+
+const spyObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navAnchors.forEach(a => a.classList.remove('active-section'));
+      const link = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+      if (link) link.classList.add('active-section');
+    }
+  });
+}, { rootMargin: '-35% 0px -55% 0px' });
+
+spyTargets.forEach(s => spyObserver.observe(s));
+
+/* ═══════════════════════════════════════════
+   3D CARD TILT (desktop fine-pointer only)
+═══════════════════════════════════════════ */
+if (window.matchMedia('(pointer: fine)').matches) {
+  document.querySelectorAll('.gallery-cell, .gallery-featured').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r  = card.getBoundingClientRect();
+      const cx = (e.clientX - r.left)  / r.width  - 0.5;
+      const cy = (e.clientY - r.top)   / r.height - 0.5;
+      card.style.transform = `perspective(900px) rotateY(${cx * 9}deg) rotateX(${-cy * 6}deg) scale(1.025)`;
+      card.style.transition = 'transform 0.08s ease';
+      card.style.zIndex = '2';
     });
-  }, { rootMargin: '-35% 0px -55% 0px' });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(900px) rotateY(0deg) rotateX(0deg) scale(1)';
+      card.style.transition = 'transform 0.5s cubic-bezier(0.22,1,0.36,1)';
+      card.style.zIndex = '';
+    });
+  });
+}
 
-  spyTargets.forEach(s => spyObserver.observe(s));
-
-  /* ── BIOME SWITCHER WITH CROSSFADE ── */
-  function showBiome(index, el) {
-    const b     = biomes[index];
-    const img   = document.getElementById('biome-img');
-    const rank  = document.getElementById('biome-rank');
-    const name  = document.getElementById('biome-name');
-    const desc  = document.getElementById('biome-desc');
-    const boss  = document.getElementById('biome-boss');
-    const texts = [rank, name, desc, boss];
-
-    img.classList.add('fading');
-    texts.forEach(t => { t.style.opacity = '0'; t.style.transform = 'translateY(6px)'; });
-
-    setTimeout(() => {
-      img.src          = b.img;
-      img.classList.remove('fading');
-      rank.textContent = b.rank;
-      name.textContent = b.name;
-      desc.textContent = b.desc;
-      boss.innerHTML   = b.boss;
-      texts.forEach(t => { t.style.opacity = ''; t.style.transform = ''; });
-    }, 320);
-
-    document.querySelectorAll('#biome-nav li').forEach(li => li.classList.remove('active'));
-    el.closest('li').classList.add('active');
-  }
-
-  /* ── LIGHTBOX ── */
-  function openLightbox(src) {
-    document.getElementById('lightbox-img').src = src;
-    document.getElementById('lightbox').classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('active');
-    document.body.style.overflow = '';
-  }
-
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+/* ═══════════════════════════════════════════
+   LIGHTBOX
+═══════════════════════════════════════════ */
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>
 </body>
 </html>
