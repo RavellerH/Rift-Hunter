@@ -3,38 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rift Hunter — Solo ARPG</title>
+  <title>Rift Hunter</title>
   <meta name="description" content="A solo ARPG inspired by Monster Hunter. Hunt ancient Veilborn across seven biomes, craft powerful gear, and master aerial combat in the world of Aethara.">
   <meta property="og:title" content="Rift Hunter">
   <meta property="og:description" content="Hunt. Craft. Master the Rift.">
   <meta property="og:image" content="assets/screenshots/rift-lord.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #07070f;
-      --bg2:      #0d0c1a;
-      --bg3:      #12101f;
-      --purple:   #8b5cf6;
-      --purple-l: #a78bfa;
-      --gold:     #f59e0b;
-      --gold-l:   #fcd34d;
-      --red:      #dc2626;
-      --text:     #e2d9f3;
-      --dim:      #7c6d8f;
-      --border:   rgba(139,92,246,0.18);
+      --black: #000;
+      --dark:  #0a0a0a;
+      --mid:   #141414;
+      --white: #ffffff;
+      --gray:  #888888;
+      --dim:   #555555;
+      --accent: #c0392b;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: var(--black);
+      color: var(--white);
       font-family: 'Inter', sans-serif;
       font-weight: 400;
-      line-height: 1.7;
+      line-height: 1.6;
       overflow-x: hidden;
     }
 
@@ -42,525 +38,621 @@
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 100;
+      z-index: 200;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem 2.5rem;
-      background: rgba(7,7,15,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      padding: 0 2.5rem;
+      height: 56px;
+      background: var(--black);
+      border-bottom: 1px solid #1a1a1a;
     }
 
     .nav-logo {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.7rem;
-      color: var(--purple-l);
-      letter-spacing: 0.05em;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
       text-decoration: none;
+      letter-spacing: 0.08em;
     }
 
     .nav-links {
       display: flex;
-      gap: 2rem;
+      gap: 2.5rem;
       list-style: none;
     }
 
     .nav-links a {
-      color: var(--dim);
+      color: var(--gray);
       text-decoration: none;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       font-weight: 500;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      transition: color 0.2s;
+      transition: color 0.15s;
     }
 
-    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover { color: var(--white); }
 
     /* ── HERO ── */
     .hero {
       position: relative;
       height: 100vh;
       min-height: 600px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+      margin-top: 56px;
       overflow: hidden;
     }
 
-    .hero-bg {
+    .hero-img {
       position: absolute;
       inset: 0;
-      background-image: url('assets/screenshots/rift-lord.jpg');
-      background-size: cover;
-      background-position: center 30%;
-      filter: brightness(0.35) saturate(1.2);
-      transform: scale(1.05);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      filter: brightness(0.55);
     }
 
-    .hero-gradient {
+    .hero-overlay {
       position: absolute;
       inset: 0;
       background: linear-gradient(
-        to bottom,
-        rgba(7,7,15,0.3) 0%,
-        transparent 40%,
-        rgba(7,7,15,0.7) 80%,
-        var(--bg) 100%
+        to right,
+        rgba(0,0,0,0.85) 0%,
+        rgba(0,0,0,0.2) 60%,
+        rgba(0,0,0,0) 100%
       );
     }
 
+    .hero-overlay-b {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 35%;
+      background: linear-gradient(to top, #000, transparent);
+    }
+
     .hero-content {
-      position: relative;
+      position: absolute;
+      bottom: 10%;
+      left: 3rem;
+      max-width: 520px;
       z-index: 2;
-      padding: 0 1.5rem;
-      max-width: 800px;
     }
 
     .hero-eyebrow {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.55rem;
+      font-size: 0.62rem;
+      font-weight: 500;
       letter-spacing: 0.25em;
-      color: var(--gold);
       text-transform: uppercase;
-      margin-bottom: 1.5rem;
+      color: var(--gray);
+      margin-bottom: 1rem;
     }
 
     .hero-title {
-      font-family: 'Press Start 2P', monospace;
-      font-size: clamp(1.8rem, 5vw, 3.2rem);
-      color: #fff;
-      line-height: 1.3;
-      text-shadow: 0 0 60px rgba(139,92,246,0.6), 0 4px 20px rgba(0,0,0,0.8);
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-title span { color: var(--purple-l); }
-
-    .hero-tagline {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(0.9rem, 2vw, 1.1rem);
-      color: rgba(226,217,243,0.7);
-      font-style: italic;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
       letter-spacing: 0.05em;
-      margin-bottom: 2.5rem;
+      margin-bottom: 1.25rem;
     }
 
-    .hero-badges {
-      display: flex;
-      gap: 0.75rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 2.5rem;
+    .hero-body {
+      font-size: 0.9rem;
+      color: #ccc;
+      line-height: 1.75;
+      margin-bottom: 2rem;
+      font-weight: 300;
     }
 
-    .badge {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.35rem 0.85rem;
-      border-radius: 2px;
-    }
-
-    .badge-engine { background: rgba(139,92,246,0.2); border: 1px solid var(--purple); color: var(--purple-l); }
-    .badge-status { background: rgba(245,158,11,0.15); border: 1px solid var(--gold); color: var(--gold-l); }
-    .badge-platform { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: var(--dim); }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--purple);
-      color: #fff;
-      padding: 0.85rem 2rem;
-      font-weight: 600;
-      font-size: 0.85rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+    .hero-btn {
+      display: inline-block;
+      background: #1e1e1e;
+      color: var(--white);
       text-decoration: none;
-      border-radius: 2px;
-      transition: background 0.2s, transform 0.2s;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      border: 1px solid #333;
+      transition: background 0.2s, border-color 0.2s;
     }
 
-    .hero-cta:hover { background: var(--purple-l); transform: translateY(-2px); }
+    .hero-btn:hover {
+      background: #2a2a2a;
+      border-color: #555;
+    }
 
     .hero-scroll {
       position: absolute;
       bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
+      right: 3rem;
+      z-index: 2;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.4rem;
-      color: var(--dim);
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      animation: bounce 2s infinite;
     }
 
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(6px); }
-    }
-
-    /* ── SECTIONS ── */
-    section { padding: 6rem 2rem; }
-
-    .section-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.5rem;
+    .hero-scroll span {
+      font-size: 0.55rem;
       letter-spacing: 0.3em;
-      color: var(--purple);
       text-transform: uppercase;
-      margin-bottom: 0.75rem;
-    }
-
-    .section-title {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(1.6rem, 3vw, 2.4rem);
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 1rem;
-      line-height: 1.2;
-    }
-
-    .section-sub {
       color: var(--dim);
-      font-size: 1rem;
-      max-width: 560px;
-      margin-bottom: 3rem;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
     }
 
-    hr.divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 0;
+    .hero-scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--dim), transparent);
+      animation: pulse 2s ease-in-out infinite;
     }
 
-    /* ── SCREENSHOTS ── */
-    #screenshots { background: var(--bg2); }
+    @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
 
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.75rem;
+    /* ── SIDEBAR LAYOUT ── */
+    .sidebar-layout {
+      display: flex;
+      min-height: 600px;
     }
 
-    .gallery-grid .wide {
-      grid-column: span 2;
+    .sidebar {
+      width: 260px;
+      flex-shrink: 0;
+      background: var(--black);
+      border-right: 1px solid #1a1a1a;
+      padding: 3rem 0;
+      position: sticky;
+      top: 56px;
+      height: calc(100vh - 56px);
+      overflow-y: auto;
     }
 
-    .gallery-item {
+    .sidebar-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding: 0 2rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .sidebar-list {
+      list-style: none;
+    }
+
+    .sidebar-list li a {
+      display: block;
+      padding: 0.7rem 2rem;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .sidebar-list li a:hover {
+      color: var(--white);
+      background: #111;
+    }
+
+    .sidebar-list li.active a {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: #1a1a1a;
+      margin: 1.5rem 2rem;
+    }
+
+    .sidebar-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ── BIOMES PANEL ── */
+    #biomes { background: var(--black); }
+
+    .biome-panel {
+      display: flex;
+      min-height: 600px;
+    }
+
+    .biome-main {
+      flex: 1;
       position: relative;
+      min-height: 600px;
       overflow: hidden;
-      border-radius: 4px;
-      border: 1px solid var(--border);
-      aspect-ratio: 16/9;
-      background: var(--bg3);
-      cursor: pointer;
     }
 
-    .gallery-item img {
+    .biome-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.4s ease, filter 0.4s ease;
-      filter: brightness(0.92) saturate(1.05);
+      filter: brightness(0.5);
+      transition: filter 0.4s;
+      position: absolute;
+      inset: 0;
     }
 
-    .gallery-item:hover img {
-      transform: scale(1.04);
-      filter: brightness(1) saturate(1.15);
-    }
-
-    .gallery-caption {
+    .biome-info-overlay {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 0.6rem 0.85rem;
-      background: linear-gradient(transparent, rgba(7,7,15,0.9));
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
+      padding: 4rem 3rem 3rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.92));
+    }
+
+    .biome-rank-badge {
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: var(--dim);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .gallery-item:hover .gallery-caption { opacity: 1; }
-
-    /* ── FEATURES ── */
-    #features { background: var(--bg); }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .feature-card {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 1.75rem;
-      transition: border-color 0.25s, transform 0.25s;
-    }
-
-    .feature-card:hover {
-      border-color: var(--purple);
-      transform: translateY(-3px);
-    }
-
-    .feature-icon {
-      font-size: 1.6rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .feature-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--gold-l);
+      color: var(--gray);
       margin-bottom: 0.5rem;
     }
 
-    .feature-desc {
-      color: var(--dim);
-      font-size: 0.875rem;
-      line-height: 1.6;
-    }
-
-    /* ── BIOMES ── */
-    #biomes { background: var(--bg2); }
-
-    .biomes-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-    }
-
-    .biome-card {
-      position: relative;
-      border-radius: 4px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      height: 140px;
-      background: var(--bg3);
-      display: flex;
-      align-items: flex-end;
-    }
-
-    .biome-card-img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: brightness(0.5) saturate(1.1);
-      transition: filter 0.3s, transform 0.3s;
-    }
-
-    .biome-card:hover .biome-card-img {
-      filter: brightness(0.65) saturate(1.3);
-      transform: scale(1.05);
-    }
-
-    .biome-info {
-      position: relative;
-      z-index: 2;
-      padding: 0.75rem 1rem;
-      width: 100%;
-      background: linear-gradient(transparent, rgba(7,7,15,0.95));
-    }
-
-    .biome-name {
-      font-family: 'Cinzel', serif;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .biome-rank {
-      font-size: 0.65rem;
-      color: var(--gold);
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .biome-card-placeholder {
-      background: linear-gradient(135deg, var(--bg3), var(--bg));
-    }
-
-    /* ── STORY ── */
-    #story {
-      background: var(--bg);
-      position: relative;
-      overflow: hidden;
-    }
-
-    #story::before {
-      content: '';
-      position: absolute;
-      top: -200px;
-      right: -200px;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .story-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .story-image {
-      border-radius: 4px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      aspect-ratio: 16/9;
-    }
-
-    .story-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: brightness(0.9) saturate(1.1);
-    }
-
-    .story-quote {
-      font-family: 'Cinzel', serif;
-      font-style: italic;
-      font-size: 1.1rem;
-      color: var(--purple-l);
-      border-left: 2px solid var(--purple);
-      padding-left: 1.25rem;
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-    }
-
-    .story-text {
-      color: var(--dim);
-      font-size: 0.95rem;
-      line-height: 1.8;
-      margin-bottom: 1rem;
-    }
-
-    /* ── STATUS ── */
-    #status { background: var(--bg2); }
-
-    .phases {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 2.5rem;
-    }
-
-    .phase {
-      padding: 0.5rem 1rem;
-      border-radius: 2px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      border: 1px solid transparent;
-    }
-
-    .phase-active {
-      background: rgba(139,92,246,0.2);
-      border-color: var(--purple);
-      color: var(--purple-l);
-    }
-
-    .phase-done {
-      background: rgba(245,158,11,0.1);
-      border-color: rgba(245,158,11,0.3);
-      color: var(--gold);
-    }
-
-    .phase-upcoming {
-      background: rgba(255,255,255,0.03);
-      border-color: var(--border);
-      color: var(--dim);
-    }
-
-    .status-links {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.8rem 1.75rem;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border-radius: 2px;
-      transition: all 0.2s;
-    }
-
-    .btn-primary {
-      background: var(--purple);
-      color: #fff;
-    }
-
-    .btn-primary:hover { background: var(--purple-l); transform: translateY(-2px); }
-
-    .btn-ghost {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--dim);
-    }
-
-    .btn-ghost:hover { border-color: var(--purple); color: var(--text); }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-      padding: 2.5rem 2rem;
-      text-align: center;
-    }
-
-    .footer-logo {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.6rem;
-      color: var(--purple);
-      letter-spacing: 0.1em;
+    .biome-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      color: var(--white);
       margin-bottom: 0.75rem;
     }
 
-    .footer-text {
-      color: var(--dim);
-      font-size: 0.8rem;
+    .biome-desc {
+      font-size: 0.85rem;
+      color: #aaa;
+      max-width: 480px;
+      line-height: 1.7;
+      font-weight: 300;
     }
 
-    .footer-text a {
-      color: var(--purple-l);
+    .biome-boss {
+      margin-top: 1rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .biome-boss strong { color: var(--gray); }
+
+    /* ── GALLERY ── */
+    #screenshots {
+      background: var(--black);
+      padding: 0;
+    }
+
+    .gallery-header {
+      padding: 4rem 3rem 2rem;
+      display: flex;
+      align-items: baseline;
+      gap: 2rem;
+    }
+
+    .gallery-header h2 {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    .gallery-count {
+      font-size: 0.6rem;
+      color: var(--dim);
+      letter-spacing: 0.1em;
+    }
+
+    .gallery-featured {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .gallery-featured img {
+      width: 100%;
+      aspect-ratio: 21/8;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.85);
+      transition: filter 0.4s, transform 0.6s;
+    }
+
+    .gallery-featured:hover img {
+      filter: brightness(1);
+      transform: scale(1.01);
+    }
+
+    .gallery-grid {
+      display: grid;
+      gap: 2px;
+      margin-top: 2px;
+    }
+
+    .gallery-grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .gallery-grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .gallery-grid-2 { grid-template-columns: 3fr 2fr; }
+
+    .gallery-cell {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--mid);
+    }
+
+    .gallery-cell img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.78);
+      transition: filter 0.3s, transform 0.5s;
+    }
+
+    .gallery-cell:hover img {
+      filter: brightness(1);
+      transform: scale(1.04);
+    }
+
+    .cell-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1.5rem 1rem 0.65rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .gallery-cell:hover .cell-label,
+    .gallery-featured:hover .cell-label { opacity: 1; }
+
+    /* ── STORY ── */
+    #story {
+      display: flex;
+      background: var(--black);
+      border-top: 1px solid #1a1a1a;
+    }
+
+    .story-sidebar {
+      width: 260px;
+      flex-shrink: 0;
+      border-right: 1px solid #1a1a1a;
+      padding: 4rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .story-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 1rem;
+    }
+
+    .story-stat {
+      padding: 0.85rem 0;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .story-stat-key {
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 0.3rem;
+    }
+
+    .story-stat-val {
+      font-size: 0.82rem;
+      color: var(--white);
+      font-weight: 400;
+    }
+
+    .story-main {
+      flex: 1;
+      padding: 4rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .story-text-block h2 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      margin-bottom: 1.5rem;
+      color: var(--white);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    blockquote {
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--gray);
+      border-left: 2px solid #333;
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.65;
+    }
+
+    .story-text {
+      font-size: 0.85rem;
+      color: #999;
+      line-height: 1.85;
+      font-weight: 300;
+      margin-bottom: 0.85rem;
+    }
+
+    .story-img-block {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .story-img-block img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.75);
+    }
+
+    /* ── STATUS ── */
+    #status {
+      background: var(--dark);
+      border-top: 1px solid #1a1a1a;
+      padding: 5rem 3rem;
+    }
+
+    .status-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .status-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+    }
+
+    .status-heading {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    .status-sub {
+      font-size: 0.72rem;
+      color: var(--dim);
+    }
+
+    .phases {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0;
+      border: 1px solid #1a1a1a;
+      margin-bottom: 3rem;
+    }
+
+    .phase {
+      padding: 1.5rem 1rem;
+      border-right: 1px solid #1a1a1a;
+      text-align: center;
+    }
+
+    .phase:last-child { border-right: none; }
+
+    .phase-num {
+      font-size: 0.5rem;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .phase-name {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .phase.active .phase-num { color: var(--white); }
+    .phase.active .phase-name { color: var(--white); }
+    .phase.active { background: #111; }
+
+    .status-btns {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 1.75rem;
       text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-fill {
+      background: #1e1e1e;
+      color: var(--white);
+      border: 1px solid #333;
+    }
+
+    .btn-fill:hover { background: #2a2a2a; border-color: #555; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--gray);
+      border: 1px solid #222;
+    }
+
+    .btn-ghost:hover { color: var(--white); border-color: #444; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid #1a1a1a;
+      padding: 2.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy {
+      font-size: 0.6rem;
+      color: var(--dim);
     }
 
     /* ── LIGHTBOX ── */
@@ -569,46 +661,52 @@
       position: fixed;
       inset: 0;
       z-index: 999;
-      background: rgba(0,0,0,0.92);
+      background: rgba(0,0,0,0.97);
       align-items: center;
       justify-content: center;
-      padding: 2rem;
       cursor: zoom-out;
     }
 
     .lightbox.active { display: flex; }
 
     .lightbox img {
-      max-width: 100%;
+      max-width: 92vw;
       max-height: 90vh;
-      border-radius: 4px;
-      border: 1px solid var(--border);
       object-fit: contain;
     }
 
-    .lightbox-close {
+    .lb-close {
       position: absolute;
       top: 1.5rem;
-      right: 1.5rem;
+      right: 2rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
       color: var(--dim);
-      font-size: 1.5rem;
       cursor: pointer;
-      line-height: 1;
     }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-      .gallery-grid .wide { grid-column: span 1; }
-      .story-layout { grid-template-columns: 1fr; gap: 2rem; }
-      nav { padding: 1rem 1.25rem; }
-      .nav-links { display: none; }
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .biome-panel { flex-direction: column; }
+      .story-main { grid-template-columns: 1fr; gap: 2rem; }
+      .story-sidebar { display: none; }
+      .phases { grid-template-columns: repeat(4, 1fr); }
     }
 
-    @media (max-width: 600px) {
-      .gallery-grid { grid-template-columns: 1fr; }
-      .hero-title { font-size: 1.4rem; }
-      section { padding: 4rem 1.25rem; }
+    @media (max-width: 680px) {
+      nav { padding: 0 1.25rem; }
+      .nav-links { display: none; }
+      .hero-content { left: 1.5rem; right: 1.5rem; }
+      #status { padding: 3rem 1.5rem; }
+      .gallery-header { padding: 2.5rem 1.5rem 1.5rem; }
+      .story-main { padding: 2.5rem 1.5rem; }
+      .gallery-grid-3 { grid-template-columns: 1fr; }
+      .gallery-grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid-2 { grid-template-columns: 1fr; }
+      .phases { grid-template-columns: repeat(2, 1fr); }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
     }
   </style>
 </head>
@@ -618,274 +716,308 @@
 <nav>
   <a class="nav-logo" href="#">Rift Hunter</a>
   <ul class="nav-links">
-    <li><a href="#screenshots">Screenshots</a></li>
+    <li><a href="#screenshots">Gallery</a></li>
     <li><a href="#biomes">Biomes</a></li>
     <li><a href="#story">Story</a></li>
     <li><a href="#status">Dev Status</a></li>
-    <li><a href="https://github.com/ravellerh/rift-hunter" target="_blank">GitHub</a></li>
+    <li><a href="https://github.com/ravellerh/rift-hunter" target="_blank">GitHub ↗</a></li>
   </ul>
 </nav>
 
 <!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-gradient"></div>
+<div class="hero">
+  <img class="hero-img" src="assets/screenshots/rift-lord.jpg" alt="Rift Hunter">
+  <div class="hero-overlay"></div>
+  <div class="hero-overlay-b"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">A Solo ARPG &nbsp;|&nbsp; Godot 4 &nbsp;|&nbsp; In Development</p>
-    <h1 class="hero-title">RIFT<br><span>HUNTER</span></h1>
-    <p class="hero-tagline">"The sky remembers what the earth has forgotten."</p>
-    <div class="hero-badges">
-      <span class="badge badge-engine">Godot 4</span>
-      <span class="badge badge-status">Phase 1 — Prototype</span>
-      <span class="badge badge-platform">Desktop</span>
-    </div>
-    <a href="#screenshots" class="hero-cta">See Screenshots ↓</a>
+    <p class="hero-eyebrow">Solo ARPG &nbsp;·&nbsp; Godot 4 &nbsp;·&nbsp; In Development</p>
+    <h1 class="hero-title">RIFT<br>HUNTER</h1>
+    <p class="hero-body">Hunt ancient creatures across seven deadly biomes. Craft gear from their remains. Master the Rift — the tear between worlds that is slowly consuming Aethara.</p>
+    <a href="#biomes" class="hero-btn">Explore the World</a>
   </div>
   <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
     <span>Scroll</span>
-    <span>↓</span>
   </div>
-</section>
+</div>
 
-<hr class="divider">
+<!-- BIOMES — SIDEBAR LAYOUT -->
+<div id="biomes" class="sidebar-layout">
+  <nav class="sidebar" aria-label="Biomes">
+    <p class="sidebar-label">Biomes</p>
+    <ul class="sidebar-list" id="biome-nav">
+      <li class="active"><a href="#" onclick="showBiome(0,this);return false;">Ancient Canopy</a></li>
+      <li><a href="#" onclick="showBiome(1,this);return false;">Wildspire Waste</a></li>
+      <li><a href="#" onclick="showBiome(2,this);return false;">Frosted Peaks</a></li>
+      <li><a href="#" onclick="showBiome(3,this);return false;">Coral Skyland</a></li>
+      <li><a href="#" onclick="showBiome(4,this);return false;">Volcanic Abyss</a></li>
+      <li><a href="#" onclick="showBiome(5,this);return false;">Rotten Hollow</a></li>
+      <li><a href="#" onclick="showBiome(6,this);return false;">Elder Sky Ruins</a></li>
+      <div class="sidebar-divider"></div>
+      <li><a href="#screenshots">View Gallery</a></li>
+      <li><a href="#story">Story</a></li>
+      <li><a href="https://github.com/ravellerh/rift-hunter/blob/main/DESIGN.md" target="_blank">Design Doc ↗</a></li>
+    </ul>
+  </nav>
 
-<!-- SCREENSHOTS -->
+  <div class="sidebar-content">
+    <div class="biome-panel" id="biome-display">
+      <div class="biome-main">
+        <img class="biome-img" id="biome-img" src="assets/screenshots/ancient-canopy.jpg" alt="Ancient Canopy">
+        <div class="biome-info-overlay">
+          <p class="biome-rank-badge" id="biome-rank">Rank G1 &nbsp;·&nbsp; Starting Region</p>
+          <h2 class="biome-title" id="biome-name">Ancient Canopy</h2>
+          <p class="biome-desc" id="biome-desc">Dense jungle canopy with towering ancient trees, shafts of golden light, and bioluminescent plants. Rain cycles reduce visibility. Vine traversal connects upper and lower zones.</p>
+          <p class="biome-boss" id="biome-boss">Elder Boss: <strong>Verdanthos</strong> &nbsp;—&nbsp; Ancient serpentine Elder that controls the canopy itself</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
 <section id="screenshots">
-  <div class="section-inner">
-    <p class="section-label">Gallery</p>
-    <h2 class="section-title">Screenshots</h2>
-    <p class="section-sub">Concept art and visual targets across all biomes and game systems.</p>
+  <div class="gallery-header">
+    <h2>Concept Art</h2>
+    <span class="gallery-count">10 images</span>
+  </div>
 
-    <div class="gallery-grid">
-      <div class="gallery-item wide" onclick="openLightbox(this)">
-        <img src="assets/screenshots/rift-lord.jpg" alt="Rift Lord Boss Encounter" loading="lazy">
-        <span class="gallery-caption">Boss Encounter — Azkathor, The Rift Lord</span>
-      </div>
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/screenshots/sky-ruins.jpg" alt="Elder Sky Ruins" loading="lazy">
-        <span class="gallery-caption">Elder Sky Ruins — Final Biome</span>
-      </div>
+  <div class="gallery-featured" onclick="openLightbox('assets/screenshots/rift-lord.jpg')">
+    <img src="assets/screenshots/rift-lord.jpg" alt="Boss Encounter — Azkathor the Rift Lord" loading="lazy">
+    <div class="cell-label">Boss Encounter — Azkathor, The Rift Lord</div>
+  </div>
 
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/screenshots/ancient-canopy.jpg" alt="Ancient Canopy Exploration" loading="lazy">
-        <span class="gallery-caption">Ancient Canopy — Exploration</span>
-      </div>
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/screenshots/volcanic-abyss.jpg" alt="Volcanic Abyss" loading="lazy">
-        <span class="gallery-caption">Volcanic Abyss — Lava Depths</span>
-      </div>
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/screenshots/frosted-peaks.jpg" alt="Frosted Peaks" loading="lazy">
-        <span class="gallery-caption">Frosted Peaks — Blizzard Traverse</span>
-      </div>
+  <div class="gallery-grid gallery-grid-3" style="margin-top:2px">
+    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/ancient-canopy.jpg')">
+      <img src="assets/screenshots/ancient-canopy.jpg" alt="Ancient Canopy" loading="lazy">
+      <div class="cell-label">Ancient Canopy</div>
+    </div>
+    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/volcanic-abyss.jpg')">
+      <img src="assets/screenshots/volcanic-abyss.jpg" alt="Volcanic Abyss" loading="lazy">
+      <div class="cell-label">Volcanic Abyss</div>
+    </div>
+    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/frosted-peaks.jpg')">
+      <img src="assets/screenshots/frosted-peaks.jpg" alt="Frosted Peaks" loading="lazy">
+      <div class="cell-label">Frosted Peaks</div>
+    </div>
+  </div>
 
-      <div class="gallery-item wide" onclick="openLightbox(this)">
-        <img src="assets/screenshots/coral-skyland-aerial.jpg" alt="Coral Skyland Aerial Combat" loading="lazy">
-        <span class="gallery-caption">Coral Skyland — Aerial Combat</span>
-      </div>
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/screenshots/aerial-combat-insectglaive.jpg" alt="Insect Glaive Aerial" loading="lazy">
-        <span class="gallery-caption">Insect Glaive — Aerial Boost</span>
-      </div>
+  <div class="gallery-grid gallery-grid-2" style="margin-top:2px">
+    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/coral-skyland-aerial.jpg')">
+      <img src="assets/screenshots/coral-skyland-aerial.jpg" alt="Coral Skyland" loading="lazy">
+      <div class="cell-label">Coral Skyland — Aerial Combat</div>
+    </div>
+    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/sky-ruins.jpg')">
+      <img src="assets/screenshots/sky-ruins.jpg" alt="Elder Sky Ruins" loading="lazy">
+      <div class="cell-label">Elder Sky Ruins</div>
+    </div>
+  </div>
 
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/screenshots/forest-combat-crit.jpg" alt="Forest Combat Critical Hit" loading="lazy">
-        <span class="gallery-caption">Ancient Canopy — Critical Strike</span>
-      </div>
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/screenshots/combat-ui.jpg" alt="Combat UI" loading="lazy">
-        <span class="gallery-caption">Combat System — Full HUD</span>
-      </div>
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="assets/screenshots/guild-hall.jpg" alt="Guild Hall — Veilwatch" loading="lazy">
-        <span class="gallery-caption">Veilwatch — Guild Hall</span>
-      </div>
+  <div class="gallery-grid gallery-grid-4" style="margin-top:2px">
+    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/forest-combat-crit.jpg')">
+      <img src="assets/screenshots/forest-combat-crit.jpg" alt="Ground Combat" loading="lazy">
+      <div class="cell-label">Ground Combat</div>
+    </div>
+    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/aerial-combat-insectglaive.jpg')">
+      <img src="assets/screenshots/aerial-combat-insectglaive.jpg" alt="Aerial Combat" loading="lazy">
+      <div class="cell-label">Aerial Combat</div>
+    </div>
+    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/combat-ui.jpg')">
+      <img src="assets/screenshots/combat-ui.jpg" alt="Combat UI" loading="lazy">
+      <div class="cell-label">Combat System</div>
+    </div>
+    <div class="gallery-cell" onclick="openLightbox('assets/screenshots/guild-hall.jpg')">
+      <img src="assets/screenshots/guild-hall.jpg" alt="Veilwatch Guild Hall" loading="lazy">
+      <div class="cell-label">Veilwatch Guild Hall</div>
     </div>
   </div>
 </section>
-
-<hr class="divider">
-
-<!-- FEATURES -->
-<section id="features">
-  <div class="section-inner">
-    <p class="section-label">Gameplay</p>
-    <h2 class="section-title">Key Features</h2>
-    <p class="section-sub">A Monster Hunter-inspired loop built for solo play on desktop.</p>
-
-    <div class="features-grid">
-      <div class="feature-card">
-        <span class="feature-icon">⚔️</span>
-        <h3 class="feature-title">Equipment-Driven Skills</h3>
-        <p class="feature-desc">No skill trees. Your armor and weapon define your abilities. Stack the same skill across multiple pieces to level it up — mix-sets are always viable.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🐉</span>
-        <h3 class="feature-title">Veilborn Hunting</h3>
-        <p class="feature-desc">Hunt ancient creatures called Veilborn across seven biomes. Every monster has weakpoints, breakable parts, elemental resistances, and an enrage phase.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🌌</span>
-        <h3 class="feature-title">Aerial Combat</h3>
-        <p class="feature-desc">Flying monsters pull you into a sky combat layer with reduced gravity. The Insect Glaive unlocks permanent aerial mode. Bow hunters dominate the skies.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🔨</span>
-        <h3 class="feature-title">Crafting from Parts</h3>
-        <p class="feature-desc">Every weapon and armor set is crafted from specific monster materials. You always know what you need and why. A full set takes 3–5 hunts, not 20.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🏰</span>
-        <h3 class="feature-title">Living Guild Hub</h3>
-        <p class="feature-desc">Veilwatch is a frontier outpost with named NPCs — a Guild Receptionist, Blacksmith, Chef, Elder Scholar, and more. Each has personality and lore to share.</p>
-      </div>
-      <div class="feature-card">
-        <span class="feature-icon">🌍</span>
-        <h3 class="feature-title">Seven Biomes</h3>
-        <p class="feature-desc">Ancient Canopy, Wildspire Waste, Frosted Peaks, Coral Skyland, Volcanic Abyss, Rotten Hollow, and the Elder Sky Ruins — each with unique mechanics and monsters.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="divider">
-
-<!-- BIOMES -->
-<section id="biomes">
-  <div class="section-inner">
-    <p class="section-label">World</p>
-    <h2 class="section-title">Seven Biomes</h2>
-    <p class="section-sub">Unlock new regions as your Guild Rank grows. Each biome has its own rules.</p>
-
-    <div class="biomes-grid">
-      <div class="biome-card">
-        <img class="biome-card-img" src="assets/screenshots/ancient-canopy.jpg" alt="Ancient Canopy">
-        <div class="biome-info">
-          <div class="biome-name">Ancient Canopy</div>
-          <div class="biome-rank">G1 — Vine traversal, rain cycles</div>
-        </div>
-      </div>
-      <div class="biome-card biome-card-placeholder">
-        <div class="biome-info">
-          <div class="biome-name">Wildspire Waste</div>
-          <div class="biome-rank">G1 — Flash floods</div>
-        </div>
-      </div>
-      <div class="biome-card">
-        <img class="biome-card-img" src="assets/screenshots/frosted-peaks.jpg" alt="Frosted Peaks">
-        <div class="biome-info">
-          <div class="biome-name">Frosted Peaks</div>
-          <div class="biome-rank">G2 — Ice footing, blizzard cycles</div>
-        </div>
-      </div>
-      <div class="biome-card">
-        <img class="biome-card-img" src="assets/screenshots/coral-skyland-aerial.jpg" alt="Coral Skyland">
-        <div class="biome-info">
-          <div class="biome-name">Coral Skyland</div>
-          <div class="biome-rank">G2 — Updrafts, aerial combat</div>
-        </div>
-      </div>
-      <div class="biome-card">
-        <img class="biome-card-img" src="assets/screenshots/volcanic-abyss.jpg" alt="Volcanic Abyss">
-        <div class="biome-info">
-          <div class="biome-name">Volcanic Abyss</div>
-          <div class="biome-rank">G3 — Heat zones, lava rivers</div>
-        </div>
-      </div>
-      <div class="biome-card biome-card-placeholder">
-        <div class="biome-info">
-          <div class="biome-name">Rotten Hollow</div>
-          <div class="biome-rank">G3 — Darkness, poison swamps</div>
-        </div>
-      </div>
-      <div class="biome-card">
-        <img class="biome-card-img" src="assets/screenshots/sky-ruins.jpg" alt="Elder Sky Ruins">
-        <div class="biome-info">
-          <div class="biome-name">Elder Sky Ruins</div>
-          <div class="biome-rank">G4 — No ground. Rift energy everywhere.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="divider">
 
 <!-- STORY -->
-<section id="story">
-  <div class="section-inner">
-    <div class="story-layout">
-      <div class="story-image">
-        <img src="assets/screenshots/sky-ruins.jpg" alt="Elder Sky Ruins">
-      </div>
-      <div>
-        <p class="section-label">Lore</p>
-        <h2 class="section-title">The World of Aethara</h2>
-        <blockquote class="story-quote">"The sky remembers what the earth has forgotten."</blockquote>
-        <p class="story-text">Three hundred years ago, an ancient civilization called the Aethori pushed through the membrane between their world and the Primordial Void. What came back was not them.</p>
-        <p class="story-text">The creatures that followed — the <strong>Veilborn</strong> — are not evil. They are simply <em>primordial</em>. Vast, territorial, and ancient beyond reckoning. They reorganized the world around their territories, and humanity learned to survive alongside them.</p>
-        <p class="story-text">You arrive at the frontier outpost of <strong>Veilwatch</strong> with a Rift Shard embedded in your palm. Someone is deliberately opening Rifts. The ancient balance is breaking.</p>
-      </div>
+<div id="story">
+  <div class="story-sidebar">
+    <p class="story-label">Game Info</p>
+    <div class="story-stat">
+      <div class="story-stat-key">Genre</div>
+      <div class="story-stat-val">Solo Action RPG</div>
+    </div>
+    <div class="story-stat">
+      <div class="story-stat-key">Platform</div>
+      <div class="story-stat-val">Desktop</div>
+    </div>
+    <div class="story-stat">
+      <div class="story-stat-key">Engine</div>
+      <div class="story-stat-val">Godot 4</div>
+    </div>
+    <div class="story-stat">
+      <div class="story-stat-key">Perspective</div>
+      <div class="story-stat-val">2.5D Side-Scroll</div>
+    </div>
+    <div class="story-stat">
+      <div class="story-stat-key">Biomes</div>
+      <div class="story-stat-val">Seven</div>
+    </div>
+    <div class="story-stat">
+      <div class="story-stat-key">Status</div>
+      <div class="story-stat-val">Phase I — Prototype</div>
     </div>
   </div>
-</section>
 
-<hr class="divider">
+  <div class="story-main">
+    <div class="story-text-block">
+      <h2>The World of Aethara</h2>
+      <blockquote>"The sky remembers what the earth has forgotten."</blockquote>
+      <p class="story-text">Three hundred years ago, an ancient civilization called the Aethori pushed through the membrane between their world and the Primordial Void. The creatures that followed — the Veilborn — are not evil. They are simply primordial. Impossibly old, and violently territorial.</p>
+      <p class="story-text">You arrive at the frontier outpost of Veilwatch with a Rift Shard embedded in your palm. Rifts are opening where they shouldn't. The ancient balance is breaking. Someone is doing this deliberately.</p>
+      <br>
+      <a class="btn btn-fill" href="https://github.com/ravellerh/rift-hunter/blob/main/LORE.md" target="_blank">Read the Full Lore ↗</a>
+    </div>
+    <div class="story-img-block">
+      <img src="assets/screenshots/sky-ruins.jpg" alt="Elder Sky Ruins">
+    </div>
+  </div>
+</div>
 
 <!-- STATUS -->
 <section id="status">
-  <div class="section-inner">
-    <p class="section-label">Development</p>
-    <h2 class="section-title">In Active Development</h2>
-    <p class="section-sub">Built in Godot 4 with GDScript. All art is AI-generated concept work — final sprites TBD.</p>
-
-    <div class="phases">
-      <span class="phase phase-active">Phase 1 — Prototype</span>
-      <span class="phase phase-upcoming">Phase 2 — Core Systems</span>
-      <span class="phase phase-upcoming">Phase 3 — Biomes</span>
-      <span class="phase phase-upcoming">Phase 4 — Guild Hub</span>
-      <span class="phase phase-upcoming">Phase 5 — Content</span>
-      <span class="phase phase-upcoming">Phase 6 — Polish</span>
-      <span class="phase phase-upcoming">Phase 7 — Launch</span>
+  <div class="status-inner">
+    <div class="status-header">
+      <span class="status-heading">Development Status</span>
+      <span class="status-sub">Godot 4 · GDScript · All systems documented</span>
     </div>
 
-    <div class="status-links">
-      <a class="btn btn-primary" href="https://github.com/ravellerh/rift-hunter" target="_blank">View on GitHub</a>
+    <div class="phases">
+      <div class="phase active">
+        <div class="phase-num">Current</div>
+        <div class="phase-name">Prototype</div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">Phase II</div>
+        <div class="phase-name">Core Systems</div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">Phase III</div>
+        <div class="phase-name">Biomes</div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">Phase IV</div>
+        <div class="phase-name">Guild Hub</div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">Phase V</div>
+        <div class="phase-name">Content</div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">Phase VI</div>
+        <div class="phase-name">Polish</div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">Phase VII</div>
+        <div class="phase-name">Launch</div>
+      </div>
+    </div>
+
+    <div class="status-btns">
+      <a class="btn btn-fill" href="https://github.com/ravellerh/rift-hunter" target="_blank">View on GitHub</a>
       <a class="btn btn-ghost" href="https://github.com/ravellerh/rift-hunter/blob/main/ROADMAP.md" target="_blank">Full Roadmap</a>
-      <a class="btn btn-ghost" href="https://github.com/ravellerh/rift-hunter/blob/main/LORE.md" target="_blank">Read the Lore</a>
+      <a class="btn btn-ghost" href="https://github.com/ravellerh/rift-hunter/blob/main/DESIGN.md" target="_blank">Game Design Doc</a>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <p class="footer-logo">Rift Hunter</p>
-  <p class="footer-text">
-    An indie game in development &nbsp;|&nbsp;
-    <a href="https://github.com/ravellerh/rift-hunter" target="_blank">GitHub</a>
-    &nbsp;|&nbsp; Design docs in repo
-  </p>
+  <a class="footer-logo" href="#">Rift Hunter</a>
+  <ul class="footer-links">
+    <li><a href="https://github.com/ravellerh/rift-hunter" target="_blank">GitHub</a></li>
+    <li><a href="https://github.com/ravellerh/rift-hunter/blob/main/LORE.md" target="_blank">Lore</a></li>
+    <li><a href="https://github.com/ravellerh/rift-hunter/blob/main/ROADMAP.md" target="_blank">Roadmap</a></li>
+  </ul>
+  <span class="footer-copy">An indie ARPG in development — 2026</span>
 </footer>
 
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+  <div class="lb-close" onclick="closeLightbox()">Close ✕</div>
   <img id="lightbox-img" src="" alt="">
 </div>
 
 <script>
-  function openLightbox(el) {
-    const img = el.querySelector('img');
-    document.getElementById('lightbox-img').src = img.src;
+  const biomes = [
+    {
+      img: 'assets/screenshots/ancient-canopy.jpg',
+      rank: 'Rank G1 · Starting Region',
+      name: 'Ancient Canopy',
+      desc: 'Dense jungle canopy with towering ancient trees, shafts of golden light, and bioluminescent plants. Rain cycles reduce visibility. Vine traversal connects upper and lower zones.',
+      boss: 'Elder Boss: <strong>Verdanthos</strong> — Ancient serpentine Elder that controls the canopy itself'
+    },
+    {
+      img: 'assets/screenshots/ancient-canopy.jpg',
+      rank: 'Rank G1 · Starting Region',
+      name: 'Wildspire Waste',
+      desc: 'Desert surface transitioning into toxic swamp lowlands. Flash floods reshape terrain every few minutes. High heat in the desert, miasma in the marsh.',
+      boss: 'Elder Boss: <strong>Diablorak</strong> — Massive horned Elder that burrows and charges from below'
+    },
+    {
+      img: 'assets/screenshots/frosted-peaks.jpg',
+      rank: 'Rank G2',
+      name: 'Frosted Peaks',
+      desc: 'Blizzard-swept mountain range, ice caves, frozen waterfalls. Slick ground reduces traction. Blizzard cycles drop visibility to near zero.',
+      boss: 'Elder Boss: <strong>Velkhrath</strong> — Enormous mammoth Elder that generates blizzards and ice pillars'
+    },
+    {
+      img: 'assets/screenshots/coral-skyland-aerial.jpg',
+      rank: 'Rank G2',
+      name: 'Coral Skyland',
+      desc: 'Floating coral islands connected by wind currents, deep ocean far below. Natural updraft columns launch players into aerial combat. Vibrant and unlike any other biome.',
+      boss: 'Elder Boss: <strong>Namielle-Keth</strong> — Bioluminescent flying Elder, floods platforms, arcs electricity'
+    },
+    {
+      img: 'assets/screenshots/volcanic-abyss.jpg',
+      rank: 'Rank G3',
+      name: 'Volcanic Abyss',
+      desc: 'Deep volcanic caldera, lava rivers, ash clouds, superheated air pockets. Lava zones deal damage over time. Ash reduces stamina regeneration.',
+      boss: 'Elder Boss: <strong>Ashmaul</strong> — Ancient Elder grown enormous by Cult feeding. Story-critical fight.'
+    },
+    {
+      img: 'assets/screenshots/rift-lord.jpg',
+      rank: 'Rank G3',
+      name: 'Rotten Hollow',
+      desc: 'Deep underground decay zone, bioluminescent fungi, poison swamps, narrow tunnels. Permanent low light. True darkness zones require careful navigation.',
+      boss: 'Elder Boss: <strong>Chaoskrel</strong> — Long-dormant deep Elder with tentacle reach and Rift energy corruption'
+    },
+    {
+      img: 'assets/screenshots/sky-ruins.jpg',
+      rank: 'Rank G4 · Final Region',
+      name: 'Elder Sky Ruins',
+      desc: 'The ruins of the Aethori Sky Kingdom, still floating above the clouds. Permanent aerial zone — no ground floor. Ancient mechanisms still partially function.',
+      boss: 'Final Boss: <strong>Serath + The Sovereign</strong> — Two-phase story climax. See LORE.md.'
+    }
+  ];
+
+  function showBiome(index, el) {
+    const b = biomes[index];
+    document.getElementById('biome-img').src = b.img;
+    document.getElementById('biome-rank').textContent = b.rank;
+    document.getElementById('biome-name').textContent = b.name;
+    document.getElementById('biome-desc').textContent = b.desc;
+    document.getElementById('biome-boss').innerHTML = 'Elder Boss: <strong>' + b.boss.split('<strong>')[1].split('</strong>')[0] + '</strong> — ' + b.boss.split('</strong>')[1].replace(' — ', '').trim();
+    document.querySelectorAll('#biome-nav li').forEach(li => li.classList.remove('active'));
+    el.closest('li').classList.add('active');
+  }
+
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
     document.getElementById('lightbox').classList.add('active');
     document.body.style.overflow = 'hidden';
   }
+
   function closeLightbox() {
     document.getElementById('lightbox').classList.remove('active');
     document.body.style.overflow = '';
   }
+
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>
-
 </body>
 </html>
