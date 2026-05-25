@@ -1,104 +1,207 @@
 # Architecture
 
-## Tech Stack
-
-### Frontend
+## Engine & Tech Stack
 
 | Layer | Technology |
 |---|---|
-| Game Engine | Phaser 3 (browser canvas) |
-| Language | JavaScript / TypeScript |
-| Rendering | WebGL (Phaser default) |
-| UI | HTML overlay + Phaser scenes |
-| Assets | Kenney.nl free assets (MVP) |
+| Engine | Godot 4 |
+| Language | GDScript |
+| Rendering | Godot built-in 2D renderer (OpenGL / Vulkan) |
+| UI | Godot Control nodes (CanvasLayer) |
+| Maps | Godot TileMapLayer + LDtk (external editor, exports to JSON) |
+| Audio | Godot AudioStreamPlayer + AudioBus |
+| Platform | Desktop — Windows / Mac / Linux export |
+| Save Data | Godot FileAccess (JSON save files) |
 
-### Backend
+---
 
-| Layer | Technology |
+## Godot 4 Systems Used
+
+| Feature | Godot Node / System |
 |---|---|
-| Server | Node.js + Express |
-| Realtime | Socket.io (WebSocket) |
-| Game Loop | Server-authoritative tick at 20Hz |
-| State Sync | Delta compression (only changed entities) |
-| Hosting | Contabo VPS (Docker container) |
-| Matchmaking | Simple room-based (max 20 players per room) |
-
-### Infrastructure
-
-```
-Client (Browser)
-    ↕ WebSocket
-Game Server (Node.js + Socket.io)
-    ↕
-State Manager (in-memory, per room)
-    ↕ (Phase 2)
-Redis (session cache, leaderboard)
-```
+| 2.5D depth sorting | `z_index`, `y_sort_enabled` on root node |
+| Aerial combat layer | Separate `Node2D` layer with modified gravity constant |
+| Parallax biome backgrounds | `ParallaxBackground` + `ParallaxLayer` |
+| Player animation | `AnimationTree` + `AnimationPlayer` |
+| Tilemap biomes | `TileMapLayer` with physics layers and autotile |
+| Monster hitboxes | `Area2D` + `CollisionShape2D` (capsule) |
+| Camera | `Camera2D` with drag margin + smoothing |
+| UI / HUD | `CanvasLayer` with `Control` scene tree |
+| Hit particles | `CPUParticles2D` (lightweight, no GPU dependency) |
+| Screen flash / shake | `ShaderMaterial` on canvas + camera offset tween |
+| Crafting data | Godot `Resource` files (.tres) — one per item/weapon |
+| Save system | `FileAccess` writing JSON to `user://save.json` |
+| Signals | Godot signal system for all cross-node communication |
 
 ---
 
 ## File Structure
 
 ```
-monster-hunter-io/
-├── client/
-│   ├── src/
-│   │   ├── scenes/        # Phaser scenes (Boot, Menu, Game, HUD)
-│   │   ├── entities/      # Player.js, Monster.js, Projectile.js
-│   │   ├── systems/       # Combat.js, Leveling.js, Loot.js
-│   │   ├── network/       # SocketClient.js
-│   │   └── main.js
-│   └── assets/
-│       ├── sprites/
-│       ├── audio/
-│       └── maps/
-├── server/
-│   ├── src/
-│   │   ├── rooms/         # Room.js, RoomManager.js
-│   │   ├── entities/      # ServerPlayer.js, ServerMonster.js
-│   │   ├── systems/       # CombatSystem.js, AISystem.js
-│   │   └── index.js
-│   └── Dockerfile
-├── shared/
-│   └── constants.js       # Shared between client and server
+rift-hunter/
+├── project.godot
+├── export_presets.cfg
+│
+├── scenes/
+│   ├── world/
+│   │   ├── World.tscn              # Root world scene, loads biome
+│   │   ├── Veilwatch.tscn          # Guild hub scene
+│   │   └── biomes/
+│   │       ├── AncientCanopy.tscn
+│   │       ├── VolcanicAbyss.tscn
+│   │       ├── CoralSkyland.tscn
+│   │       ├── FrostedPeaks.tscn
+│   │       ├── RottenHollow.tscn
+│   │       ├── WildspireWaste.tscn
+│   │       └── ElderSkyRuins.tscn
+│   │
+│   ├── player/
+│   │   ├── Player.tscn
+│   │   └── AerialPlayer.tscn       # Player in aerial mode (different physics)
+│   │
+│   ├── monsters/
+│   │   ├── veilkin/                # Small monsters per biome
+│   │   ├── riftborn/               # Mid-boss monsters
+│   │   └── elders/                 # Boss monsters
+│   │
+│   ├── ui/
+│   │   ├── HUD.tscn                # HP, stamina, equipped skill icons
+│   │   ├── GuildBoard.tscn         # Quest board UI
+│   │   ├── CraftingMenu.tscn
+│   │   ├── Inventory.tscn
+│   │   └── MainMenu.tscn
+│   │
+│   └── effects/
+│       ├── HitSpark.tscn
+│       ├── DodgeTrail.tscn
+│       ├── RiftSurge.tscn          # Visual for Rift energy bursts
+│       └── MonsterDeath.tscn
+│
+├── scripts/
+│   ├── player/
+│   │   ├── Player.gd               # Movement, input, state machine
+│   │   ├── PlayerCombat.gd         # Attack, dodge, i-frames
+│   │   ├── PlayerStats.gd          # HP, stamina, derived stats from gear
+│   │   ├── PlayerAerial.gd         # Aerial mode physics and combat
+│   │   └── RiftShard.gd            # Unique player ability system
+│   │
+│   ├── monsters/
+│   │   ├── MonsterBase.gd          # Shared monster logic
+│   │   ├── MonsterAI.gd            # State machine (Idle/Patrol/Alert/Attack/Flee)
+│   │   ├── MonsterIntro.gd         # First-encounter cinematic sequence
+│   │   └── AerialMonster.gd        # Flying monster overrides
+│   │
+│   ├── systems/
+│   │   ├── CombatSystem.gd         # Hit resolution, damage calc, i-frames
+│   │   ├── CraftingSystem.gd       # Recipe lookup, material check, gear creation
+│   │   ├── EquipmentSystem.gd      # Equip/unequip, skill derivation from gear
+│   │   ├── GuildSystem.gd          # Rank tracking, quest state, NPC dialogue
+│   │   ├── BiomeManager.gd         # Load/unload biome scenes, spawn tables
+│   │   └── SaveSystem.gd           # Read/write save data
+│   │
+│   ├── ui/
+│   │   ├── HUD.gd
+│   │   ├── CraftingMenu.gd
+│   │   ├── GuildBoard.gd
+│   │   └── Inventory.gd
+│   │
+│   └── globals/
+│       ├── Constants.gd            # Autoload — all tunable values
+│       ├── GameState.gd            # Autoload — current player state, flags
+│       └── Events.gd               # Autoload — global signal bus
+│
+├── resources/
+│   ├── weapons/                    # .tres files — one per weapon
+│   ├── armor/                      # .tres files — one per armor piece
+│   ├── monsters/                   # .tres files — monster data (stats, drops)
+│   ├── quests/                     # .tres files — quest definitions
+│   └── items/                      # .tres files — crafting materials
+│
+├── assets/
+│   ├── sprites/
+│   │   ├── player/
+│   │   ├── monsters/
+│   │   ├── environment/
+│   │   ├── ui/
+│   │   └── effects/
+│   ├── audio/
+│   │   ├── music/
+│   │   ├── sfx/
+│   │   └── ambient/
+│   └── fonts/
+│
 ├── ARCHITECTURE.md
 ├── DESIGN.md
+├── LORE.md
 ├── ROADMAP.md
 └── README.md
 ```
 
-### One file per system — keep concerns separated:
+---
 
-| File | Responsibility |
+## Autoloads (Global Singletons)
+
+| Script | Purpose |
 |---|---|
-| `client/src/entities/Player.js` | Input handling, local prediction, rendering |
-| `client/src/entities/Monster.js` | Client-side monster interpolation |
-| `client/src/systems/Combat.js` | Hit detection, damage numbers, effects |
-| `client/src/systems/Leveling.js` | Power Shard accumulation, level-up logic |
-| `client/src/systems/Loot.js` | Gear Buff display, pickup logic |
-| `client/src/network/SocketClient.js` | Socket.io connection, event handling |
-| `server/src/rooms/Room.js` | Per-match state, player list, timers |
-| `server/src/rooms/RoomManager.js` | Matchmaking, room lifecycle |
-| `server/src/entities/ServerPlayer.js` | Authoritative player state |
-| `server/src/entities/ServerMonster.js` | Monster AI state machine |
-| `server/src/systems/CombatSystem.js` | Server-side hit validation |
-| `server/src/systems/AISystem.js` | Monster behavior tick |
-| `shared/constants.js` | MAP_SIZE, TICK_RATE, SPEEDS, COOLDOWNS |
+| `Constants.gd` | All numeric constants — speeds, cooldowns, damage values |
+| `GameState.gd` | Player inventory, guild rank, quest flags, current biome |
+| `Events.gd` | Global signal bus — decouples systems without tight references |
+
+Using `Events.gd` as a signal bus keeps systems decoupled. Example:
+```
+# CombatSystem emits:
+Events.monster_killed.emit(monster_id, loot_table)
+
+# GuildSystem listens:
+Events.monster_killed.connect(_on_monster_killed)
+```
 
 ---
 
-## AI Development Workflow
+## Sprite Strategy — Free + AI Hybrid
+
+| Asset Type | Source |
+|---|---|
+| Player character animations | LPC Sprite Generator (free, CC-licensed, layered) |
+| Armor overlays on character | Stable Diffusion + pixel LoRA over LPC base |
+| Monster sprites (small) | szadiart (itch.io) free packs |
+| Monster sprites (bosses) | Midjourney concept → pixelated → Aseprite cleanup |
+| Biome background layers | ansimuz (itch.io) — atmospheric parallax packs |
+| Tileset per biome | LPC tilesets + AI-generated variants |
+| Boss splash / NPC portraits | Midjourney or DALL-E 3, high res |
+| UI icons, item art | Adobe Firefly (commercially safe) |
+| Effects (sparks, particles) | Hand-made in Aseprite (small, fast to make) |
+
+**AI consistency workflow:**
+1. Generate front-facing sprite with Stable Diffusion (fix seed + LoRA)
+2. Use that as ControlNet reference for side / back views
+3. Import frames into Aseprite, clean up, export sprite sheet
+4. Godot `AnimatedSprite2D` reads sheet directly
+
+**Tools:**
+- **Stable Diffusion** (local) + pixel art LoRA — most control, free
+- **Pixelicious** (itch.io) — converts any image to pixel art in one click
+- **Aseprite** (~$20) — animation cleanup, sprite sheets
+- **LDtk** (free) — map editor, exports to JSON Godot can load
+
+---
+
+## AI Agent Development Workflow
 
 | Task | Tool |
 |---|---|
-| Architecture & systems | Claude Code (primary) |
-| Refactoring / cleanup | Codex CLI |
-| Monster AI behavior | Claude Code |
-| Phaser scene boilerplate | Claude Code |
-| Asset naming & config | Gemini CLI (fast generation) |
+| All GDScript systems | Claude Code (primary) |
+| Scene structure (.tscn descriptions) | Claude Code |
+| Monster AI state machines | Claude Code |
+| Shader effects (hit flash, Rift glow) | Claude Code |
+| Refactoring passes | Codex CLI |
+| Resource file generation (bulk items) | Gemini CLI |
+| Asset config and naming | Gemini CLI |
 
-### Tips
+### Claude Code Session Tips
 
-- Keep `ARCHITECTURE.md` updated so Claude retains full context across sessions.
-- Ask Claude Code to write tests for collision and state transitions before implementing features.
-- Use `shared/constants.js` as the single source of truth for all tunable values.
+- Start every session: *"Read ARCHITECTURE.md and DESIGN.md before writing any code."*
+- One script per system — never mix combat logic into the Player node
+- Use `Constants.gd` for every number — no magic values in scripts
+- Use `Events.gd` signals for cross-system communication — no direct node references across scenes
+- Ask Claude to write the `Resource` data schema first, then the system that reads it
