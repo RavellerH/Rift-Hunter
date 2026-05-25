@@ -1,6 +1,6 @@
 # Asset Generation Prompts — Rift Hunter
 
-**Art style:** Anime pixel art, dark fantasy ARPG. Rich atmospheric color with dark backgrounds.
+**Art style:** Anime pixel art, vibrant adventure ARPG. Rich atmospheric color, lush environments, warm lighting.
 Side-scrolling 2.5D aesthetic. Sprites target **48×48px** per frame.
 
 Each section has two prompt variants:
@@ -18,13 +18,13 @@ Append this to every prompt for visual consistency:
 
 **MJ suffix:**
 ```
---style raw --ar 1:1 --v 6 dark fantasy anime pixel art, rich atmospheric lighting, 
-2.5D side-scroller aesthetic, Aethara world, Rift Hunter game
+--style raw --ar 1:1 --v 6 vibrant adventure anime pixel art, rich atmospheric lighting, 
+lush colorful world, 2.5D side-scroller aesthetic, Aethara world, Rift Hunter game
 ```
 
 **SD suffix:**
 ```
-pixel art, 48x48 sprite, game sprite, dark fantasy ARPG, 
+pixel art, 48x48 sprite, game sprite, vibrant adventure ARPG, 
 clean outlines, limited palette, sprite sheet
 NEGATIVE: photorealistic, 3D render, blurry, soft edges, watermark, 
 extra limbs, deformed, low quality, jpeg artifacts
@@ -39,7 +39,7 @@ extra limbs, deformed, low quality, jpeg artifacts
 **Identity:** A lone Guild hunter who arrived at Veilwatch with no rank and a Rift Shard — a sliver
 of crystallized Void energy — embedded in their left palm under scar tissue. The shard emits a faint
 violet-blue glow through the skin. Practical armor designed for mobility, crafted from monster parts.
-Anime protagonist energy — determined, capable, quietly dangerous.
+Anime protagonist energy — determined, capable, ready for whatever comes next.
 
 ---
 
@@ -164,8 +164,8 @@ Expression: calm focus before a fight.
 
 **Design brief:** A large, predatory quadruped — imagine a lion-bear hybrid with a mane of
 black thorns and moss-covered obsidian hide plates. Green-gold bioluminescent eyes.
-Ancient forest energy. Not evil — just violently territorial. When enraged, the thorn mane
-flares outward and glows deep crimson.
+Ancient forest energy. Not evil — just proudly territorial. When enraged, the thorn mane
+flares outward and blazes deep crimson — spectacular to look at, dangerous to stand near.
 
 ### Reference Sheet (MJ)
 ```
@@ -362,13 +362,14 @@ gold electricity, clear blue sky contrast.
 
 ## 10 — ASHMAUL (G3 Elder Boss — Volcanic Abyss)
 
-*Colossal Elder, grown enormous by Cult feeding. Lava pools, tremor slams. Story-critical.*
+*The largest documented living Veilborn. The Reclamation has been keeping it fed. Story-critical.*
 
-**Design brief:** Something that was once a manageable Elder and has been fed Rift energy by
-the Cult until it became a geological event. Its body is now so dense with Rift corruption
-that it barely moves — but when it does, the caldera shakes. Obsidian hide cracked open at
-stress points where magma pressure vents. Eyes that have gone from animal to something almost
-aware — too aware. The Cult's runes are carved into its hide.
+**Design brief:** Something that was once a large Elder and has been fed Rift energy by the
+Reclamation until it became a geological event. Its body has grown so dense with mass and
+volcanic energy that it barely moves — but when it does, the caldera shakes. Obsidian hide
+cracked open at stress points where magma pressure vents orange-gold light. Ancient and
+immense, not malevolent — just enormous and disturbed by the energy being fed into its territory.
+The Reclamation's tool marks are carved into the feeding stones around its lair.
 
 ### Reference Sheet (MJ)
 ```
@@ -381,18 +382,17 @@ Originally bear-like quadruped body structure, now bloated with Rift feeding.
 Hide: thick obsidian plates, black as volcanic glass, cracked at seams — 
 magma glows deep orange-red at every crack. Stress fractures spider-web across 
 shoulders and haunches where Rift energy vents as heat shimmer.
-Cult markings: deep carved runes across back and shoulders, 
-glowing faint sickly green (Rift Cult energy, different from natural Rift violet).
-Eyes: four small eyes, originally dull and animal — now unsettlingly aware, 
-pale gold, looking at something not in the physical world.
+Feeding marks: crude carved channels in the stone around its resting area, 
+Reclamation tool marks, charred feeding runes — orange-gold from volcanic contact.
+Eyes: four small eyes, pale amber-gold, slow and ancient.
 Tail: massive, ends in volcanic rock club, trailing lava.
 
 Attack inset: foreleg raised, slamming down, concentric lava pool ring erupting 
 from impact point. Body weight causing visible ground deformation.
 
-Volcanic Abyss atmosphere — hell-red caldera light from below, 
+Volcanic Abyss atmosphere — deep caldera light from below, 
 ash cloud overhead, lava river behind. Obsidian black, magma orange-red, 
-sickly Cult green, pale gold eyes.
+amber-gold eyes, dramatic scale.
 
 --style raw --ar 16:9 --v 6
 ```
@@ -401,13 +401,14 @@ sickly Cult green, pale gold eyes.
 
 ## 11 — CHAOSKREL (G3 Elder Boss — Rotten Hollow)
 
-*Long-dormant deep Elder. Multi-phase fight. Tentacle reach. Rift energy corruption.*
+*Long-dormant deep Elder. Multi-phase fight. Never before documented. First contact.*
 
-**Design brief:** Something that has been asleep in the deepest dark of the world since before
-the Sundering and is now awake and confused and immense. Phase 1: looks almost geological — a
-mass of dark stone with faintly moving surfaces. Phase 2: the stone shell cracks and something
-vast and many-tentacled unfolds. Its Rift corruption is visible — the void shows through cracks
-in its body, small windows into empty space.
+**Design brief:** Something that has been asleep in the deepest hollow of the world since before
+the Sundering and is now awake and curious and immense. Phase 1: looks almost geological — a
+mass of dark stone with faintly moving surfaces, almost indistinguishable from the cave itself.
+Phase 2: the stone shell cracks and something vast and many-limbed unfolds — bioluminescent,
+alien, spectacular. The Field Codex has never had an entry for this tier of deep Elder.
+It is the discovery of a career.
 
 ### Reference Sheet (MJ)
 ```
@@ -426,14 +427,14 @@ Central body: roughly cephalopod — wide flat torso, boneless.
 Deep black-purple skin, iridescent in bioluminescent fungal light. 
 Tentacles: twelve primary tentacles, each 3× body length, 
 tips crystallized with deep purple Rift energy spikes.
-Where Rift corruption is worst: cracks through body reveal void — 
-not darkness, but actual absence, stars visible through the gaps.
+Where bioluminescence is strongest: deep teal and gold light radiates from 
+between body segments and across the skin surface in shifting patterns.
 Eyes: three large compound eyes, ringed in deep teal bioluminescence, 
-the inner eye surface shows moving void imagery.
+vast and ancient and attentive.
 
 Rotten Hollow atmosphere — bioluminescent fungal light teal and gold, 
-deep shadow, wet stone. Deep black-purple, void absence visible in cracks, 
-teal bio light, dark stone.
+deep shadow, wet stone. Deep black-purple iridescent skin, 
+teal and gold bioluminescence, spectacular in the dark.
 
 --style raw --ar 16:9 --v 6
 ```
@@ -481,14 +482,14 @@ mechanisms, sky blue energy core, sunset orange sky.
 
 ## 13 — SERATH (G4 Story Antagonist)
 
-*Aethori descendant. 230 years old. Rift Shard in chest. Believes in the second Sundering.*
+*Aethori descendant. 230 years old. Rift Shard in chest. Wants to restart the Sky Kingdom.*
 
 **Design brief:** A person who has lived two centuries beyond their natural span, sustained by
 a Rift Shard embedded in their sternum. They do not look 230 — they look ageless, somewhere
 between 35 and ancient. Ancient Aethori sky-sailor clothing worn and repaired over centuries.
 The Rift Shard in their chest glows through their shirt — a steady violet heartbeat. They are
-not designed to look villainous. They look like someone who has been right about everything
-for too long and learned patience the hard way.
+not designed to look villainous. They look like someone who has spent sixty years building
+toward one specific thing and is now very close to finishing it.
 
 ### Reference Sheet (MJ)
 ```
@@ -578,13 +579,12 @@ Each prompt generates one character. Use `--ar 1:1` for dialogue box crop.
 
 ### Yela — Guild Receptionist
 ```
-close-up portrait of a young woman guild receptionist, dark fantasy anime ARPG, 
+close-up portrait of a young woman guild receptionist, vibrant adventure anime ARPG, 
 dialogue portrait style. Yela: warm brown skin, dark hair pinned up practically, 
-small Guild insignia earring. Sharp intelligent eyes — warm but watchful. 
-She's seen too many hunters not come back to be fully comfortable. 
-Professional Guild uniform — deep navy with silver collar pip. Expression: 
-welcoming but carrying quiet worry she doesn't show in her voice.
-Painterly portrait, dark stone background with Guild lantern warm-orange light.
+small Guild insignia earring. Sharp intelligent eyes — genuinely warm, knows everyone 
+by name, happy to see you. Professional Guild uniform — deep navy with silver collar pip. 
+Expression: welcoming, energized, the kind of person who makes a place feel like home.
+Painterly portrait, warm stone background with Guild lantern warm-orange light.
 --style raw --ar 1:1 --v 6
 ```
 
@@ -595,24 +595,23 @@ dialogue portrait style. Doram: broad face, wide jaw, dark skin with old burn sc
 across left cheek and neck (forge accident, years ago). Thick work-worn hands visible 
 at frame edge. Short grey-shot black beard. Eyes: deeply competent — he assesses 
 everything structurally. Expression: neutral bordering on disapproving, 
-but this is just his face. He's proud of his work and terrified of Elders 
-in equal measure, shows neither. Leather apron, hammer hilt visible over shoulder.
+but this is just his face. He's deeply proud of his work and deeply unimpressed 
+by anyone who brings him inferior materials. Leather apron, hammer hilt visible over shoulder.
 Forge fire warm light from below, dark workshop behind.
 --style raw --ar 1:1 --v 6
 ```
 
 ### Elder Scholar Voss
 ```
-close-up portrait of an ancient scholar, dark fantasy anime ARPG, dialogue portrait style. 
-Elder Scholar Voss: very old — genuinely ancient, the kind of old that stops being specific. 
-Long silver-white hair, worn loose. Deep set eyes, pale grey, seeing things 
-not in the present room. Calm that is not peace — it is the calm of someone 
-who has processed every terrible thing and kept going. 
+close-up portrait of an ancient scholar, vibrant adventure anime ARPG, dialogue portrait style. 
+Elder Scholar Voss: very old — genuinely ancient, the kind of old that has seen most things 
+and is still curious about the rest. Long silver-white hair, worn loose. 
+Deep set eyes, pale grey, warm with accumulated knowledge. 
+The patient calm of someone who has been delighted by discovery for a very long time. 
 Layered scholar robes, deep burgundy and old gold. 
-Open book visible at frame edge, filled with dense notation. 
-A single closed Rift Shard in a sealed glass vial worn as a pendant — 
-much smaller than the player's. He knows what it is. He's never mentioned it unprompted.
-Expression: listening to something no one else can hear.
+Open book visible at frame edge, filled with dense notation and enthusiastic margin notes. 
+A single Rift Shard in a sealed glass vial worn as a pendant — a research specimen. 
+Expression: just thought of something interesting, about to share it.
 Candlelit study background, ancient tomes, faint violet Rift glow from the pendant.
 --style raw --ar 1:1 --v 6
 ```
