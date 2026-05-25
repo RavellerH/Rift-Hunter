@@ -23,6 +23,62 @@ All stats are **derived from equipped gear** — the base values are fixed. Gear
 - 3 faints per quest = quest failed, no loot
 - Fainting loses any temporary buffs (meal bonus, etc.) but not collected materials
 
+### Player Identity — Blank Slate
+
+The Hunter has no name, no backstory, no spoken dialogue. NPCs call you "Hunter," "you," or your guild title. The Rift Shard in your palm is the one personal detail — unusual enough that Voss reacts on sight, specific enough to anchor the story. Everything else is whoever the player imagines.
+
+This is intentional. The world has enough personality that the player doesn't need a character to arrive with it.
+
+---
+
+## Rift Shard — Resonance Abilities
+
+The Rift Shard is a sliver of crystallized Void energy embedded in the player's left palm. It reacts to Rift proximity and Veilborn presence. As the player hunts and explores, attunement deepens and new abilities unlock.
+
+Three abilities. All are in addition to the weapon moveset and gear skills — a separate layer. Voss tracks the progression obsessively and gives informal ability names. The Guild has no official classification.
+
+### Rift Pulse *(unlocks: G1, after first Rift encounter)*
+
+**What it does:** Sends a pulse of Rift energy outward from the palm. All Veilborn within a large radius glow faintly for 20 seconds — visible through walls and terrain. Veilkin caught in the pulse enter a startled alert state (1.5 seconds).
+
+**Use cases:** Scout zone before engaging. Find fleeing Veilkin. Detect hidden spawns. Get the first read on a new monster's patrol path.
+
+**Cooldown:** 45 seconds
+
+**Visual:** Palm illuminates violet-blue, a ring of energy spreads outward at ground level.
+
+*Voss's notes: "The Shard reads Rift signatures the way a compass reads north. Passive attunement — she has been doing this unconsciously since arriving."*
+
+---
+
+### Rift Step *(unlocks: G2, triggered by the carved Rift wound scene in Coral Skyland)*
+
+**What it does:** Blink through Rift-space — teleport 200px in the held direction, passing through enemy hitboxes, projectiles, and terrain.
+
+**What it is NOT:** A dodge replacement. Rift Step has no i-frames, doesn't cancel animations, and doesn't trigger the combo system. It is a repositioning tool.
+
+**Use cases:** Escape a counter window that dodge won't clear. Reposition in aerial combat. Close a gap on a fleeing Veilkin. Pass through environmental hazards.
+
+**Cooldown:** 18 seconds (reduced by `Focus` skill)
+
+**Visual:** The player briefly phases into a translucent void-frame, then reappears. One-frame absence where they were.
+
+*Voss's notes: "She learned to step through it. This is unprecedented in documented Shard carriers. Rescheduling everything. Extraordinary."*
+
+---
+
+### Rift Seal *(unlocks: G4, the moment the Sovereign stirs in the Elder Sky Ruins)*
+
+**Story use:** Channels through the palm to guide the Sovereign back through the Rift membrane. A unique scripted event — not a fight, a negotiation through force of will and Shard attunement. The only thing in the game that interacts directly with the Rift from this side.
+
+**Post-story combat use:** Charge for 2 seconds → release a concentrated beam of Rift energy. Deals high Rift-element damage to a single target and opens a 4-second vulnerability window (all incoming damage ×1.5 against that target).
+
+**Cooldown:** 3 minutes
+
+**Visual:** Palm charges violet-gold, crackling upward along the arm. Beam releases forward, brief sky-flash on impact. Most dramatic animation in the player's kit.
+
+*Voss's notes: "This is what the attunement was building toward. First documented full Rift Seal in three hundred years." — followed by a handwritten addition: "You were magnificent."*
+
 ---
 
 ## Weapons
@@ -685,3 +741,92 @@ Elder Rank — Post-story content
   → New material tier, endgame gear
   → The other Rift Shards questline
 ```
+
+---
+
+## Guild Story Branches
+
+The main story beats are the same regardless of guild. What changes is the *angle* — who tells you what, who noticed first, who was already worried, and what your people do when things escalate. Each guild gives you a different version of the same truth.
+
+These are short scene variations (different NPC dialogue, different ambient context) — not full quest rewrites.
+
+### The Three Key Divergence Points
+
+**Scene 1 — "Something's wrong" (Act I, Ancient Canopy)**
+
+The moment the player notices the Rift shouldn't exist. Each guild has a different reason for knowing:
+
+| Guild | How they flag it |
+|-------|-----------------|
+| Wardens | Yela flags it via Rift monitor data. Aldis posts an investigation contract before you finish the hunt. |
+| Crimson Claw | Brix bet on a kill time and the monster was in the wrong zone entirely. Karas pins the location as a personal contract. |
+| Ironveil Crafters | Lira notices the drop materials don't match any known biome origin. Doram posts a research contract. |
+| Skyborn | Tae felt the updraft patterns shift a week before the Rift opened. Vyn had already filed a report. |
+| Hollowroot Lodge | Wren's field team documented the Veilkin displacement three days before the Rift opened. They have the data. |
+| Ember Pact | Ryn noticed the new spawn from field experience. Ignas posts a scouting contract quietly, without announcing why. |
+| Voidwalkers | They knew before anyone and said nothing. They'll tell you why when you reach G3. |
+
+---
+
+**Scene 2 — The Carved Wound (Act II, Coral Skyland)**
+
+When the player finds the artificially cut Rift tear:
+
+| Guild | Their read |
+|-------|-----------|
+| Wardens | Sora cross-references natural Rift formation patterns — this doesn't match. Aldis authorizes an investigation above standard rank. |
+| Crimson Claw | Brix is angry. Someone's using the biome as a distraction. Karas is already mapping movement patterns. |
+| Ironveil Crafters | Doram examines the tool marks — ancient carving technique, but the tools were modified modern Aethori artifacts. Someone planned this. |
+| Skyborn | Elder Vyn recognizes the carving style immediately. Aethori sky-script — a door marker. Her tone shifts. |
+| Hollowroot Lodge | Pip documents everything. Wren sends you a private note: "Don't tell the other guilds yet. Let's find out more first." |
+| Ember Pact | Hessa has seen these marks near the Volcanic Abyss. Ignas, direct: "This changes the job." |
+| Voidwalkers | Sable says nothing unusual. But their operative was already at the location an hour before you arrived. |
+
+---
+
+**Scene 3 — The Reclamation Revealed (Act III)**
+
+When it becomes clear who's behind the disruptions:
+
+| Guild | Their reaction |
+|-------|---------------|
+| Wardens | Aldis activates the full Rift monitoring network. Emergency status. |
+| Crimson Claw | Karas considers filing a counter-challenge against the Reclamation, seriously. Brix talks her down. |
+| Ironveil Crafters | Doram has heard of Serath. Has notes. Says carefully: "They're after the archives." |
+| Skyborn | Vyn goes quiet. At high friendship, she tells you: Serath approached the Skyborn once, years ago. They declined. |
+| Hollowroot Lodge | Wren has been tracking Reclamation field operatives for months without connecting them. Quietly furious at herself. |
+| Ember Pact | Ignas knew — not everything, but enough. He'll tell you over a drink if you've built the friendship. "The Abyss shows you things." |
+| Voidwalkers | Sable: "We've been watching Serath for longer than Veilwatch has had a wall." This is the moment they fully bring you in. |
+
+---
+
+## Serath Relationship Tracking
+
+How the final confrontation scene plays out depends on how much of Serath's story you found. There is no choice, no dialogue wheel — just depth determined by whether you looked.
+
+### The Five Discoverable Pieces
+
+| # | What | Where | Notes |
+|---|------|-------|-------|
+| 1 | **Three Letters** | Sky Ruins archives — scattered across Act IV exploration | Written across two centuries: grief → purpose → certainty |
+| 2 | **NPC Memory** | Merchant Athe — triggered if you ask enough questions about their older customers | "Someone old" becomes a description, becomes a name |
+| 3 | **The Journal Fragment** | Reclamation base in the Volcanic Abyss | Operational notes with one personal entry: what Serath remembers about the Sundering |
+| 4 | **Annotated Document** | Scholar Voss has a partial copy; Serath's copy is in the Ruins archives | Ancient Aethori sky-kingdom record, Serath's margin notes across two centuries |
+| 5 | **The Approach** | Before the final confrontation — walk toward Serath rather than attack | Requires 3+ other pieces to unlock the full exchange. Serath speaks first. |
+
+`serath_knowledge` score tracked in `GameState`. Each discovery = +1. Score gates the final scene.
+
+### Final Scene Variations
+
+**Score 0–1 — Minimal**
+Serath helps because their plan collapsed and they need you. Professional. Efficient. They leave through the Rift when it's done. Brief.
+
+**Score 2–3 — Acknowledged**
+Serath mentions you found their letters (or journal, whichever triggered). Brief — a sentence of surprise, not displeasure. Something like relief that someone knows the real story. They leave, and turn back once.
+
+**Score 4–5 — Full**
+Serath talks about what sixty years building toward something feels like when it doesn't land. The help they give is genuine, not calculated. They ask what you'll do with the Codex entry. They leave.
+
+After, Voss reads one of Serath's margin annotations aloud — the one from the annotated document, written when Serath was a hundred and fifty years old. It ends the game.
+
+*The scene doesn't change the outcome. It changes how much it meant.*

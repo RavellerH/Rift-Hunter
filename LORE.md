@@ -249,12 +249,22 @@ Your guild is home. Every monster you track, fight, and bring materials back fro
 
 The Guild has no official name for it. "Resonance" is what Voss settled on after three weeks of field notes.
 
-- **Early warning:** You feel a Rift opening minutes before Guild instruments detect it — useful for getting to the new spawn first and planting your flag
-- **Combat read:** Mid-fight, you get a half-second flash of clarity — not psychic, just a deep read on the Veilborn's intent that lets you react to the move before it starts
-- **Void Step** *(G2 unlock):* A blink through Rift-space, enough to slip through a gap that should have been a solid wall of claws
-- **Full attunement** *(G4):* Something spectacular. Voss has notes. They end with: *"Extraordinary. Schedule follow-up immediately."*
+Three abilities, unlocking as attunement deepens. The Resonance grows the more you hunt — every biome, every Elder, every Field Codex entry nudges it further.
 
-The Resonance grows the more you hunt. Every biome unlocked, every Elder encountered, every Field Codex entry completed nudges it further. Think of it as a reward for exploration.
+**Rift Pulse** *(G1 — after first Rift encounter)*
+A pulse of energy from the palm. All Veilborn in a wide radius glow faintly for 20 seconds — visible through terrain and walls. Useful for scouting, for finding displaced Veilkin, for getting the first read on a new monster before it knows you're there.
+
+*Voss's notes: "The Shard reads Rift signatures the way a compass reads north. She's been doing this unconsciously since she arrived."*
+
+**Rift Step** *(G2 — triggered by the carved Rift wound in the Coral Skyland)*
+A short blink through Rift-space — step through a gap that should be solid. The Shard learned to move from a moment of necessity: you found the wound, and the Shard recognized it. Something shifted.
+
+*Voss's notes: "She learned to step through it. Unprecedented. Rescheduling everything. Extraordinary."*
+
+**Rift Seal** *(G4 — the moment the Sovereign stirs)*
+The thing Voss's notes were building toward. A concentrated beam of Rift energy from the palm, capable of interacting directly with the Rift membrane from this side. Story-use: guide the Sovereign home. Combat use: the most powerful ability in the player's kit, on a very long cooldown.
+
+*Voss's notes: "First documented full Rift Seal in three hundred years." — followed by a handwritten addition: "You were magnificent."*
 
 ---
 
@@ -332,17 +342,21 @@ The Rift network, tapped too hard, too fast, wakes something that has been dorma
 
 A Rift Lord. Enormous. Ancient. Not malevolent — just *awake*, disoriented, and thrashing through the eastern sky like a creature that just opened its eyes in a room that has gotten very small. The Sky Ruins are shaking. The Coral Skyland below is losing altitude. Three biomes are registering emergency Rift surges.
 
-Serath helps you. Not out of redemption — out of practicality. They did not spend sixty years getting here to watch it collapse.
+Serath helps you. How the help arrives — and what gets said — depends on how much of their story you found.
 
 The Rift Lord cannot be fought conventionally. It has to be guided back into the Rift, and the only thing that can interact with the Rift membrane from this side is a Rift Shard. Yours. At full attunement.
 
 This is the moment Voss's notes were building toward. The thing he called *extraordinary*.
 
-You push the Sovereign back through. The Rift seals. The sky stabilizes. The Ruins are still standing — damaged, but standing. Serath is escorted out by the Guild. The eastern sky turns gold with released energy and then goes quiet.
+You push the Sovereign back through. The Rift seals. The sky stabilizes. The Ruins are still standing — damaged, but standing. The eastern sky turns gold with released energy and then goes quiet.
 
 You go home. Your guild is waiting. The trophy goes on the wall. Someone buys you a drink. Brix from the Crimson Claw demands a full account of the fight and will not stop asking follow-up questions.
 
 Voss is already writing the Field Codex entry for a Rift Lord. He puts your name as first contact and *"successfully negotiated its return to the Void"* and you decide not to correct that phrasing.
+
+The final scene between you and Serath varies depending on whether you looked. If you found their letters, their journal, their history — there is a real exchange. A conversation. Something worth having. If you didn't look, the resolution is still clean. It just ends sooner.
+
+*This is a story worth telling. How much of the story you found determines how it feels to tell it.*
 
 **Milestone:** The Sovereign. The seal. Full Resonance. A story worth telling.
 
