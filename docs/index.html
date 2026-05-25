@@ -6,8 +6,8 @@
   <title>Rift Hunter</title>
   <meta name="description" content="A solo ARPG inspired by Monster Hunter. Hunt ancient Veilborn across seven biomes, craft powerful gear, and master aerial combat in the world of Aethara.">
   <meta property="og:title" content="Rift Hunter">
-  <meta property="og:description" content="Hunt. Craft. Master the Rift.">
-  <meta property="og:image" content="assets/screenshots/rift-lord.jpg">
+  <meta property="og:description" content="Hunt. Explore. Build your legend.">
+  <meta property="og:image" content="assets/screenshots/coral-skyland-aerial.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -41,7 +41,7 @@
       height: 300%;
       pointer-events: none;
       z-index: 9998;
-      opacity: 0.042;
+      opacity: 0.018;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
       background-repeat: repeat;
       background-size: 200px 200px;
@@ -123,7 +123,7 @@
       height: 100%;
       object-fit: cover;
       object-position: center 20%;
-      filter: brightness(0.55);
+      filter: brightness(0.72);
       will-change: transform;
     }
     .hero-overlay {
@@ -264,7 +264,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: brightness(0.45);
+      filter: brightness(0.58);
       opacity: 0;
       transition: opacity 0.85s ease;
       will-change: opacity, transform;
@@ -275,8 +275,8 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(to right, rgba(0,0,0,0.75) 0%, transparent 55%),
-        linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 45%);
+        linear-gradient(to right, rgba(8,16,30,0.68) 0%, transparent 52%),
+        linear-gradient(to top, rgba(8,16,30,0.80) 0%, transparent 45%);
       pointer-events: none;
     }
 
@@ -592,7 +592,7 @@
 
     .story-text {
       font-size: 0.85rem;
-      color: #999;
+      color: #bbb;
       line-height: 1.85;
       font-weight: 300;
       margin-bottom: 0.85rem;
@@ -606,7 +606,7 @@
       aspect-ratio: 4/3;
       object-fit: cover;
       display: block;
-      filter: brightness(0.75);
+      filter: brightness(0.88);
     }
 
     /* ── STATUS ── */
@@ -787,7 +787,7 @@
 
 <!-- HERO -->
 <div class="hero">
-  <!-- Rift Lord video scrubs forward as you scroll down from the hero -->
+  <!-- Hero video scrubs forward as you scroll down -->
   <video class="hero-img" id="hero-vid" muted playsinline preload="auto"
          poster="assets/screenshots/coral-skyland-aerial.jpg">
     <source src="assets/video/coral-skyland.mp4" type="video/mp4">
@@ -867,9 +867,9 @@
     <span class="gallery-count">10 images</span>
   </div>
 
-  <div class="gallery-featured" onclick="openLightbox('assets/screenshots/rift-lord.jpg')">
-    <img src="assets/screenshots/rift-lord.jpg" alt="Boss Encounter — Azkathor the Rift Lord" loading="lazy">
-    <div class="cell-label">Boss Encounter — Azkathor, The Rift Lord</div>
+  <div class="gallery-featured" onclick="openLightbox('assets/screenshots/coral-skyland-aerial.jpg')">
+    <img src="assets/screenshots/coral-skyland-aerial.jpg" alt="Coral Skyland — Aerial Combat" loading="lazy">
+    <div class="cell-label">Coral Skyland — Open-Sky Aerial Combat</div>
   </div>
 
   <div class="gallery-grid gallery-grid-3" style="margin-top:2px">
@@ -888,9 +888,9 @@
   </div>
 
   <div class="gallery-grid gallery-grid-2" style="margin-top:2px">
-    <div class="gallery-cell" data-d="1" onclick="openLightbox('assets/screenshots/coral-skyland-aerial.jpg')">
-      <img src="assets/screenshots/coral-skyland-aerial.jpg" alt="Coral Skyland" loading="lazy">
-      <div class="cell-label">Coral Skyland — Aerial Combat</div>
+    <div class="gallery-cell" data-d="1" onclick="openLightbox('assets/screenshots/rift-lord.jpg')">
+      <img src="assets/screenshots/rift-lord.jpg" alt="Boss Encounter — Azkathor" loading="lazy">
+      <div class="cell-label">Boss Encounter — Azkathor</div>
     </div>
     <div class="gallery-cell" data-d="2" onclick="openLightbox('assets/screenshots/sky-ruins.jpg')">
       <img src="assets/screenshots/sky-ruins.jpg" alt="Elder Sky Ruins" loading="lazy">
@@ -936,8 +936,8 @@
     <div class="stat-label">Monsters</div>
   </div>
   <div class="stat-item" data-r data-d="4">
-    <div class="stat-num" data-target="4">0</div>
-    <div class="stat-label">Guild Ranks</div>
+    <div class="stat-num" data-target="6">0</div>
+    <div class="stat-label">Guilds</div>
   </div>
 </div>
 
@@ -974,14 +974,14 @@
   <div class="story-main">
     <div class="story-text-block" data-r="left">
       <h2>The World of Aethara</h2>
-      <blockquote class="word-reveal">"The sky remembers what the earth has forgotten."</blockquote>
-      <p class="story-text">Three hundred years ago, an ancient civilization called the Aethori pushed through the membrane between their world and the Primordial Void. The creatures that followed — the Veilborn — are not evil. They are simply primordial. Impossibly old, and violently territorial.</p>
-      <p class="story-text">You arrive at the frontier outpost of Veilwatch with a Rift Shard embedded in your palm. Rifts are opening where they shouldn't. The ancient balance is breaking. Someone is doing this deliberately.</p>
+      <blockquote class="word-reveal">"Every hunt is a story. Every biome is a frontier."</blockquote>
+      <p class="story-text">Three hundred years ago, the ancient Aethori civilization pushed through the edge of the world and found the Primordial Void. The creatures that came through — the Veilborn — built their own ecosystems, their own territories, their own patterns. The world reorganized around them. It is, honestly, spectacular.</p>
+      <p class="story-text">You've arrived at Veilwatch, a frontier town where six hunter guilds compete for glory, the biomes are still being mapped, and the Field Codex gains new entries every season. Pick a guild. Find your hunt. See what you're made of.</p>
       <br>
       <a class="btn btn-fill" href="lore.html">Read the Full Lore →</a>
     </div>
     <div class="story-img-block" data-r="right" data-d="2">
-      <img src="assets/screenshots/sky-ruins.jpg" alt="Elder Sky Ruins">
+      <img src="assets/screenshots/guild-hall.jpg" alt="Veilwatch Guild Hall">
     </div>
   </div>
 </div>
@@ -1081,19 +1081,19 @@ const biomes = [
     rank: 'Rank G3',
     name: 'Volcanic Abyss',
     desc: 'Deep volcanic caldera, lava rivers, ash clouds, superheated air pockets. Lava zones deal damage over time. Ash reduces stamina regeneration.',
-    boss: 'Elder Boss: <strong>Ashmaul</strong> &nbsp;—&nbsp; Ancient Elder grown enormous by Cult feeding. Story-critical fight.'
+    boss: 'Elder Boss: <strong>Ashmaul</strong> &nbsp;—&nbsp; The largest documented living Veilborn. The Reclamation has been keeping it fed. Story-critical.'
   },
   {
     rank: 'Rank G3',
     name: 'Rotten Hollow',
     desc: 'Deep underground decay zone, bioluminescent fungi, poison swamps, narrow tunnels. Permanent low light. True darkness zones require careful navigation.',
-    boss: 'Elder Boss: <strong>Chaoskrel</strong> &nbsp;—&nbsp; Long-dormant deep Elder with tentacle reach and Rift energy corruption'
+    boss: 'Elder Boss: <strong>Chaoskrel</strong> &nbsp;—&nbsp; Long-dormant deep Elder, never fully documented. First contact fight — yours to catalogue.'
   },
   {
     rank: 'Rank G4 · Final Region',
     name: 'Elder Sky Ruins',
     desc: 'The ruins of the Aethori Sky Kingdom, still floating above the clouds. Permanent aerial zone — no ground floor. Ancient mechanisms still partially function.',
-    boss: 'Final Boss: <strong>Serath + The Sovereign</strong> &nbsp;—&nbsp; Two-phase story climax. See LORE.md.'
+    boss: 'Story Climax: <strong>Serath + The Sovereign</strong> &nbsp;—&nbsp; The Sky Ruins, the Reclamation, and a Rift Lord that needs guiding home.'
   }
 ];
 
