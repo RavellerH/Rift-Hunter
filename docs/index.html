@@ -458,6 +458,16 @@
     }
     .gallery-cell:hover img { filter:brightness(1); transform:scale(1.04); }
 
+    .gallery-video {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.78);
+      transition: filter 0.3s, transform 0.5s;
+    }
+    .gallery-cell:hover .gallery-video { filter: brightness(1); transform: scale(1.04); }
+
     .cell-label {
       position: absolute;
       bottom:0; left:0; right:0;
@@ -776,7 +786,11 @@
 
 <!-- HERO -->
 <div class="hero">
-  <img class="hero-img" id="hero-img" src="assets/screenshots/rift-lord.jpg" alt="Rift Hunter">
+  <!-- Rift Lord video scrubs forward as you scroll down from the hero -->
+  <video class="hero-img" id="hero-vid" muted playsinline preload="auto"
+         poster="assets/screenshots/rift-lord.jpg">
+    <source src="assets/video/rift-lord.mp4" type="video/mp4">
+  </video>
   <div class="hero-overlay"></div>
   <div class="hero-overlay-b"></div>
   <div class="hero-content">
@@ -796,35 +810,20 @@
   <div class="biome-scroll-track" id="biome-scroll-track">
     <div class="biome-sticky">
 
-      <!-- Background layers — poster = fallback image while video loads / if video missing -->
+      <!-- Biomes 0 + 3 are scroll-scrubbed videos; rest are static images -->
       <video class="biome-bg-layer active" id="biome-bg-0" muted playsinline preload="auto"
              poster="assets/screenshots/ancient-canopy.jpg">
         <source src="assets/video/ancient-canopy.mp4" type="video/mp4">
       </video>
-      <video class="biome-bg-layer" id="biome-bg-1" muted playsinline preload="none"
-             poster="assets/screenshots/ancient-canopy.jpg">
-        <source src="assets/video/wildspire-waste.mp4" type="video/mp4">
-      </video>
-      <video class="biome-bg-layer" id="biome-bg-2" muted playsinline preload="none"
-             poster="assets/screenshots/frosted-peaks.jpg">
-        <source src="assets/video/frosted-peaks.mp4" type="video/mp4">
-      </video>
+      <img class="biome-bg-layer" id="biome-bg-1" src="assets/screenshots/ancient-canopy.jpg" alt="">
+      <img class="biome-bg-layer" id="biome-bg-2" src="assets/screenshots/frosted-peaks.jpg" alt="">
       <video class="biome-bg-layer" id="biome-bg-3" muted playsinline preload="none"
              poster="assets/screenshots/coral-skyland-aerial.jpg">
         <source src="assets/video/coral-skyland.mp4" type="video/mp4">
       </video>
-      <video class="biome-bg-layer" id="biome-bg-4" muted playsinline preload="none"
-             poster="assets/screenshots/volcanic-abyss.jpg">
-        <source src="assets/video/volcanic-abyss.mp4" type="video/mp4">
-      </video>
-      <video class="biome-bg-layer" id="biome-bg-5" muted playsinline preload="none"
-             poster="assets/screenshots/rift-lord.jpg">
-        <source src="assets/video/rotten-hollow.mp4" type="video/mp4">
-      </video>
-      <video class="biome-bg-layer" id="biome-bg-6" muted playsinline preload="none"
-             poster="assets/screenshots/sky-ruins.jpg">
-        <source src="assets/video/sky-ruins.mp4" type="video/mp4">
-      </video>
+      <img class="biome-bg-layer" id="biome-bg-4" src="assets/screenshots/volcanic-abyss.jpg" alt="">
+      <img class="biome-bg-layer" id="biome-bg-5" src="assets/screenshots/rift-lord.jpg" alt="">
+      <img class="biome-bg-layer" id="biome-bg-6" src="assets/screenshots/sky-ruins.jpg" alt="">
 
       <div class="biome-overlay-gradient"></div>
 
@@ -911,8 +910,11 @@
       <img src="assets/screenshots/combat-ui.jpg" alt="Combat UI" loading="lazy">
       <div class="cell-label">Combat System</div>
     </div>
-    <div class="gallery-cell" data-d="4" onclick="openLightbox('assets/screenshots/guild-hall.jpg')">
-      <img src="assets/screenshots/guild-hall.jpg" alt="Veilwatch Guild Hall" loading="lazy">
+    <div class="gallery-cell video-cell" data-d="4" onclick="openLightbox('assets/screenshots/guild-hall.jpg')">
+      <video class="gallery-video" muted playsinline loop preload="none"
+             poster="assets/screenshots/guild-hall.jpg">
+        <source src="assets/video/guild-hall.mp4" type="video/mp4">
+      </video>
       <div class="cell-label">Veilwatch Guild Hall</div>
     </div>
   </div>
@@ -1190,18 +1192,25 @@ dots.forEach(dot => {
 });
 
 /* ═══════════════════════════════════════════
-   HERO PARALLAX ZOOM
+   HERO SCROLL-SCRUB + PARALLAX ZOOM
 ═══════════════════════════════════════════ */
-const heroImgEl = document.getElementById('hero-img');
+const heroVidEl = document.getElementById('hero-vid');
 const heroEl    = document.querySelector('.hero');
 
 function updateHeroParallax(scrollY) {
-  if (!heroEl || !heroImgEl) return;
+  if (!heroEl || !heroVidEl) return;
   const heroH    = heroEl.offsetHeight;
   const progress = Math.min(scrollY / heroH, 1);
-  const scale    = 1 + progress * 0.12;
-  const drift    = scrollY * 0.28;
-  heroImgEl.style.transform = `scale(${scale}) translateY(${drift}px)`;
+
+  /* parallax zoom — same as before */
+  heroVidEl.style.transform =
+    `scale(${1 + progress * 0.12}) translateY(${scrollY * 0.28}px)`;
+
+  /* scrub hero video: scroll to bottom of hero = end of clip */
+  const d = heroVidEl.duration;
+  if (heroVidEl.readyState >= 2 && d && isFinite(d)) {
+    heroVidEl.currentTime = progress * d;
+  }
 }
 
 /* ═══════════════════════════════════════════
@@ -1334,6 +1343,24 @@ if (window.matchMedia('(pointer: fine)').matches) {
     });
   });
 }
+
+/* ═══════════════════════════════════════════
+   VIDEO GALLERY CELLS — hover/view to play
+═══════════════════════════════════════════ */
+document.querySelectorAll('.video-cell').forEach(cell => {
+  const vid = cell.querySelector('video');
+  if (!vid) return;
+
+  /* desktop: hover plays, leave resets */
+  cell.addEventListener('mouseenter', () => { vid.play().catch(() => {}); });
+  cell.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
+
+  /* mobile: play when >50% in view */
+  new IntersectionObserver(([e]) => {
+    if (e.isIntersecting) vid.play().catch(() => {});
+    else { vid.pause(); vid.currentTime = 0; }
+  }, { threshold: 0.5 }).observe(cell);
+});
 
 /* ═══════════════════════════════════════════
    LIGHTBOX
