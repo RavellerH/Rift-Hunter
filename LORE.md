@@ -4,23 +4,23 @@
 
 ## Taglines
 
-- *"The sky remembers what the earth has forgotten."*
-- *"Hunt to survive. Understand to prevail."*
-- *"Between this world and the Void — you are the only thing standing."*
+- *"Every hunt is a story. Every biome is a frontier."*
+- *"Know the monster. Earn the trophy. Build the legend."*
+- *"The sky doesn't have an edge. Go find out."*
 
 ---
 
 ## The World: Aethara
 
-Aethara is a world of **layered existence**.
+Aethara is a world of **layered wonders**.
 
-Below: a vast surface of ancient forests, volcanic badlands, frozen peaks, coral skylands, and rotting hollows carved deep into the earth. Above: the **Sky Reaches** — a realm of floating ruins, eternal storms, and open sky where the wind has a name and the clouds remember the dead.
+Below: ancient forests full of species no one has fully catalogued, volcanic badlands where the stone glows at night, frozen peaks with thermal vents that bloom into impossible hot-spring valleys, living coral skylands that drift with the wind, and deep hollow caverns that glow with their own bioluminescent ecosystems. Above: the **Sky Reaches** — floating ruins of a civilization three centuries gone, open-air hunting grounds where the updrafts have names and the view from the top makes every hard climb worth it.
 
-Between the surface and the heavens exists something that was never meant to be seen:
+Between the surface and the sky exists something that changed everything:
 
 **The Rift.**
 
-A membrane between the physical world and the **Primordial Void** — a dimensionless space where nothing was born but everything old goes to sleep. For most of history, the Rift was invisible, sealed, forgotten.
+A membrane between the physical world and the **Primordial Void** — a vast, ancient space where the oldest things sleep and the newest things come from. For most of history, the Rift was invisible, sealed, unfound.
 
 Then humanity found its edge.
 
@@ -235,92 +235,131 @@ Available only after reaching G3 rank. Switching to the Voidwalkers means leavin
 
 ## The Player
 
-You are a hunter. Not the hunter — *a* hunter. You arrived at Veilwatch because the frontier pays well and the work is honest and somewhere in the back of your mind you wanted to see what an Elder actually looks like up close.
+You came to Veilwatch because you heard the stories.
 
-You carry a **Rift Shard** embedded in your left palm. It is strange and the Scholar finds it interesting. You are not the first person this has happened to — there are perhaps a dozen known Rift Shards in the world, and at least four people alive who carry one. What makes you different is not the Shard. What makes you different is what you do with the next few hundred hours.
+A place where the maps still have blank spots. Where new species get documented every season. Where the best hunters in the world swap tall tales over drinks and every single one of them is true. Where a first-rate hunt can build your reputation and a legendary one earns you a trophy on the wall, a spot on the board, and drinks for the whole guild.
 
-Your guild is your home. The hunters you meet are your people. The monsters you've faced are your story. None of this was written for you. You're writing it.
+You wanted to see it for yourself. It is *exactly* as good as advertised.
 
-### What the Shard Does
+You carry a **Rift Shard** — a sliver of crystallized Void energy that ended up in your palm through a series of events you're still piecing together. Elder Scholar Voss lit up like a festival lantern when he spotted it. He says there are maybe a dozen in the world, carried by a handful of tough and fortunate people. You're one of them. Your guildmates think it's remarkable. You think it's useful.
 
-**Resonance** — the ability the Guild has no better name for.
+What makes you a great hunter is not the Shard. The Shard just makes you a little more interesting.
 
-- You can feel a Rift opening before it happens, minutes before instruments detect it
-- You can read a Veilborn's attack pattern mid-fight — not predict it, but *feel* its intention in the way you feel air pressure before thunder
-- At deeper attunement: you can briefly step into the Rift space between heartbeats — a fraction of a second, enough to pass through an attack that should have killed you
-- At full attunement: unknown. The Scholar's notes say *"do not pursue this line of inquiry without supervision"* and then the page is blank
+Your guild is home. Every monster you track, fight, and bring materials back from is another line in your story. The world is enormous, gorgeous, and only a fraction of it has been seen. You are here for all of it.
 
-The Riftborn Cult knows about your Shard. They have known longer than you have.
+### What the Shard Does — Resonance
+
+The Guild has no official name for it. "Resonance" is what Voss settled on after three weeks of field notes.
+
+- **Early warning:** You feel a Rift opening minutes before Guild instruments detect it — useful for getting to the new spawn first and planting your flag
+- **Combat read:** Mid-fight, you get a half-second flash of clarity — not psychic, just a deep read on the Veilborn's intent that lets you react to the move before it starts
+- **Void Step** *(G2 unlock):* A blink through Rift-space, enough to slip through a gap that should have been a solid wall of claws
+- **Full attunement** *(G4):* Something spectacular. Voss has notes. They end with: *"Extraordinary. Schedule follow-up immediately."*
+
+The Resonance grows the more you hunt. Every biome unlocked, every Elder encountered, every Field Codex entry completed nudges it further. Think of it as a reward for exploration.
 
 ---
 
-## The Threat — Riftborn Cult
+## The Antagonists — The Reclamation
 
-Someone is deliberately opening Rifts.
+Someone is deliberately opening Rifts. And they have a very specific destination in mind.
 
-New Veilborn are flooding into biomes that have been stable for decades. Elder Veilborn — creatures the Guild has spent generations learning to coexist with — are growing agitated, moving from territories they have not left in living memory. When an Elder moves, ecosystems collapse in its wake.
+The **Reclamation** is a faction of treasure hunters, Aethori heritage obsessives, and true believers who are convinced that the Elder Sky Ruins — the floating remnants of the original Aethori civilization — belong to them by right of bloodline and ambition. They've spent decades trying to reach those ruins. Guild hunters and hostile Veilborn have stopped them every time.
 
-The **Riftborn Cult** believes the Great Sundering was not a catastrophe.
+So they changed tactics. They started opening Rifts.
 
-It was an *invitation*.
+Flooding biomes with Veilborn forces Guild attention outward — onto the chaos, onto the monsters, away from what the Reclamation is actually doing. While every hunter in Veilwatch scrambles to deal with destabilized migration patterns and displaced Elders, a small, very capable squad of Reclamation operatives walks straight through the commotion toward the Sky Ruins.
 
-They worship the Veilborn as expressions of something divine and believe that fully merging Aethara with the Primordial Void will bring a second, permanent Sundering — not destruction, in their view, but **transcendence**. Humanity absorbed into something eternal. No more death. No more separation. No more Rift, because there would be nothing left on either side of it.
+They are not a death cult. They do not want to end the world. They want the Aethori legacy — the flying ships, the crystal archives, the Sky Kingdom infrastructure that's been sitting unmaintained for three hundred years — and they want everyone else to stay out of their way. They've decided the most efficient method of "stay out of our way" is to fill the world with problems.
 
-They are not stupid. Some of their members are former Guild hunters who got too close to an Elder and came back changed — not corrupted, exactly, but *different*. Quieter. More certain.
+Their leader is an Aethori descendant named **Serath**: brilliant, patient, two centuries old, and absolutely convinced that what they're doing is restoration, not theft. The fact that their methods have destabilized three biomes and sent four Elder Veilborn into unexpected migration patterns is, to Serath, an acceptable cost. The Sky Kingdom is worth it.
 
-Their leader is something older and stranger still.
+It is, admittedly, genuinely spectacular up there. That's not the point.
 
 ---
 
 ## The Story
 
-### Act I — Veilwatch (Biomes: Ancient Canopy, Wildspire Waste)
+### Act I — Welcome to Veilwatch *(Biomes: Ancient Canopy, Wildspire Waste)*
 
-You are a G1 Initiate. You hunt Veilkin to prove you belong, learn the Guild's rules, survive your first Riftborn encounter. A Rift opens in the Ancient Canopy where there has not been one in forty years. Something came through that is not in the Field Codex.
+You are a G1 Initiate. First hunts. Learning the ecosystem, the Guild rhythms, the Veilborn behaviors. Your guild takes you in. You meet the regulars. The board fills up with contracts and you start working through them — Veilkin culls, Rift monitoring patrols, the occasional Riftborn that wandered somewhere it shouldn't.
 
-The Elder Scholar begins watching you very closely.
+Then a Rift opens in the Ancient Canopy where there hasn't been one in forty years. Something comes through that isn't in the Field Codex. The Guild gets excited. You get the contract.
 
-### Act II — The Coral Skyland Collapse (Biomes: Frosted Peaks, Coral Skyland)
+Voss starts asking a lot of questions about your left hand.
 
-An entire biome destabilizes. A Riftborn of a species thought extinct is driving smaller creatures from their territory in a coordinated pattern that looks disturbingly like a military advance. You find Cult markings carved into the stone near a Rift wound that was not formed naturally — it was cut.
+**Milestone:** Clear your first undocumented Veilborn. Watch it get added to the Field Codex in real time. Your name goes in the notes as the first sighting.
 
-They are not just opening Rifts. They are **herding Veilborn toward something**.
+### Act II — The Sky Chase *(Biomes: Frosted Peaks, Coral Skyland)*
 
-### Act III — Into the Deep (Biomes: Volcanic Abyss, Rotten Hollow)
+A Riftborn species thought extinct for a century reappears in the Frosted Peaks, driving entire Veilkin herds out of their territory. The Hollowroot Lodge is losing their minds (scientifically). The Crimson Claw wants the first kill. You want answers.
 
-The Cult has been operating in the deep zones for years. They have been feeding an Elder Veilborn — an ancient creature called the **Ashmaul** — making it larger than anything in recorded history. The Elder Scholar sends one message and goes silent for three days:
+The trail leads upward — into the Coral Skyland, a biome of floating reefs and open-air hunting where the wind works differently and every fight is three-dimensional. It's the most beautiful place you've seen in your life and also something is very wrong with the Rift activity up here.
 
-*"Do not let it reach the Sky Ruins."*
+You find carved markings near a Rift wound that wasn't formed naturally. It was *cut*. Deliberately. Precisely.
 
-You reach Elder Rank in the field because there is no one left above you in this region.
+The Reclamation wasn't just releasing Veilborn — they were herding them. Upward. Toward the Sky Ruins.
 
-### Act IV — The Elder Sky Ruins (Biome: Elder Sky Ruins)
+**Milestone:** First aerial boss. First Rift wound investigation. The sky opens up.
 
-The ruins of the original Aethori civilization. Still floating. Still partially intact. Because something has been maintaining them — not a machine, not gravity, but *will*. A presence that has been up here since before the Guild existed.
+### Act III — The Deep Zones *(Biomes: Volcanic Abyss, Rotten Hollow)*
 
-The Cult's leader reveals themselves: an Aethori descendant named **Serath**, two hundred and thirty years old, sustained by a Rift Shard larger than yours, embedded in their chest where a heart should be. They do not want to destroy Aethara. They want to **restore the Aethori Sky Kingdom** — using the Veilborn as its living foundation, the fully-opened Rift as its permanent sky. A world where the membrane no longer exists. Where Veilborn and humans share the same plane permanently.
+The Reclamation has backup operations in the deep zones — older ones, running longer than anyone realized. In the Volcanic Abyss, they've been sustaining an Elder Veilborn called the **Ashmaul**, keeping it fed and agitated in a specific territory to block Guild access to the lower Rift networks.
 
-Serath does not believe they are the villain. They might not be wrong.
+The Ashmaul is the largest documented living Veilborn. Fighting it requires everything you've learned. Beating it opens a path the Reclamation thought they had locked.
 
-### Final Act — The Sovereign Stirs (Biome: The Deep Rift — unlocked)
+The Rotten Hollow below it is unmapped Guild territory. The Field Codex has no entries for what lives down here. You are filing the first reports while also trying not to get eaten.
 
-A Rift Lord wakes beneath the Elder Sky Ruins. It has been dormant since before the Sundering. Serath woke it deliberately, believing it would complete the merge. Instead it is simply **enormous and confused and destroying everything in its immediate vicinity**, which currently includes the entire eastern sky.
+Voss sends a message: *"The Sky Ruins are active. Something is powering them. Get up there."*
 
-A Rift Lord cannot be killed. Destroying it would tear Aethara apart — the Surge would be continental. It has to be sealed back into the Void. Your Rift Shard is the only thing in the world that can touch the Rift membrane from this side without killing the person holding it.
+**Milestone:** Take down the Ashmaul. Unlock Elder Rank. The Rotten Hollow is now on the map and your name is all over the first entries.
 
-The question is what happens to you when you use it at this scale.
+### Act IV — The Elder Sky Ruins *(Biome: Elder Sky Ruins)*
 
-The Scholar's blank page.
+Three hundred years of unmaintained Aethori architecture, and it is *extraordinary*. Crystal spires still humming. Navigation systems still charting sky routes that no longer have ships. Ancient bestiary murals covering entire halls — species the Guild has never seen, Sky Beasts that have not existed since the Sundering.
+
+And Serath, at the center of it all, having finally made it.
+
+They're not monologuing about the end of the world. They're trying to get the power systems online, the archives decrypted, the docking platforms running — a functioning Sky Kingdom, with the Reclamation as its founding population. They've been planning this for sixty years. They are *so close*.
+
+The problem is that powering up the Sky Ruins requires tapping the Rift network directly. The Ruins were built to interface with it safely. Serath has the access codes. What Serath doesn't have is the understanding that the Rift network has three hundred years of built-up pressure and the Ruins' containment architecture is significantly more damaged than their scans showed.
+
+You have approximately one hunt's worth of time to stop them from accidentally doing something very large.
+
+**Milestone:** The Sky Ruins. Everything opens up. The most visually spectacular zone in the game.
+
+### Final Act — The Sovereign *(Biome: The Deep Rift — unlocked)*
+
+The Rift network, tapped too hard, too fast, wakes something that has been dormant since before the Sundering.
+
+A Rift Lord. Enormous. Ancient. Not malevolent — just *awake*, disoriented, and thrashing through the eastern sky like a creature that just opened its eyes in a room that has gotten very small. The Sky Ruins are shaking. The Coral Skyland below is losing altitude. Three biomes are registering emergency Rift surges.
+
+Serath helps you. Not out of redemption — out of practicality. They did not spend sixty years getting here to watch it collapse.
+
+The Rift Lord cannot be fought conventionally. It has to be guided back into the Rift, and the only thing that can interact with the Rift membrane from this side is a Rift Shard. Yours. At full attunement.
+
+This is the moment Voss's notes were building toward. The thing he called *extraordinary*.
+
+You push the Sovereign back through. The Rift seals. The sky stabilizes. The Ruins are still standing — damaged, but standing. Serath is escorted out by the Guild. The eastern sky turns gold with released energy and then goes quiet.
+
+You go home. Your guild is waiting. The trophy goes on the wall. Someone buys you a drink. Brix from the Crimson Claw demands a full account of the fight and will not stop asking follow-up questions.
+
+Voss is already writing the Field Codex entry for a Rift Lord. He puts your name as first contact and *"successfully negotiated its return to the Void"* and you decide not to correct that phrasing.
+
+**Milestone:** The Sovereign. The seal. Full Resonance. A story worth telling.
 
 ---
 
-## Loose Ends (For Post-Story Content)
+## What Comes Next (Post-Story Content)
 
-- What are the other eleven Rift Shards and who carries them
-- The Aethori Sky Beasts — the original creatures they flew on — where did they go
-- Serath survived (or didn't) — and had followers who still believe
-- The Field Codex has a locked section the Guild Masters have never opened
-- The Rift Lord that was sealed is still in there, and Rifts are still forming
+The world didn't stop being interesting just because the main event is over.
+
+- The Aethori Sky Ruins are partially operational — and the archives are full of entries no one has translated yet
+- The Field Codex now has a Rift Lord entry with exactly one data point; Voss considers this inadequate
+- Other Rift Shards are out there. Other people carrying them have started sending letters
+- The Sky Beasts in the Ruins' murals — the ones the Aethori flew on — some of those murals show them in biomes that still exist
+- Serath got out. The Reclamation still has members. They're not done
+- The Rotten Hollow is barely documented. Something large is moving in the lower chambers and nobody has seen it yet
 
 ---
 
