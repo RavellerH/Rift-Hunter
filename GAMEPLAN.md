@@ -555,6 +555,220 @@ func _on_player_died():
 
 ---
 
+## 13b. Dynamic Camera System
+
+### CombatCamera.gd — Zoom Logic
+
+```gdscript
+# Target zoom levels
+const ZOOM_EXPLORE   := Vector2(0.6, 0.6)   # no enemy in aggro range
+const ZOOM_COMBAT    := Vector2(1.0, 1.0)   # enemy at mid range
+const ZOOM_MELEE     := Vector2(1.3, 1.3)   # within MELEE_CLOSE_RANGE pixels
+const ZOOM_LERP_SPEED := 3.0                # how fast zoom transitions
+
+const MELEE_CLOSE_RANGE := 80.0             # pixels — triggers close zoom
+const COMBAT_RANGE      := 400.0            # pixels — triggers combat zoom
+
+func _process(delta: float) -> void:
+    var target_zoom := _compute_target_zoom()
+    zoom = zoom.lerp(target_zoom, ZOOM_LERP_SPEED * delta)
+    # ... existing shake logic
+
+func _compute_target_zoom() -> Vector2:
+    var nearest_dist := _nearest_enemy_distance()
+    if nearest_dist < MELEE_CLOSE_RANGE:
+        return ZOOM_MELEE
+    elif nearest_dist < COMBAT_RANGE:
+        return ZOOM_COMBAT
+    else:
+        return ZOOM_EXPLORE
+```
+
+Add to `Constants.gd`:
+```gdscript
+const CAMERA_ZOOM_EXPLORE  := Vector2(0.6, 0.6)
+const CAMERA_ZOOM_COMBAT   := Vector2(1.0, 1.0)
+const CAMERA_ZOOM_MELEE    := Vector2(1.3, 1.3)
+const CAMERA_ZOOM_SPEED    := 3.0
+const CAMERA_MELEE_RANGE   := 80.0
+const CAMERA_COMBAT_RANGE  := 400.0
+```
+
+---
+
+## 13c. Melee Risk System
+
+### Player-Side: Recovery Frames
+
+Each weapon has a `recovery_frames` value in its `WeaponData` resource.
+During recovery, dodge input is queued but not activated until recovery ends.
+
+```gdscript
+# In PlayerCombat.gd — after firing hitbox
+func _fire_hitbox(facing, damage, active_duration) -> void:
+    # ... existing hitbox enable/disable
+
+    # Recovery window — dodge buffered but inactive
+    is_in_recovery = true
+    await get_tree().create_timer(equipped_weapon.recovery_frames / 60.0).timeout
+    is_in_recovery = false
+    # Execute buffered dodge if input was held during recovery
+    if _dodge_buffered:
+        _dodge_buffered = false
+        start_dodge(facing)
+```
+
+Recovery frames per weapon (add to WeaponData resource):
+
+| Weapon | Recovery Frames (at 60fps) |
+|--------|--------------------------|
+| Dual Blades | 4 |
+| Sword & Shield | 7 |
+| Bow | 0 (no recovery) |
+| Insect Glaive | 8 |
+| Great Sword light | 12 |
+| Great Sword heavy | 22 |
+| Lance | 6 |
+
+### Monster-Side: Counter Windows
+
+Each monster attack has a `counter_range` field. If player is within that range when the monster enters the attack's wind-up state, the counter fires.
+
+```gdscript
+# In MonsterBase.gd — add to attack state entry
+func _enter_attack_state(attack_id: String) -> void:
+    var attack_data := monster_data.attacks[attack_id]
+    if attack_data.has("counter_range"):
+        var dist := global_position.distance_to(player.global_position)
+        if dist <= attack_data.counter_range:
+            _fire_counter_attack(attack_data)
+            return
+    _fire_normal_attack(attack_data)
+```
+
+Add to monster attack definitions (in MonsterData resource):
+```gdscript
+# Example Thornmane tail sweep entry
+{
+    "id": "tail_sweep",
+    "damage": THORNMANE_SWEEP_DAMAGE,
+    "windup_frames": 24,
+    "active_frames": 21,
+    "recovery_frames": 18,
+    "counter_range": 70.0,      # triggers if player within 70px on windup
+    "windup_color": Color(0.9, 0.2, 0.6)
+}
+```
+
+---
+
+## 13d. Discovery Crafting System
+
+### CraftingSystem.gd — Core API (updated)
+
+```gdscript
+# Attempt a craft — main entry point
+func attempt_craft(slot_a: String, slot_b: String, slot_c: String = "") -> CraftResult:
+    var key := _normalize_key(slot_a, slot_b, slot_c)
+
+    if known_recipes.has(key):
+        return _execute_known_recipe(key)
+
+    var partial := _find_closest_recipe(slot_a, slot_b, slot_c)
+    if partial:
+        return _execute_partial_craft(partial, slot_a, slot_b, slot_c)
+
+    return _execute_failure(slot_a, slot_b, slot_c)
+
+func _execute_known_recipe(key: String) -> CraftResult:
+    # deduct materials, return item at quality = lowest input quality
+    var recipe := recipe_db[key]
+    var quality := _lowest_material_quality(recipe.inputs)
+    var item := recipe.output.duplicate()
+    item.quality = quality
+    GameState.add_item(item)
+    codex.add_recipe(key)
+    return CraftResult.new(CraftResult.SUCCESS, item)
+
+func _execute_partial_craft(partial_match, ...) -> CraftResult:
+    # Produce weak version of the closest recipe
+    # Save hint: which slots were right, which were wrong
+    codex.add_hint(partial_match.hint_string)   # e.g. "Thornmane Fang + ? + ?"
+    var weak_item := partial_match.output.duplicate()
+    weak_item.quality = Quality.BASE
+    weak_item.name += " (rough)"
+    GameState.add_item(weak_item)
+    return CraftResult.new(CraftResult.PARTIAL, weak_item)
+
+func _execute_failure(...) -> CraftResult:
+    # Consume inputs, produce Fused Scrap
+    GameState.remove_materials(slot_a, slot_b, slot_c)
+    GameState.add_item(fused_scrap_resource)
+    return CraftResult.new(CraftResult.FAILURE, fused_scrap_resource)
+```
+
+### CraftResult Class
+
+```gdscript
+class_name CraftResult
+extends RefCounted
+
+enum Type { SUCCESS, PARTIAL, FAILURE }
+
+var type: Type
+var item: MaterialItem    # what was produced
+var hint: String = ""     # for PARTIAL — the partial recipe string
+```
+
+### Recipe Database Format
+
+Recipes stored as `Dictionary` in `CraftingSystem.gd` or loaded from JSON:
+
+```gdscript
+# Key is sorted material IDs joined — order-independent
+# "canopy_vine+iron_plate+thornmane_fang" (always sorted alphabetically)
+
+recipes = {
+    "canopy_vine+iron_plate+thornmane_fang": {
+        "output": preload("res://resources/weapons/thornmane_sword.tres"),
+        "inputs": ["canopy_vine", "iron_plate", "thornmane_fang"],
+        "discovered_by_default": false
+    },
+    ...
+}
+```
+
+### Quality Tiers
+
+```gdscript
+enum Quality { BASE, FINE, PERFECT }
+
+# Output quality = lowest quality input
+func _lowest_material_quality(inputs: Array[String]) -> Quality:
+    var lowest := Quality.PERFECT
+    for mat_id in inputs:
+        var q := GameState.get_material_quality(mat_id)
+        if q < lowest:
+            lowest = q
+    return lowest
+```
+
+### Loot Quality on Drop
+
+Add to `MonsterBase.gd` drop roll:
+
+```gdscript
+func _roll_quality(base_drop_rate: float, is_enraged_kill: bool) -> Quality:
+    var r := randf()
+    var perfect_chance := 0.05 if not is_enraged_kill else 0.10
+    var fine_chance    := 0.25 if not is_enraged_kill else 0.35
+    if r < perfect_chance:  return Quality.PERFECT
+    if r < fine_chance:     return Quality.FINE
+    return Quality.BASE
+```
+
+---
+
 ## 14. Events.gd — Full Signal List
 
 Add all signals here before using them anywhere. Current + planned:
@@ -579,6 +793,17 @@ signal monster_intro_ended(monster_id: String)
 signal damage_dealt(position: Vector2, amount: int, is_critical: bool)
 signal hit_landed(target: Node, damage: int)
 signal camera_shake(intensity: float)
+signal melee_recovery_started(weapon_type: int)
+signal melee_recovery_ended()
+signal monster_counter_triggered(monster_id: String, attack_id: String)
+
+# Crafting
+signal craft_attempted(slot_a: String, slot_b: String, slot_c: String)
+signal craft_succeeded(item_id: String, quality: int)
+signal craft_partial(hint: String)
+signal craft_failed()
+signal recipe_discovered(recipe_key: String)
+signal codex_hint_added(hint: String)
 
 # Equipment
 signal skills_updated(active_skills: Dictionary)
