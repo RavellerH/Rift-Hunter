@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lore — Rift Hunter</title>
+  <meta name="description" content="The world of Aethara — lore, history, the Great Sundering, and the Veilborn.">
+  <meta property="og:title" content="Rift Hunter — The World of Aethara">
+  <meta property="og:description" content="The sky remembers what the earth has forgotten.">
+  <meta property="og:image" content="assets/screenshots/sky-ruins.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #000;
+      --dark:   #0a0a0a;
+      --mid:    #141414;
+      --white:  #ffffff;
+      --gray:   #888888;
+      --dim:    #555555;
+      --gold:   #c9a84c;
+      --gold-dim: #7a6230;
+      --rift:   #7b4fd4;
+      --rift-dim: #3a2466;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ── FILM GRAIN ── */
+    .grain {
+      position: fixed; inset: -100%; width: 300%; height: 300%;
+      pointer-events: none; z-index: 9998; opacity: 0.042;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat; background-size: 200px 200px;
+      animation: grain-shift 0.32s steps(1) infinite;
+    }
+    @keyframes grain-shift {
+      0%{transform:translate(0,0)} 16%{transform:translate(-5%,-8%)}
+      33%{transform:translate(4%,5%)} 50%{transform:translate(-4%,9%)}
+      66%{transform:translate(8%,-4%)} 83%{transform:translate(-8%,4%)}
+    }
+    @media (prefers-reduced-motion: reduce) { .grain { animation: none; } }
+    @media (max-width: 680px) { .grain { display: none; } }
+
+    /* ── SCROLL PROGRESS ── */
+    .scroll-bar {
+      position: fixed; top: 56px; left: 0;
+      height: 2px; width: 0%;
+      background: var(--gold); z-index: 300;
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200; display: flex;
+      align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 56px;
+      background: var(--black);
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .nav-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--white); text-decoration: none;
+      letter-spacing: 0.08em;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--gray); text-decoration: none;
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--white); }
+
+    /* ── HERO ── */
+    .lore-hero {
+      position: relative; height: 70vh; min-height: 480px;
+      margin-top: 56px; overflow: hidden;
+      display: flex; align-items: flex-end;
+    }
+    .lore-hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('assets/screenshots/sky-ruins.jpg');
+      background-size: cover; background-position: center 30%;
+      filter: brightness(0.38);
+      transform: scale(1.05);
+      will-change: transform;
+    }
+    .lore-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, #000 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+    }
+    .lore-hero-content {
+      position: relative; z-index: 2;
+      padding: 0 3rem 5rem;
+      max-width: 640px;
+    }
+    .lore-eyebrow {
+      font-size: 0.62rem; font-weight: 500;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+    }
+    .lore-hero-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      font-weight: 700; color: var(--white);
+      line-height: 1.1; margin-bottom: 1.5rem;
+    }
+    .lore-hero-tagline {
+      font-size: 1.05rem; font-weight: 300;
+      color: rgba(255,255,255,0.65);
+      font-style: italic; letter-spacing: 0.04em;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .lore-body {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 5rem 2rem 8rem;
+    }
+
+    /* Chapter divider */
+    .chapter {
+      margin-bottom: 5rem;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .chapter.visible { opacity: 1; transform: none; }
+
+    .chapter-label {
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.75rem;
+    }
+
+    .chapter h2 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 600; color: var(--white);
+      margin-bottom: 1.75rem;
+      border-bottom: 1px solid #1e1e1e;
+      padding-bottom: 1rem;
+    }
+
+    .chapter h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem; font-weight: 600;
+      color: var(--gold); margin: 2.5rem 0 1rem;
+      letter-spacing: 0.06em;
+    }
+
+    .chapter p {
+      margin-bottom: 1.25rem;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.97rem;
+    }
+
+    .chapter p strong {
+      color: var(--white); font-weight: 500;
+    }
+
+    .chapter p em {
+      color: rgba(255,255,255,0.65);
+    }
+
+    /* Pull quote */
+    .pull-quote {
+      border-left: 2px solid var(--gold);
+      padding: 0.75rem 0 0.75rem 1.75rem;
+      margin: 2.5rem 0;
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.75);
+      font-style: italic;
+    }
+
+    /* Table */
+    .lore-table {
+      width: 100%; border-collapse: collapse;
+      margin: 1.5rem 0 2rem; font-size: 0.88rem;
+    }
+    .lore-table th {
+      text-align: left; padding: 0.6rem 1rem;
+      font-size: 0.62rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--gold);
+      border-bottom: 1px solid #222;
+    }
+    .lore-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #151515;
+      color: rgba(255,255,255,0.75);
+      vertical-align: top;
+    }
+    .lore-table td:first-child { color: var(--white); font-weight: 500; }
+    .lore-table tr:last-child td { border-bottom: none; }
+
+    /* Tier badges */
+    .tier-badge {
+      display: inline-block; padding: 0.15rem 0.55rem;
+      border-radius: 2px; font-size: 0.7rem;
+      font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .tier-veilkin  { background: #1a2a1a; color: #5a9e5a; }
+    .tier-riftborn { background: #2a1a0a; color: #c8823a; }
+    .tier-elder    { background: #1a0a2a; color: #9a5fd4; }
+    .tier-sovereign{ background: #0a0a1a; color: #5a7eff; border: 1px solid #2a2a4a; }
+
+    /* Rift glow text */
+    .rift-text {
+      color: #a07de8;
+    }
+
+    /* Act boxes */
+    .act-box {
+      background: #0d0d0d;
+      border: 1px solid #1e1e1e;
+      border-left: 3px solid var(--gold-dim);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .act-box.rift { border-left-color: var(--rift); }
+    .act-label {
+      font-size: 0.6rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .act-box.rift .act-label { color: #a07de8; }
+    .act-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem; color: var(--white);
+      margin-bottom: 0.75rem;
+    }
+    .act-box p {
+      font-size: 0.9rem; margin-bottom: 0;
+      color: rgba(255,255,255,0.65);
+    }
+
+    /* Chapter rule */
+    .rule {
+      border: none; border-top: 1px solid #181818;
+      margin: 4rem 0;
+    }
+
+    /* Codex stamp */
+    .codex-stamp {
+      text-align: center;
+      margin-top: 5rem;
+      padding-top: 3rem;
+      border-top: 1px solid #181818;
+    }
+    .codex-stamp p {
+      font-size: 0.65rem; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--dim);
+    }
+
+    /* Back to top */
+    .back-top {
+      position: fixed; bottom: 2rem; right: 2rem;
+      width: 42px; height: 42px;
+      background: #111; border: 1px solid #2a2a2a;
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      cursor: pointer; opacity: 0;
+      transition: opacity 0.3s, border-color 0.2s;
+      z-index: 100;
+    }
+    .back-top.visible { opacity: 1; }
+    .back-top:hover { border-color: var(--gold); }
+    .back-top svg { width: 16px; fill: var(--gray); }
+
+    @media (max-width: 680px) {
+      .lore-hero-content { padding: 0 1.5rem 4rem; }
+      .lore-body { padding: 3rem 1.25rem 6rem; }
+      .nav-links li:not(:first-child) { display: none; }
+    }
+  </style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js');</script>
+<div class="grain" aria-hidden="true"></div>
+<div class="scroll-bar" id="scrollBar"></div>
+
+<nav>
+  <a class="nav-logo" href="index.html">Rift Hunter</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="lore.html" class="active">Lore</a></li>
+    <li><a href="index.html#biomes">Biomes</a></li>
+    <li><a href="index.html#gallery">Gallery</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="lore-hero" aria-label="Lore hero">
+  <div class="lore-hero-bg" id="loreBg" aria-hidden="true"></div>
+  <div class="lore-hero-overlay" aria-hidden="true"></div>
+  <div class="lore-hero-content">
+    <p class="lore-eyebrow">Field Codex — Restricted Access</p>
+    <h1 class="lore-hero-title">The World of Aethara</h1>
+    <p class="lore-hero-tagline">"The sky remembers what the earth has forgotten."</p>
+  </div>
+</section>
+
+<!-- LORE BODY -->
+<main class="lore-body" id="main">
+
+  <!-- TAGLINES -->
+  <div class="chapter" id="intro">
+    <p class="chapter-label">Aethara Field Codex</p>
+    <h2>Three Truths</h2>
+    <div class="pull-quote">"The sky remembers what the earth has forgotten."</div>
+    <div class="pull-quote">"Hunt to survive. Understand to prevail."</div>
+    <div class="pull-quote">"Between this world and the Void — you are the only thing standing."</div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- THE WORLD -->
+  <div class="chapter" id="world">
+    <p class="chapter-label">Chapter I</p>
+    <h2>The World</h2>
+    <p>Aethara is a world of <strong>layered existence</strong>.</p>
+    <p>Below: a vast surface of ancient forests, volcanic badlands, frozen peaks, coral skylands, and rotting hollows carved deep into the earth. Above: the <strong>Sky Reaches</strong> — a realm of floating ruins, eternal storms, and open sky where the wind has a name and the clouds remember the dead.</p>
+    <p>Between the surface and the heavens exists something that was never meant to be seen: <strong class="rift-text">The Rift.</strong></p>
+    <p>A membrane between the physical world and the <strong>Primordial Void</strong> — a dimensionless space where nothing was born but everything old goes to sleep. For most of history, the Rift was invisible, sealed, forgotten.</p>
+    <p>Then humanity found its edge. Then they pushed through.</p>
+  </div>
+
+  <hr class="rule">
+
+  <!-- THE SUNDERING -->
+  <div class="chapter" id="sundering">
+    <p class="chapter-label">Chapter II</p>
+    <h2>The Great Sundering</h2>
+    <p>Three hundred years ago, the <strong>Aethori</strong> — an ancient civilization of sky-sailors and beast-tamers who built their cities on the backs of colossal flying creatures — attempted to reach the edge of the world. Their scholars believed the horizon was a wall. They wanted to see what was on the other side.</p>
+    <p>What they found instead was the Rift's skin, thin as glass, stretched tight over the heavens. They pushed through.</p>
+    <p>What came back was not them.</p>
+    <p>The <strong>Great Sundering</strong> was the moment the Rift bled into Aethara. Through the tear poured the <strong class="rift-text">Veilborn</strong> — ancient creatures that had slept in the space between worlds since before time had a name. Not evil. Not mindless. Simply <em>primordial</em> — impossibly large, impossibly old, and violently territorial. They did not invade. They simply <em>arrived</em>, the way a flood arrives: without malice, without mercy, and without end.</p>
+    <p>The Aethori Sky Kingdoms fell in a single season. Their floating cities crumbled into ruins that still drift in the upper atmosphere, slowly decaying, held aloft by mechanisms no living person understands.</p>
+    <p>The surface world survived — but it was fractured. Biomes reshaped around the territories the Veilborn carved for themselves. The world that emerged from the Sundering was not destroyed. It was <strong>reorganized around something far older than humanity.</strong></p>
+  </div>
+
+  <hr class="rule">
+
+  <!-- THE VEILBORN -->
+  <div class="chapter" id="veilborn">
+    <p class="chapter-label">Chapter III</p>
+    <h2>The Veilborn</h2>
+    <p>They are not monsters in the way the word is meant. They are the <strong>apex of a world that existed before this one</strong> — creatures shaped by the Primordial Void, carrying its silence inside them.</p>
+
+    <h3>Classification Tiers</h3>
+    <table class="lore-table">
+      <thead>
+        <tr>
+          <th>Tier</th>
+          <th>Name</th>
+          <th>Nature</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tier-badge tier-veilkin">Lesser</span></td>
+          <td>Veilkin</td>
+          <td>Small, territorial. Ecosystem anchors — their presence stabilizes Rift energy in a zone. Flee when overwhelmed.</td>
+        </tr>
+        <tr>
+          <td><span class="tier-badge tier-riftborn">Marked</span></td>
+          <td>Riftborn</td>
+          <td>Mid-sized, intelligent enough to remember specific hunters. Will alter patrol routes after an encounter.</td>
+        </tr>
+        <tr>
+          <td><span class="tier-badge tier-elder">Elder</span></td>
+          <td>Veilborn Elder</td>
+          <td>Ancient and vast. Partially merged with the Rift — their presence warps local reality. Some have lived longer than recorded civilization.</td>
+        </tr>
+        <tr>
+          <td><span class="tier-badge tier-sovereign">Sovereign</span></td>
+          <td>Rift Lord</td>
+          <td>So old they <em>are</em> the Rift. Killing one tears a permanent scar in physical reality. Cannot be destroyed — only sealed.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>The Crucial Truth</h3>
+    <div class="pull-quote">Killing a Veilborn Elder releases Rift energy — a Surge that tears open new Rifts.</div>
+    <p>The monsters are not the problem. The Rifts are the problem. The monsters are what live near them.</p>
+    <p>The Guild learned this the hard way. The first generation of hunters killed every Elder they could find and nearly ended the world in the process. The Rift Surge of Year 47 swallowed an entire coastal province. No one hunts Elders for sport anymore.</p>
+
+    <h3>Veilborn Behavior</h3>
+    <p><strong>Veilkin</strong> follow migratory patterns tied to Rift energy flows — drawn to unstable areas. <strong>Riftborn</strong> are territorial but not expansionist — they fight to hold ground, not to take it. <strong>Elders</strong> do not attack unless their core territory is breached or they are disturbed from a dormant state. <strong>Rift Lords</strong> do not move. Finding one awake means something has gone catastrophically wrong.</p>
+  </div>
+
+  <hr class="rule">
+
+  <!-- THE GUILD -->
+  <div class="chapter" id="guild">
+    <p class="chapter-label">Chapter IV</p>
+    <h2>The Hunter's Guild of Aethara</h2>
+    <p>Founded two centuries after the Sundering by a coalition of surviving Aethori descendants and surface-world warlords who agreed on exactly one thing: uncoordinated violence against Veilborn was making everything worse.</p>
+    <div class="pull-quote">"We do not hunt to conquer. We hunt to balance."</div>
+    <p>The Guild tracks Veilborn migration patterns, seals unstable Rifts before they cascade, culls overpopulated Veilkin, and stops other humans from doing something catastrophically stupid near an Elder. It maintains the <strong>Field Codex</strong> — a living encyclopedia of every documented Veilborn species, updated by hunters who survive long enough to write reports.</p>
+
+    <h3>Veilwatch</h3>
+    <p>The Guild's primary frontier outpost. Built into the cliffs at the convergence point of four biomes. Rift activity here is the highest of any inhabited settlement on Aethara. Veilwatch has stood for one hundred and forty years. It has nearly fallen seven times.</p>
+    <p>The Hall's gate carries a saying carved in Old Aethori script:</p>
+    <div class="pull-quote">"The monster you do not understand is the one that kills you."</div>
+
+    <h3>Guild Ranks</h3>
+    <table class="lore-table">
+      <thead><tr><th>Rank</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td>G1 — Initiate</td><td>Ancient Canopy, Wildspire Waste</td></tr>
+        <tr><td>G2 — Scout</td><td>Frosted Peaks, Coral Skyland</td></tr>
+        <tr><td>G3 — Veteran</td><td>Volcanic Abyss, Rotten Hollow</td></tr>
+        <tr><td>G4 — Warden</td><td>Elder Sky Ruins</td></tr>
+        <tr><td>Elder Rank</td><td>All zones + Sovereign protocol. Fewer than twenty alive.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="rule">
+
+  <!-- THE THREAT -->
+  <div class="chapter" id="threat">
+    <p class="chapter-label">Chapter V</p>
+    <h2>The Threat — Riftborn Cult</h2>
+    <p>Someone is deliberately opening Rifts.</p>
+    <p>New Veilborn are flooding into biomes that have been stable for decades. Elder Veilborn — creatures the Guild has spent generations learning to coexist with — are growing agitated, moving from territories they have not left in living memory. When an Elder moves, ecosystems collapse in its wake.</p>
+    <p>The <strong class="rift-text">Riftborn Cult</strong> believes the Great Sundering was not a catastrophe. It was an <em>invitation</em>.</p>
+    <p>They worship the Veilborn as expressions of something divine and believe that fully merging Aethara with the Primordial Void will bring a second, permanent Sundering — not destruction in their view, but <strong>transcendence</strong>. Humanity absorbed into something eternal. No more death. No more separation.</p>
+    <p>They are not stupid. Some of their members are former Guild hunters who got too close to an Elder and came back changed — not corrupted, exactly, but <em>different</em>. Quieter. More certain.</p>
+  </div>
+
+  <hr class="rule">
+
+  <!-- THE STORY -->
+  <div class="chapter" id="story">
+    <p class="chapter-label">Chapter VI</p>
+    <h2>The Story</h2>
+
+    <div class="act-box" id="act1">
+      <p class="act-label">Act I</p>
+      <p class="act-title">Veilwatch — Biomes: Ancient Canopy, Wildspire Waste</p>
+      <p>You arrive at Veilwatch with no rank and a worn weapon. You hunt Veilkin to prove you belong, learn the Guild's rules, survive your first Riftborn encounter. A Rift opens in the Ancient Canopy where there has not been one in forty years. Something came through that is not in the Field Codex. The Elder Scholar begins watching you very closely.</p>
+    </div>
+
+    <div class="act-box" id="act2">
+      <p class="act-label">Act II</p>
+      <p class="act-title">The Coral Skyland Collapse — Biomes: Frosted Peaks, Coral Skyland</p>
+      <p>An entire biome destabilizes. A Riftborn of a species thought extinct is driving smaller creatures from their territory in a coordinated pattern that looks disturbingly like a military advance. You find Cult markings carved into stone near a Rift wound that was not formed naturally — it was cut.</p>
+    </div>
+
+    <div class="act-box" id="act3">
+      <p class="act-label">Act III</p>
+      <p class="act-title">Into the Deep — Biomes: Volcanic Abyss, Rotten Hollow</p>
+      <p>The Cult has been operating in the deep zones for years, feeding an Elder Veilborn called the Ashmaul — making it larger than anything in recorded history. The Elder Scholar sends one message and goes silent for three days: <em>"Do not let it reach the Sky Ruins."</em></p>
+    </div>
+
+    <div class="act-box" id="act4">
+      <p class="act-label">Act IV</p>
+      <p class="act-title">The Elder Sky Ruins — Biome: Elder Sky Ruins</p>
+      <p>The ruins of the original Aethori civilization. Still floating. Still partially intact. A presence has been maintaining them since before the Guild existed. The Cult's leader reveals themselves: <strong>Serath</strong>, an Aethori descendant two hundred and thirty years old, sustained by a Rift Shard embedded in their chest. They want to restore the Aethori Sky Kingdom — using the Veilborn as its living foundation.</p>
+      <p>Serath does not believe they are the villain. They might not be wrong.</p>
+    </div>
+
+    <div class="act-box rift" id="final">
+      <p class="act-label">Final Act</p>
+      <p class="act-title">The Sovereign Stirs</p>
+      <p>A Rift Lord wakes beneath the Elder Sky Ruins. It has been dormant since before the Sundering. Serath woke it deliberately, believing it would complete the merge. Instead it is simply enormous and confused and destroying everything in its vicinity — which currently includes the entire eastern sky.</p>
+      <p>A Rift Lord cannot be killed. It has to be sealed back into the Void. The only thing in the world that can touch the Rift membrane from this side without killing the person holding it is a <span class="rift-text">Rift Shard</span>.</p>
+      <p>The Scholar's notes end mid-sentence.</p>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- LOOSE ENDS -->
+  <div class="chapter" id="after">
+    <p class="chapter-label">Epilogue</p>
+    <h2>What Remains</h2>
+    <p>The story does not end cleanly. It never does.</p>
+    <p>What are the other eleven Rift Shards, and who carries them? Where did the Aethori Sky Beasts — the original creatures they flew on — go after the Sundering? What is in the locked section of the Field Codex that no Guild Master has opened? The Rift Lord that was sealed is still in there. And Rifts are still forming.</p>
+    <p>Serath survived. Or didn't. Either way, they had followers who still believe.</p>
+    <div class="pull-quote">"The sky remembers what the earth has forgotten."</div>
+  </div>
+
+  <div class="codex-stamp">
+    <p>Aethara Field Codex &nbsp;·&nbsp; Restricted Access &nbsp;·&nbsp; Guild Eyes Only</p>
+  </div>
+
+</main>
+
+<!-- BACK TO TOP -->
+<button class="back-top" id="backTop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg viewBox="0 0 24 24"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg>
+</button>
+
+<script>
+  // Scroll progress bar
+  const scrollBar = document.getElementById('scrollBar');
+  const loreBg    = document.getElementById('loreBg');
+  const backTop   = document.getElementById('backTop');
+  let ticking = false;
+
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const st  = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      scrollBar.style.width = (st / max * 100) + '%';
+
+      // Hero parallax
+      if (loreBg) loreBg.style.transform = `scale(1.05) translateY(${st * 0.18}px)`;
+
+      // Back to top visibility
+      backTop.classList.toggle('visible', st > 600);
+
+      ticking = false;
+    });
+  });
+
+  // Scroll reveal for chapters
+  const chapters = document.querySelectorAll('.chapter');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  chapters.forEach(c => observer.observe(c));
+
+  // Stagger act boxes
+  document.querySelectorAll('.act-box').forEach((box, i) => {
+    box.style.opacity = '0';
+    box.style.transform = 'translateY(16px)';
+    box.style.transition = `opacity 0.5s ${i * 0.08}s ease, transform 0.5s ${i * 0.08}s ease`;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { box.style.opacity = '1'; box.style.transform = 'none'; obs.disconnect(); }
+    }, { threshold: 0.1 });
+    obs.observe(box);
+  });
+</script>
+</body>
+</html>
