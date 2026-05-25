@@ -1,0 +1,71 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/Player.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/monsters/Thornmane.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="3"]
+[ext_resource type="Script" path="res://scripts/systems/CombatCamera.gd" id="4"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(2400, 40)
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(40, 400)
+
+[sub_resource type="RectangleShape2D" id="3"]
+size = Vector2(40, 400)
+
+[sub_resource type="StyleBoxFlat" id="4"]
+bg_color = Color(0.08, 0.1, 0.16, 1)
+
+[node name="Main" type="Node2D"]
+
+[node name="Background" type="ColorRect" parent="."]
+offset_left = -1200.0
+offset_top = -400.0
+offset_right = 1200.0
+offset_bottom = 600.0
+color = Color(0.08, 0.1, 0.16, 1)
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(0, 200)
+
+[node name="FloorShape" type="CollisionShape2D" parent="Floor"]
+shape = SubResource("1")
+
+[node name="FloorSprite" type="ColorRect" parent="Floor"]
+offset_left = -1200.0
+offset_top = -20.0
+offset_right = 1200.0
+offset_bottom = 20.0
+color = Color(0.22, 0.18, 0.12, 1)
+
+[node name="WallLeft" type="StaticBody2D" parent="."]
+position = Vector2(-1200, 0)
+
+[node name="WallLeftShape" type="CollisionShape2D" parent="WallLeft"]
+shape = SubResource("2")
+
+[node name="WallRight" type="StaticBody2D" parent="."]
+position = Vector2(1200, 0)
+
+[node name="WallRightShape" type="CollisionShape2D" parent="WallRight"]
+shape = SubResource("3")
+
+[node name="Player" parent="." instance=ExtResource("1")]
+position = Vector2(-300, 140)
+
+[node name="Thornmane" parent="." instance=ExtResource("2")]
+position = Vector2(350, 120)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+script = ExtResource("4")
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+limit_left = -1180
+limit_right = 1180
+limit_top = -380
+limit_bottom = 210
+drag_horizontal_enabled = true
+drag_horizontal_offset = 0.15
+
+[node name="HUD" parent="." instance=ExtResource("3")]

@@ -69,14 +69,58 @@ Each piece of gear has 1–2 skill slots. A skill activates the moment the gear 
 
 ### Gear Slots
 
-```
-Head armor    → 1 skill slot
-Chest armor   → 2 skill slots
-Arms armor    → 1 skill slot
-Legs armor    → 1 skill slot
-Charm         → 1 skill slot (crafted separately, cross-biome materials)
-```
-Total: 6 active skill slots per build. Mix-sets are valid and often optimal.
+| Slot | Type | Skill Slots | Extra Effect |
+|------|------|-------------|-------------|
+| **Helm** | Armor | 1 | — |
+| **Chest** | Armor | 2 | — |
+| **Arms** | Armor | 1 | — |
+| **Greaves** (legs/shoes) | Armor | 1 | — |
+| **Backpack** | Utility | 1 | Consumable capacity + loadout (see below) |
+| **Back-piece** | Mobility | 1 | Movement ability unlocked (see below) |
+| **Charm** | Accessory | 1 | Crafted separately, cross-biome materials |
+| **Weapon** | Weapon | 1 (passive only) | Moveset + weapon passive skill |
+
+**Total: 9 active skill slots per build.** Mix-sets across armor, backpack, and back-piece are valid and often optimal.
+
+Full set bonus: equipping all 4 **armor pieces** (Helm/Chest/Arms/Greaves) from the same monster grants +1 bonus skill slot. Does not apply to backpack, back-piece, or charm.
+
+### Backpack Slot
+
+The backpack determines two things simultaneously:
+
+**1. Consumable capacity and loadout**
+
+| Backpack Type | Consumable Slots | Max Per Type | Passive Skill |
+|--------------|-----------------|-------------|---------------|
+| Scout Pack | 3 types | 3 each | `swiftness` |
+| Medic Pack | 5 types | 5 each | `recovery_speed` |
+| Combat Pack | 3 types | 3 each | `attack_boost` |
+| Alchemist Pack | 4 types | 4 each | `elemental_attack` |
+| Ironhide Pack | 2 types | 2 each | `guard_up` |
+
+Consumables include: healing potions, stamina draughts, elemental coatings (for Bow), status antidotes, trap components, flash bombs, smoke bombs.
+
+**2. Passive skill** — stacks with armor skills using the same Lv1/Lv2/Lv3 system.
+
+Backpacks are crafted from utility materials (ores, hides, woven biome plants) — not monster boss parts. They upgrade on the same discovery-crafting system.
+
+### Back-piece Slot (Mobility Device)
+
+Any weapon can equip any back-piece. The back-piece grants one active movement ability, usable on a cooldown governed by the `Constitution` skill. It also contributes one passive skill slot.
+
+| Back-piece | Movement Ability | Passive Skill | Crafted From |
+|-----------|-----------------|---------------|-------------|
+| **Rift Glider** | Glide (fall slowly, steer horizontally) | `airborne` | Glacewing membrane + Rift crystal |
+| **Grapple Anchor** | Fire hook to monster — pull yourself to it | `weakness_exploit` | Thornmane thorns + iron chain |
+| **Rift Burst Pack** | Short vertical burst jump, then fall | `evasion_window` | Rift Shard fragment + ore |
+| **Sky Membrane** | Full slowfall + one horizontal air dash | `airborne` | Namielle-Keth wing cloth |
+| **Volcanic Thruster** | Ground dash burst (faster than dodge, no i-frames) | `constitution` | Ashmaul plate + ember ore |
+| **Shadow Step** | Short-range blink teleport (bypasses melee counter range) | `evasion_window` | Chaoskrel tendril + void crystal |
+| **Aethori Flight Harness** | Sustained flight for 8 seconds before cooldown | `airborne` | Aethori War-Wyvern parts |
+
+Back-pieces do **not** grant the aerial moveset of the Insect Glaive — they grant aerial access only. A Great Sword player with a Rift Glider can glide and perform aerial light/heavy, but not the Glaive's vault combo. Aerial specialists still benefit from Insect Glaive, but aerial access is no longer locked to it.
+
+Back-piece cooldown: 12 seconds base, reduced by `Constitution` skill level.
 
 ---
 
@@ -181,19 +225,157 @@ On **first encounter only**, a monster triggers its intro:
 
 ---
 
-## Combat System
+## Monster Pattern System
+
+### Design Principle
+
+Combat is a knowledge game, not a reaction game. Every monster has a fixed, learnable attack pattern. A player who understands the pattern can clear a fight with no faints. A player who goes in without knowledge will fail consistently — not because of bad luck, but because the pattern is punishing in predictable, avoidable ways.
+
+There is no randomness in monster move selection. Monsters choose attacks based on **state conditions**: distance to player, player's last action, monster HP, and internal cooldown timers. The same conditions always produce the same result. This means death is never unfair — it is always information.
+
+### Pattern Structure
+
+Each monster has:
+- **2–4 attacks**, each with a distinct wind-up tell
+- **1–2 counter-attack windows** (close range triggers) — see Combat System
+- **State transitions** that change available moves (enrage unlocks new attacks, doesn't replace old ones)
+- **Openings** — specific frames after certain attacks where the monster is fully vulnerable
+
+Example — Thornmane full pattern:
+
+```
+If player is CLOSE (< 70px) and monster just took a hit:
+  → Tail Sweep (purple flash wind-up, 24 frames)
+    → Opening: 18 frames after tail sweep if it misses
+
+If player is MID RANGE (70–200px):
+  → Charge Windup (crouch + orange flash, 33 frames)
+    → Charge lasts 0.55s
+    → Opening: 22 frames immediately after charge ends (regardless of hit)
+
+If player is FAR (> 200px) and monster is enraged:
+  → Thorn Launch (new enrage move — fires 3 projectile thorns, no melee wind-up)
+    → No melee counter window, but projectiles can be dodged through
+
+Idle conditions (no attack):
+  → If player outside aggro range: patrol
+  → If player just dodged through an attack: 1.2s reset before next attack
+```
+
+This means a skilled player learns: dodge the charge → punish immediately → back off before Tail Sweep triggers → repeat. The loop is clear, consistent, and satisfying to master.
+
+### Codex Pattern Learning
+
+The Field Codex entry for each monster fills in progressively based on hunt experience:
+
+| Milestone | Codex Info Unlocked |
+|-----------|-------------------|
+| First sighting | Name, biome, tier |
+| First hit landed | Weakpoint locations highlighted on diagram |
+| First death (or 1 completed hunt) | Attack names listed |
+| 3 hunts total | Wind-up descriptions ("orange flash on shoulders before charge") |
+| 5 hunts total | Timing notes ("18-frame opening after failed tail sweep") |
+| Part break achieved | That part's function in the pattern noted |
+| Elder Scholar Voss consulted | One free full-pattern hint per monster |
+
+The Codex does not hand the player the answers immediately — it rewards engagement. A player who dies repeatedly learns faster than one who avoids a monster entirely.
+
+### Environmental Tells
+
+Beyond wind-up animations, the environment communicates monster state:
+
+- **Sound**: Thornmane growls low before a charge. Velkhrath's exhale mist thickens before a stomp. Chaoskrel goes silent before a tentacle reach.
+- **Particles**: Dust rises under Thornmane's feet when charging. Ice crystals shed off Velkhrath during blizzard windup.
+- **Music**: Combat music tempo increases when monster enters a combo chain. Returns to base tempo during monster's reset window.
+
+Players who turn off music and watch carefully can read patterns faster. Players who fight with audio get the musical cues as a secondary layer.
+
+### Difficulty Philosophy
+
+**No stat wall** — a player at G1 gear can theoretically defeat a G3 monster if they understand the pattern perfectly. Gear makes it more forgiving, not more possible.
+
+**Death teaches** — the first encounter with any monster should result in at least one faint for most players. This is expected and intentional. The game is telling you: watch, learn, return.
+
+**Headlong yolo fails consistently** — monsters are tuned so that three consecutive random attacks, all connected, exhaust roughly 60–70% of base HP. A player who doesn't dodge will exhaust three faints in under two minutes. A player who dodges correctly can fight indefinitely.
+
+**No softlocks** — if a player is genuinely stuck on a monster, Ryn (companion NPC, G2) can be recruited. Ryn is a competent fighter who also draws some aggro. The fight becomes easier, but Ryn is never strong enough to carry it alone.
+
+The camera responds to the space between player and monster:
+
+| Situation | Zoom Level | Feel |
+|-----------|-----------|------|
+| No enemy nearby | Wide (0.6×) | Exploration mode, see the biome |
+| Enemy at mid range | Normal (1.0×) | Standard combat framing |
+| Melee engaged (<80px) | Close (1.3×) | Tension, monster fills screen |
+| Boss intro / cinematic | Scripted | Pulls out dramatically, then snaps back |
+
+Camera tween is smooth — it never cuts, always lerps. This makes the choice between melee and ranged feel physical: ranged players live in the wide view, melee players voluntarily push into the close view where the monster is bigger and counters are harder to read.
 
 ### Ground Combat
 
-- Side-scrolling real-time combat
+- 2.5D side-scrolling, free horizontal + vertical movement within each arena zone
 - WASD movement (or arrow keys)
-- Light attack / heavy attack / special (weapon-specific)
+- Multiple attack inputs per weapon (see Combo System below)
 - Dodge roll with i-frames (Agility stat affects duration)
 - Stamina governs sprinting, charging, dodge frequency
 - Hitboxes: capsule-based, per-limb on larger monsters
 - Damage numbers float above target on hit
 - White flash frame (2 frames) on hit — anime impact feel
 - Screen shake scales with damage magnitude
+
+### Melee vs. Ranged Tradeoff
+
+Melee and ranged are not balanced identically — they offer a genuine tradeoff:
+
+| | Melee | Ranged (Bow) |
+|--|-------|------|
+| Damage | Higher base, scales with Strength | Lower base, scales with Focus |
+| Risk | Recovery frames after every attack | No recovery frames |
+| Monster response | Monsters have close-range counter windows | No counter window triggered |
+| Positioning | Must close distance | Must maintain distance |
+| Best against | Slow monsters, staggered enemies | Fast monsters, aerial phases |
+
+**Recovery frames (player-side risk):**
+After every melee attack, the player has a brief window (varies by weapon — Great Sword longest, Dual Blades shortest) where dodge input is buffered but not active. Attacking into a monster's counter-attack wind-up during this window means the player takes the hit. This is the core skill expression for melee: learning when to commit and when to wait.
+
+**Counter-attack windows (monster-side risk):**
+Every monster has 1–2 specific attacks that are designed to punish close-range presence. These are telegraphed — a visible wind-up animation or color flash — but the window is short. Players who learn a monster's moveset can bait counters and dodge through them; players who button-mash get punished consistently.
+
+Examples:
+- Thornmane: tail sweep triggers when player is within 60px and just landed a hit — brief purple flash warns it
+- Verdanthos: vine grab specifically tracks close-range players; cannot grab from outside 120px
+- Velkhrath: stomp radius is close-range only; staying at mid range is safe
+
+Neither risk is unavoidable — both reward knowledge and mastery over pure reaction speed.
+
+### Combo System — Multiple Moves Per Weapon
+
+No single "correct" button sequence. Each weapon has a moveset tree:
+
+```
+Light × 1           → quick single hit
+Light × 2           → 2-hit combo
+Light × 3           → 3-hit finisher (weapon-specific animation)
+Heavy (tap)         → overhead strike, moderate charge
+Heavy (hold 0.4s)   → charged strike, high damage
+Heavy (hold 1.0s)   → full charge, max damage + special effect
+Dodge → Light       → dash attack (momentum-based, different hitbox)
+Airborne → Light    → aerial strike (different angle, knockdown on grounded enemies)
+Airborne → Heavy    → aerial smash (slam down, AoE on landing)
+```
+
+Context-sensitive moves unlock as the player explores combinations — the game does not tell you all inputs upfront. The Codex tracks discovered combos.
+
+### Build Diversity — No Single Right Answer
+
+Monsters have no hard counters. Multiple valid strategies exist for each encounter:
+
+- A Bow player who understands Thornmane's aggro range can kite and deal consistent damage
+- A Great Sword player who knows the counter window can charge between attacks for massive hits
+- A Dual Blades player with Elemental Burst can proc status effects to stagger cycles
+- An Insect Glaive player can stay aerial and avoid the counter window entirely
+
+Gear builds follow the same principle — mixed sets are often as strong as full sets because skill stacking creates different ability combinations. The "optimal" build is whatever the player has discovered and practiced.
 
 ### Aerial Combat
 
@@ -224,43 +406,101 @@ Elements: Fire, Ice, Thunder, Water, Dragon (Rift-type), Poison (status), Sleep 
 
 ## Crafting System
 
-Crafting happens at the **Blacksmith in Veilwatch**. No crafting in the field (keeps returning to hub meaningful).
+Crafting happens at the **Blacksmith in Veilwatch** (and at field camps for consumables only). No weapon or armor crafting in the field — returning to hub stays meaningful.
 
-### Weapons
+### Discovery-Based Crafting
 
-- Each weapon is crafted from a specific monster's materials
-- Weapon trees branch — early weapon → upgrade path A or B
-- Upgrading requires the same monster's rarer parts
+There is no recipe book handed to the player. Recipes are discovered through:
+
+**1. Free experimentation**
+The crafting grid accepts any combination of materials. Results:
+
+| Outcome | What Happens | What Player Gets |
+|---------|-------------|-----------------|
+| **Success** | Valid recipe found | Item crafted + recipe saved to personal Codex |
+| **Partial** | Close but not right | Weak version of item OR hint fragment saved: `Thornmane Fang + ? + ?` |
+| **Failure** | No valid recipe | Materials fuse into **Fused Scrap** — itself a crafting component |
+
+Partial hints accumulate in the Codex. The more partial attempts near a recipe, the more `?` slots fill in. Doram will offer one free hint per hunt for materials he's seen you bring back.
+
+**2. World hints**
+Discoveries in the field provide partial recipes without giving the full answer:
+- Monster drops: `Worn Schematic` (dropped by Riftborn on first kill) — partial recipe fragment
+- Environment: `Ancient Inscription` on biome walls — sometimes a material name, sometimes a pairing
+- NPC dialogue: Doram, Voss, and Athe all drop recipe hints in conversation as guild rank increases
+
+**3. Quality tiers from the same recipe**
+The same recipe with higher-quality materials produces a better output:
 
 ```
-Iron Sword (starter)
-  └→ Thornmane Sword (Thornmane parts)
-       └→ Thornmane Sword+ (Thornmane rare parts)
-            └→ Verdanthos Blade (Verdanthos parts — biome 1 endgame)
+Thornmane Fang (common) + Iron Plate + Canopy Vine
+  → Thornmane Sword  [base stats, 1 skill slot]
+
+Thornmane Fang (fine) + Refined Plate + Woven Vine
+  → Thornmane Sword  [+12% damage, 1 skill slot]
+
+Thornmane Fang (perfect) + Tempered Plate + Elder Vine
+  → Thornmane Sword  [+28% damage, 2 skill slots]
+```
+
+Quality tier of the output is always the lowest-quality material used. Farming for quality is the endgame grind — not farming for a new recipe, but farming for perfect materials to maximize a known recipe.
+
+### No Useless Loot
+
+Every material has at least two uses. Common materials are not vendor trash:
+
+| Material Type | Primary Use | Secondary Use | Tertiary Use |
+|--------------|-------------|---------------|-------------|
+| Common (Canopy Vine) | Crafting component | Consumable ingredient (Canopy Stew) | Upgrade filler (reinforce existing gear) |
+| Uncommon (Thornmane Fang) | Weapon crafting | Charm ingredient | Trade value at Merchant Athe |
+| Rare (Thornmane Plate) | Armor crafting | High-tier consumable | Unique recipe component |
+| **Fused Scrap** (failed craft) | Specific unique recipes | Reinforce cheap gear | Trade — Athe pays well for it |
+| Fine/Perfect quality variants | Upgrade same recipe to better tier | Charm slot upgrade | — |
+
+The Merchant Athe always buys everything — but at poor rates. Selling is always the last resort, not the default.
+
+### Weapon Trees
+
+Trees still exist as a framework, but the player discovers each node through experimentation or hints rather than seeing the full tree upfront. Doram shows the tree only for recipes the player has already discovered.
+
+```
+Iron Sword (starter — given)
+  └→ Thornmane Sword         [discover by experimenting with Thornmane materials]
+       ├→ Thornmane Sword+   [Thornmane Plate × 1 — rare drop, hint from Voss]
+       └→ Hunter's Edge      [Thornmane Fang + Canopy Vine fine quality — alternate branch]
+            └→ Verdanthos Blade  [Elder material — Voss gives schematic on G1 clear]
 ```
 
 ### Armor
 
 - Each monster has a full armor set (Head, Chest, Arms, Legs)
-- Craft any individual piece — full set not required
-- Full set bonus: equipping all 4 pieces adds one extra skill slot (charm still separate)
+- Individual pieces can be crafted — full set not required
+- Full set bonus: all 4 pieces from same monster = one extra skill slot (charm still separate)
+- Mixed sets are often better than full sets for skill diversity
 
 ### Charm Crafting
 
-- Charms use materials from **multiple biomes** — encourages full exploration
+- Charms require materials from **multiple biomes** — encourages full exploration
 - One charm slot per build
-- Charms cannot be upgraded — craft a better one instead
+- Charms are not upgradeable — craft a better one with better materials
+- Charm recipes are among the hardest to discover — require cross-biome material combinations that only show up as hints in late-game NPC dialogue
 
-### Material Drop Design (Light Grind)
+### Material Drop Design
 
-Goal: a full weapon + armor set in 3–5 hunts of the target monster.
+Goal: a full weapon + armor set in 3–5 hunts. Grind is for quality, not just availability.
 
-| Material Tier | Drop Rate | Hunts Expected |
+| Material Tier | Drop Rate | Quality Distribution |
 |---|---|---|
-| Common | 80–100% | 1 hunt |
-| Uncommon | 50–65% | 2 hunts |
-| Rare | 25–35% | 3–4 hunts |
-| Ultra-rare (charm / endgame) | 10–15% (guaranteed on first kill) | 1 guaranteed + occasional |
+| Common | 80–100% | 70% base, 25% fine, 5% perfect |
+| Uncommon | 50–65% | 80% base, 18% fine, 2% perfect |
+| Rare | 25–35% | 90% base, 9% fine, 1% perfect |
+| Ultra-rare (charm) | 10–15% (guaranteed first kill) | Always base quality — no upgrades |
+
+Loot also varies by **kill condition**:
+- Enraged kill: higher chance of fine/perfect quality on rare drops
+- Part break bonus: always drops the part-specific material at base+ quality
+- Carve (3 post-kill carves): higher quality variance than kill drops
+- First kill: always drops one rare at guaranteed base quality minimum
 
 ---
 
