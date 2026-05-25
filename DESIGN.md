@@ -504,13 +504,29 @@ Loot also varies by **kill condition**:
 
 ---
 
+## Game Feel & Tone
+
+Rift Hunter feels like a world that is **happy you're in it**.
+
+Veilwatch is a town that gets better as you play. NPCs have opinions, moods, and things they're genuinely excited about. A new biome opening is a community event. A first kill on a new species gets noted and celebrated. Fainting in the field is never shameful — it's a learning moment, and someone at the hall always has something kind to say when you get back.
+
+Hunts are hard — the Monster Hunter pattern-learning DNA is fully intact — but the world around hunts is warm and alive. The contrast is the point: the field is a challenge you choose, and the guild is the place you come home to.
+
+**Visual tone:** Vibrant, saturated environments. Monsters are spectacular to look at, not grotesque. Biomes feel like places worth exploring. Each new zone should make the player think "I want to see what's in there."
+
+**Dialogue tone:** Warm, direct, personality-first. NPCs say what they actually think. Nobody is cryptic for the sake of atmosphere. Light humor throughout. Nobody suffers quietly — if an NPC is going through something, it becomes a friendship quest, not background gloom.
+
+**Pacing tone:** The hunt is the event. Everything else is the community life between events. Both should feel good — not one as setup for the other.
+
+---
+
 ## Guild Hub — Veilwatch
 
-Veilwatch is a town, not a menu. Six guild halls line the main street, each with its own personality, board, and bar. Shared infrastructure (Blacksmith, Chef Suni, Scholar Voss, Merchant Athe) sits in the central district. Players belong to one guild — their room is there, their name is on that board.
+Veilwatch is a town, not a menu. Six guild halls line the main street, each with its own personality, board, and bar. Shared infrastructure (Blacksmith, Chef Suni, Scholar Voss, Merchant Athe) sits in the central district. Players belong to one guild — their guild hall grows with them.
 
 ### Guild Selection
 
-Offered once at game start, after the intro hunt. Cannot be changed (one guild per playthrough). Each guild leader gives a brief pitch when you arrive. The choice is permanent and meaningful — guild NPCs remember you, their story arc unfolds around your presence.
+Offered once at game start, after the intro hunt. Cannot be changed (one guild per playthrough). Each guild leader gives a brief pitch when you arrive. The choice is permanent and meaningful — guild NPCs remember you, and the hall evolves around your progress.
 
 The Voidwalkers are not offered at start — they approach the player at G3.
 
@@ -518,48 +534,117 @@ The Voidwalkers are not offered at start — they approach the player at G3.
 
 | NPC | Role | Dialogue Style |
 |---|---|---|
-| **Yela — Central Receptionist** | Guild rank advancement, urgent dispatches, cross-guild news | Warm, professional, knows everyone, quietly worried |
-| **Chef Suni** | Pre-hunt meals, timed buffs | Enthusiastic, every meal is a ceremony |
-| **Elder Scholar Voss** | Field Codex, lore, Rift research | Ancient, calm, knows more than he says |
-| **Merchant Athe** | Buys materials, sells components | Cheerful opportunist, hints at Cult activity |
+| **Yela — Central Receptionist** | Guild rank advancement, dispatches, cross-guild news | Warm, knows everyone by name, genuinely happy to see you |
+| **Chef Suni** | Pre-hunt meals, timed buffs | Enthusiastic, every meal is a ceremony, remembers your favorites |
+| **Elder Scholar Voss** | Field Codex, lore, Rift research | Gentle, patient, delighted when you bring back something new |
+| **Merchant Athe** | Buys materials, sells components | Chatty, always has town gossip, great memory for prices |
 
 ### Guild-Specific NPCs (3–4 per guild)
 
-Each guild has its own leader, a junior hunter (story companion), a crafting specialist, and one wildcard NPC. Relationships build through quests and conversation — high relationship unlocks personal quests, unique dialogue, and crafting hints.
+Each guild has its own leader, a junior hunter (the player's closest companion), a specialist, and a wildcard. Relationships deepen through play — not gifting mechanics, just showing up, going on hunts, and talking to people.
 
-| Guild | Leader | Junior Hunter | Specialist |
-|-------|--------|--------------|-----------|
-| Veilwatch Wardens | Commander Aldis | Fen (cautious, thoughtful) | Sora (Codex researcher) |
-| Crimson Claw | Karas | Brix (competitive, loudly supportive) | Nem (trap and coating expert) |
-| Ironveil Crafters | Master Doram | Lira (obsessed with rare materials) | Cael (ancient weapon historian) |
-| Skyborn | Elder Vyn | Tae (half-Aethori descent, conflicted) | Ova (back-piece engineer) |
-| Hollowroot Lodge | Wren | Pip (youngest hunter, brilliant naturalist) | Holt (poison and herb specialist) |
-| Ember Pact | Ignas | Ryn (yes, that Ryn — she's Ember Pact) | Hessa (volcanic materials expert) |
-| Voidwalkers | Sable | — | Mira (Rift energy analyst, unsettling) |
+| Guild | Leader | Close Companion | Specialist |
+|-------|--------|----------------|-----------|
+| Veilwatch Wardens | Commander Aldis | Fen (thoughtful, asks good questions) | Sora (Codex obsessive, excited by everything) |
+| Crimson Claw | Karas | Brix (loudly enthusiastic, unreservedly supportive) | Nem (trap and coating nerd) |
+| Ironveil Crafters | Master Doram | Lira (obsessed with rare materials, will talk your ear off) | Cael (ancient weapon historian) |
+| Skyborn | Elder Vyn | Tae (half-Aethori, figuring out what that means) | Ova (back-piece engineer, brilliant, scattered) |
+| Hollowroot Lodge | Wren | Pip (youngest hunter, incredibly sharp naturalist) | Holt (herb and poison specialist, calm as anything) |
+| Ember Pact | Ignas | Ryn (yes, that Ryn — she's Ember Pact, she's great) | Hessa (volcanic materials expert, dry humor) |
+| Voidwalkers | Sable | — | Mira (Rift energy analyst, quiet, observant) |
 
-### Player Room & Home Decor
+---
 
-Every hunter has a personal room in their guild hall. The room starts bare — a bed, a weapon rack, one window.
+## Friendship System
 
-Decorations are obtained through:
-- **Monster trophies** — automatically awarded after certain kills (Thornmane head mount, Verdanthos scale wall piece, etc.)
-- **Crafted furniture** — made from common biome materials at Doram's workshop
-- **Quest rewards** — guild leaders give unique decorations as relationship rewards
-- **Rank achievements** — a board updates automatically with your rank milestones
+Relationships with NPCs deepen naturally through play — no gifting required, no daily schedule to maintain. Just be there, hunt, talk, and follow through on quests.
 
-Decorations are cosmetic only. The room is a record of your hunts — a visual autobiography. Other guild members comment on new additions when you return from a hunt.
+### How Friendship Builds
+
+Each key NPC has a **friendship bar** (5 levels, shown as small icons next to their name). It fills through:
+
+- **Talking to them** after returning from a hunt — they comment on what you did, you respond
+- **Completing their quests** — each NPC posts 1–2 personal quest lines on the board over the course of the game
+- **Hitting rank milestones** they care about (Brix lights up when you reach G2; Wren sends a field note when you clear a new biome)
+- **Clearing hunts they posted** on the shared board — they notice and say something
+
+### Friendship Levels
+
+| Level | Unlock |
+|-------|--------|
+| ★☆☆☆☆ | Basic greeting, functional dialogue |
+| ★★☆☆☆ | Extended conversation options, small hints |
+| ★★★☆☆ | Personal story quest unlocks |
+| ★★★★☆ | Exclusive dialogue, recurring check-ins when you return from hunts |
+| ★★★★★ | Close Friend — unique scene, a keepsake item for the guild hall, one exclusive crafting hint |
+
+### Companion in the Field
+
+Your guild's close companion NPC (the junior hunter) can join you on hunts from G2 onward — opt-in, always. They fight competently, draw some aggro, and have different field dialogue depending on the monster and biome. They never carry the fight, but they make it warmer and slightly more forgiving. After hunts they debrief with you, and that conversation fills friendship progress too.
+
+---
+
+## Guild Hall Evolution
+
+The guild hall starts modest. It grows as you do.
+
+This is not a personal room — it's a shared space that reflects the whole guild's progress, with your contributions visible in it. Every rank-up and major quest milestone physically changes the hall.
+
+| Progress | What Changes |
+|----------|-------------|
+| **Arrive (G1)** | Basic hall — quest board, a few tables, your bunk in the back |
+| **First biome clear** | A trophy mount goes up on the wall (first-kill trophy, your name on the plaque) |
+| **G2 rank** | A new NPC joins the hall. The kitchen gets an upgrade. Suni starts offering a new meal. |
+| **Second biome clear** | Outdoor notice board added. Other hunters from town start hanging around. |
+| **G3 rank** | Hall gets a dedicated lounge area. Trophy wall expands. A framed Field Codex page goes up. |
+| **Ashmaul hunt** | The Ashmaul trophy is enormous. The hall rearranges slightly to fit it. Everyone has opinions. |
+| **G4 rank** | The hall becomes a Veilwatch landmark. A mural goes up. The bar gets better drinks. |
+| **Elder Rank** | Full hall — every facility, every NPC present, warm and lively. This is home. |
+
+New NPCs who show up as the hall grows have their own friendship bars and small story arcs. The hall never stops having someone new to talk to.
 
 ### Biome Unlock Events
 
-When a gatekeeper boss is defeated for the first time (opening a new biome), the whole guild reacts:
-- **Crimson Claw:** Immediate celebration. Someone starts a pool on who gets the first G2/G3 kill.
-- **Hollowroot Lodge:** Excited field team immediately deploys to catalogue the new biome.
-- **Skyborn:** If it's an aerial biome, they hold a ceremony. Vyn makes a speech.
-- **Ironveil Crafters:** Theoretical discussion about what the new monsters will drop.
-- **Ember Pact:** Quiet toasts. They've been here before. They're genuinely happy.
-- **Wardens:** The board updates. A new zone is logged. Someone pins a note about new Rift monitoring needs.
+When a gatekeeper boss falls for the first time, the whole guild reacts when you walk back in:
 
-These are ambient dialogue events, not cutscenes — the guild hall changes when you walk in after a major unlock.
+- **Crimson Claw:** Immediate noise. Someone starts a pool on who gets the first G2/G3 kill. Karas already has a time to beat in mind.
+- **Hollowroot Lodge:** Pip is already packing field gear. Wren has a list of species she expects to find.
+- **Skyborn:** If it's an aerial biome, Vyn holds a short ceremony. It's sincere. Everyone attends.
+- **Ironveil Crafters:** Lira has material theories. Doram is already calculating what new recipes might open.
+- **Ember Pact:** Quiet toasts. They've done this before. They're genuinely, warmly happy.
+- **Wardens:** The board updates. Aldis signs a new zone log. Fen pins a note about Rift patterns to monitor.
+
+These are ambient dialogue events, not cutscenes — the guild hall is different when you walk in, and people react to what you did specifically.
+
+---
+
+## Seasonal Events
+
+Veilwatch runs on a calendar. Four events per year, each lasting about a week of in-game time. Events happen regardless of story progress — the town keeps living whether you're on the main quest or not.
+
+### The Migration Festival *(Spring)*
+
+The season the Veilkin migration routes open up. The Hollowroot Lodge coordinates field documentation teams and posts a stack of rare observation contracts. Special reward: a unique Codex entry that only unlocks during migration season, plus a festival meal buff from Suni that lasts the whole week.
+
+Mood: busy, excited, academic. Pip is running everywhere.
+
+### Guild Championship *(Summer)*
+
+Organized by the Crimson Claw every year. Speed-run tournament: fastest clear time on a designated hunt wins. Open to all guilds — competing against each other cross-faction is half the fun. Prizes are seasonal gear cosmetics and a spot on the Championship board in the Crimson Claw hall (visible all year).
+
+Mood: loud, competitive, good-natured. Brix will not stop talking about his strategy.
+
+### Codex Week *(Autumn)*
+
+The Field Codex's annual documentation push. Every completed Codex page during the week earns bonus materials. Voss picks one mystery species per year — a creature with incomplete data — and posts a field contract to fill in the gaps. Completing it earns a unique charm component only available this week.
+
+Mood: focused, curious, a little nerdy. Voss has a very good week.
+
+### Ember Night *(Winter)*
+
+Ember Pact tradition, now adopted by the whole town. A bonfire in the central square, Suni's warmest meal buff of the year (full week duration, +1 faint). Guild members share hunt stories — the tall tales get taller as the night goes on. NPCs who you've reached ★★★★☆ with will share something personal.
+
+Mood: warm, slow, the best kind of tired. Ignas makes a short speech. It is sincere and not long.
 
 ### Meals (Pre-Hunt Buffs)
 

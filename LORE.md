@@ -80,31 +80,29 @@ The Guild learned this the hard way. The first generation of hunters killed ever
 
 ## The Hunter's Guild of Aethara
 
-Founded two centuries after the Sundering by a coalition of surviving Aethori descendants and surface-world warlords who agreed on exactly one thing: uncoordinated violence against Veilborn was making everything worse.
+Founded two centuries after the Sundering by a coalition of Aethori descendants and frontier settlers who figured out that working together was a lot more fun than not. The Guild grew from a small coordinating body into the backbone of frontier life — part scientific organization, part community anchor, part excuse to have a really good meal before a hard hunt.
 
 The Guild operates on one principle:
 
-> *"We do not hunt to conquer. We hunt to balance."*
+> *"Every hunt is a story worth telling."*
 
 ### What the Guild Actually Does
 
-- Tracks Veilborn migration patterns across all biomes
-- Seals unstable Rifts before they cascade
-- Culls overpopulated Veilkin before they collapse their own ecosystem
-- Stops other humans from doing something catastrophically stupid near an Elder
-- Maintains the **Field Codex** — a living encyclopedia of every documented Veilborn species, updated by hunters who survive long enough to write reports
+- Tracks Veilborn migration patterns across all biomes — useful for knowing what's coming before it arrives
+- Seals unstable Rifts before they spread
+- Manages Veilkin populations so ecosystems stay healthy
+- Maintains the **Field Codex** — a living encyclopedia of every documented Veilborn species, written by hunters in the field and updated constantly
+- Runs Veilwatch and its satellite outposts, which have become genuine communities
 
 ### Veilwatch
 
-The Guild's primary frontier outpost. Built into the cliffs at the convergence point of four biomes — Ancient Canopy, Volcanic Abyss, Frosted Peaks, and Rotten Hollow. Rift activity here is the highest of any inhabited settlement on Aethara.
+The Guild's primary frontier hub. Built into the cliffs at the convergence point of four biomes — Ancient Canopy, Volcanic Abyss, Frosted Peaks, and Rotten Hollow — Veilwatch started as an outpost and grew into a proper town. It has been here one hundred and forty years and every decade it gets a little bigger, a little louder, and a little better-stocked.
 
-Veilwatch has stood for one hundred and forty years. It has nearly fallen seven times.
+The central square has a stone marker with the original founding words carved into it:
 
-The central Hall has a saying carved above its gate in Old Aethori script:
+> *"Come hunt. Stay awhile."*
 
-> *"The monster you do not understand is the one that kills you."*
-
-Veilwatch is not one guild. It is a **town of guilds** — six active hunting factions with their own halls, their own boards, their own aesthetics and philosophies, all operating under the shared Guild rank system. You choose one when you arrive. They all respect each other, mostly. Competition is fierce, friendly, and very loud.
+Six guild halls ring the main street, each with its own board, its own bar, and its own very strong opinions about the best way to hunt. They all share the same rank structure and the same deep, competitive respect for each other. The rivalry is real. The celebration is louder.
 
 ### Guild Ranks (shared across all factions)
 
