@@ -29,15 +29,15 @@ from pathlib import Path
 PROMPTS_FILE = Path(__file__).parent / "PROMPTS.md"
 OUTPUT_DIR   = Path(__file__).parent / "docs" / "assets" / "generated"
 
-# Gemini 2.0 Flash image generation — free tier, available on all AI Studio keys
-IMAGEN_MODEL = "gemini-2.0-flash-preview-image-generation"
+# Imagen 4 — available on your AI Studio key
+IMAGEN_MODEL = "imagen-4.0-generate-001"
 
-# Aspect ratio hints appended to prompts (Gemini doesn't accept aspect ratio params)
+# Aspect ratios supported by Imagen 4
 ASPECT_HINTS = {
-    "reference": "wide landscape 16:9 format",
-    "portrait":  "square 1:1 format",
-    "sprite":    "square 1:1 format",
-    "ui":        "wide landscape 16:9 format",
+    "reference": "16:9",
+    "portrait":  "1:1",
+    "sprite":    "1:1",
+    "ui":        "16:9",
 }
 
 # Pixel art prefix appended to sprite prompts
@@ -215,16 +215,15 @@ def _get_client():
 
 
 def generate_one(entry: dict, out_path: Path, dry_run: bool = False) -> bool:
-    aspect_hint = ASPECT_HINTS.get(entry["size_key"], "square 1:1 format")
+    aspect = ASPECT_HINTS.get(entry["size_key"], "1:1")
 
     prompt = entry["prompt"]
     if entry["type"] == "sprite":
         prompt = SPRITE_PREFIX + prompt
-    prompt = f"{prompt} [{aspect_hint}]"
 
     if dry_run:
         print(f"    [DRY RUN]  {entry['title']}")
-        print(f"               model  : {IMAGEN_MODEL}")
+        print(f"               model  : {IMAGEN_MODEL}  aspect: {aspect}")
         print(f"               prompt : {prompt[:120]}{'…' if len(prompt) > 120 else ''}")
         return True
 
@@ -232,27 +231,25 @@ def generate_one(entry: dict, out_path: Path, dry_run: bool = False) -> bool:
 
     try:
         from google.genai import types
-
         client = _get_client()
 
-        response = client.models.generate_content(
+        response = client.models.generate_images(
             model=IMAGEN_MODEL,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                response_modalities=["IMAGE", "TEXT"],
+            prompt=prompt,
+            config=types.GenerateImagesConfig(
+                number_of_images=1,
+                aspect_ratio=aspect,
+                output_mime_type="image/png",
+                safety_filter_level="BLOCK_ONLY_HIGH",
+                person_generation="ALLOW_ADULT",
             ),
         )
 
-        img_bytes = None
-        for part in response.candidates[0].content.parts:
-            if part.inline_data is not None:
-                img_bytes = part.inline_data.data
-                break
-
-        if not img_bytes:
-            print("  ✗  No image in response (may have been filtered)")
+        if not response.generated_images:
+            print("  ✗  No image returned (may have been filtered)")
             return False
 
+        img_bytes = response.generated_images[0].image.image_bytes
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_bytes(img_bytes)
 
