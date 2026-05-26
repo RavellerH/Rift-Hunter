@@ -22,21 +22,22 @@ Goal: a player that feels good to control in a single room.
 Goal: the full combat loop with gear and crafting functional.
 
 - [ ] All 6 weapon types implemented with distinct movesets
-- [ ] `EquipmentSystem.gd` — equip gear, derive stats, apply skills
-- [ ] `CraftingSystem.gd` — recipe lookup, material check, item creation
-- [ ] `SaveSystem.gd` — write/read inventory and progress to disk
+- [ ] `EquipmentSystem.gd` — equip gear, derive stats, apply skills (includes backpack + back-piece slots)
+- [ ] `CraftingSystem.gd` — discovery crafting with partial hints and Fused Scrap
+- [ ] `SaveSystem.gd` — write/read inventory, equipment, friendship bars, Serath knowledge, Rift Shard flags, active guild
 - [ ] Monster drop system — loot tables per monster, material items defined as Resources
-- [ ] Craftable weapon (one full weapon tree)
-- [ ] Craftable armor set (one full monster set)
+- [ ] Craftable weapon (one full weapon tree — Sword & Shield, 3 upgrades)
+- [ ] Craftable armor set (Thornmane, 4 pieces, skills stack)
 - [ ] Skill system working — at least 4 skills stackable
 - [ ] Basic Veilwatch hub scene — Blacksmith and Guild Board functional
 - [ ] One quest flow: accept → hunt → return → reward
+- [ ] `RiftShard.gd` — Rift Pulse implemented, unlocks after first Rift encounter (G1)
 
 ---
 
 ## Phase 3 — Biomes & Monsters (Week 5–7)
 
-Goal: two complete biomes with bosses, aerial combat working.
+Goal: two complete biomes with bosses, aerial combat working, Rift Step unlocked.
 
 - [ ] Ancient Canopy biome — full tileset, parallax background, vine traversal
 - [ ] Wildspire Waste biome — flash flood mechanic
@@ -47,36 +48,47 @@ Goal: two complete biomes with bosses, aerial combat working.
 - [ ] Bow aerial advantage — damage bonus, aerial charge levels
 - [ ] Monster intro cutscene system (first-encounter only)
 - [ ] Field Codex entries unlock on first kill
+- [ ] Coral Skyland carved Rift wound scene → unlocks Rift Step ability
+- [ ] `GuildStorySystem.gd` — Scene 2 (carved wound) branch dialogue (7 guild variants)
 
 ---
 
 ## Phase 4 — Guild & Progression (Week 8–9)
 
-Goal: full hub experience, guild rank gates, all NPCs.
+Goal: full hub experience, guild rank gates, all NPCs, friendship system live.
 
+- [ ] Guild selection at game start — one-time permanent choice from 7 guilds
 - [ ] All Veilwatch NPCs — dialogue system, basic conversations
 - [ ] Meal system — Chef Suni, pre-hunt buffs
 - [ ] Guild rank system — G1 through G4, rank-up quests
 - [ ] Full quest board — hunt quests, gather quests, urgent dispatches
-- [ ] Companion AI — Ryn recruitable at G2
+- [ ] Companion AI — guild's junior hunter recruitable at G2
 - [ ] Quest fail state — 3 faints, return to hub, no reward
+- [ ] `FriendshipSystem.gd` — friendship bars, gain events, personal quests at Lv3, close friend scene at Lv5
+- [ ] `GuildStorySystem.gd` — all 3 branch scenes × 7 guilds (21 dialogue resources)
+- [ ] Guild Hall Evolution — milestone changes to Veilwatch.tscn (trophy mounts, new NPCs, kitchen upgrade, etc.)
+- [ ] Seasonal Events — calendar system, 4 events per year with event-specific board and dialogue
 
 ---
 
 ## Phase 5 — Content Pass (Week 10–13)
 
-Goal: all 7 biomes, all monsters, story complete.
+Goal: all 7 biomes, all monsters, full story with Serath relationship system complete.
 
 - [ ] Frosted Peaks + Velkhrath
 - [ ] Coral Skyland + Namielle-Keth
-- [ ] Volcanic Abyss + Ashmaul (story boss)
+- [ ] Volcanic Abyss + Ashmaul (story boss) + Serath journal fragment at Reclamation base
 - [ ] Rotten Hollow + Chaoskrel
 - [ ] Elder Sky Ruins + Sovereign (final boss, two-phase)
-- [ ] Full story — Act I through Final Act
-- [ ] Serath NPC arc and dialogue
-- [ ] Elder Scholar Voss research questline (Rift Shard lore)
+- [ ] Rift Seal unlock scene (Sovereign stirs) → Rift Seal ability wired
+- [ ] Full story — Act I through Final Act (Acts I–IV scripted with guild branch variants)
+- [ ] Serath relationship system — all 5 discoverable pieces wired across Acts II–IV
+- [ ] Three-tier final scene variants (minimal / acknowledged / full) based on serath_knowledge
+- [ ] Elder Scholar Voss research questline (Rift Shard lore + annotated document piece)
+- [ ] Merchant Athe dialogue branch (npc_memory Serath piece at question threshold)
 - [ ] All charm recipes
 - [ ] Weapon upgrade trees complete for all 6 weapon types
+- [ ] All back-piece items craftable (7 types)
 
 ---
 
@@ -124,9 +136,14 @@ Goal: stable, distributable, tested.
 
 ## Open Design Questions
 
-1. **Rift Shard progression** — should the Shard's Resonance ability unlock in stages (tied to Guild rank) or story beats?
-2. **Ryn companion** — passive AI follower, or player-controlled toggle?
-3. **Faint penalty** — lose all collected materials on faint, or just the 1-faint-per-3 limit?
+~~1. **Rift Shard progression**~~ ✅ **Resolved:** Three abilities unlock via story beats gated by Guild rank (Rift Pulse G1, Rift Step G2, Rift Seal G4). See DESIGN.md and GAMEPLAN.md §15b.
+
+2. **Companion** — Guild's junior hunter is the companion (not just Ryn). Passive AI follower, or player-controlled toggle?
+
+3. **Faint penalty** — lose all collected materials on faint, or just the 3-faint quest limit?
+
 4. **Charm upgrading** — keep charms non-upgradeable (forces exploration) or allow one upgrade per charm?
-5. **Post-game loop** — tempered monsters only, or add a Rift incursion system (random hard hunts)?
-6. **Serath ending** — binary choice (seal or spare) or multiple outcomes based on player actions throughout?
+
+5. **Post-game loop** — tempered monsters only, or add a Rift incursion system (random hard hunts)? "Other Rift Shards" questline planned — enough?
+
+~~6. **Serath ending**~~ ✅ **Resolved:** Multiple outcomes (3 tiers: minimal / acknowledged / full) based on `serath_knowledge` score (0–5). No dialogue wheel. Depth determined by how much you looked. See DESIGN.md and GAMEPLAN.md §15e.

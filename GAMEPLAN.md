@@ -982,6 +982,7 @@ signal objective_updated(quest_id: String, objective_index: int, current: int, t
 # Guild
 signal guild_rank_increased(new_rank: int)
 signal faint_occurred(faints_remaining: int)
+signal guild_story_branch_triggered(scene_id: String, guild_id: String)
 
 # Biome
 signal biome_loaded(biome_id: String)
@@ -992,6 +993,22 @@ signal dialogue_started(npc_id: String)
 signal dialogue_ended(npc_id: String)
 signal inventory_changed()
 signal loot_picked_up(material_id: String, quantity: int)
+
+# Rift Shard
+signal rift_pulse_fired()
+signal rift_step_used(direction: Vector2)
+signal rift_seal_charged()
+signal rift_seal_released(target_position: Vector2)
+signal rift_shard_ability_unlocked(ability_id: String)
+
+# Friendship
+signal friendship_increased(npc_id: String, new_level: int)
+signal friendship_quest_unlocked(npc_id: String, quest_id: String)
+signal npc_returned_from_hunt(npc_id: String)
+
+# Serath
+signal serath_knowledge_increased(new_score: int)
+signal serath_piece_found(piece_id: String)
 ```
 
 ---
@@ -1005,6 +1022,7 @@ extends Node
 var player_hp: float = Constants.BASE_HP
 var player_stamina: float = Constants.BASE_STAMINA
 var player_dead: bool = false
+var player_last_action: String = "idle"   # "dodge", "attack", "idle" — read by MonsterAI
 
 # Equipment
 var equipped_weapon: WeaponData = null
@@ -1012,12 +1030,15 @@ var equipped_head: ArmorPiece = null
 var equipped_chest: ArmorPiece = null
 var equipped_arms: ArmorPiece = null
 var equipped_legs: ArmorPiece = null
+var equipped_backpack: BackpackItem = null
+var equipped_back_piece: BackPieceItem = null
 var equipped_charm: ArmorPiece = null
 
 # Inventory
-var inventory: Dictionary = {}     # material_id → count
+var inventory: Dictionary = {}     # material_id → { "count": int, "quality": int }
 
 # Guild progression
+var active_guild: String = ""      # set once at game start, never changes
 var guild_rank: int = 1            # 1 = G1 through 4 = G4, 5 = Elder Rank
 var completed_quests: Array[String] = []
 var active_quest: QuestData = null
@@ -1026,9 +1047,272 @@ var active_meal_buff: String = ""  # meal_id or ""
 # Monster tracking
 var seen_monsters: Array[String] = []    # monsters whose intros have played
 var current_biome: String = "veilwatch"
+var codex_entries: Dictionary = {}
+# { "thornmane": { "hunts": 3, "deaths": 1, "parts_broken": ["tail"], "unlocked_info": [...] } }
 
 # Codex
 var codex_unlocked: Array[String] = []   # monster_ids with Codex entries
+
+# Rift Shard abilities (unlocked through story)
+var rift_pulse_unlocked: bool = false      # G1 — after first Rift encounter
+var rift_step_unlocked: bool = false       # G2 — Coral Skyland carved wound scene
+var rift_seal_unlocked: bool = false       # G4 — Sovereign stirs in Elder Sky Ruins
+var rift_pulse_cooldown_elapsed: float = 0.0
+var rift_step_cooldown_elapsed: float = 0.0
+var rift_seal_cooldown_elapsed: float = 0.0
+
+# Friendship (5-level bars per key NPC)
+# Keys: "yela", "voss", "suni", "athe", "doram", "ryn", "brix", "fen", "pip", "wren",
+#       "karas", "aldis", "vyn", "tae", "ignas", "sable", etc.
+var friendship_bars: Dictionary = {}       # npc_id → int (0–5)
+var friendship_quests_completed: Array[String] = []  # npc_id + "_quest_N"
+
+# Guild story branches (which variant scenes have been seen)
+var seen_guild_branches: Array[String] = []
+# e.g. ["scene1_wardens", "scene2_wardens", "scene3_wardens"]
+
+# Serath relationship
+var serath_knowledge: int = 0              # 0–5, gates final scene depth
+var serath_pieces_found: Array[String] = []
+# e.g. ["three_letters", "npc_memory", "journal_fragment", "annotated_doc", "the_approach"]
+```
+
+---
+
+## 15b. Rift Shard System
+
+### File: `scripts/player/RiftShard.gd` (attached to Player)
+
+Three active abilities tied to story progression. All cooldowns live in `Constants.gd`.
+
+```gdscript
+class_name RiftShard
+extends Node
+
+# Rift Pulse — unlocks G1 (after first Rift encounter)
+# Sends ring of energy — all Veilborn within RIFT_PULSE_RADIUS glow 20 s,
+# Veilkin enter startled-alert for 1.5 s
+func fire_rift_pulse() -> void:
+    if not GameState.rift_pulse_unlocked: return
+    if GameState.rift_pulse_cooldown_elapsed < Constants.RIFT_PULSE_COOLDOWN: return
+    GameState.rift_pulse_cooldown_elapsed = 0.0
+    Events.rift_pulse_fired.emit()
+    # Highlight all monsters within RIFT_PULSE_RADIUS via shader override
+    for monster in get_tree().get_nodes_in_group("monsters"):
+        var dist := monster.global_position.distance_to(player.global_position)
+        if dist <= Constants.RIFT_PULSE_RADIUS:
+            monster.apply_rift_glow(Constants.RIFT_PULSE_DURATION)
+            if monster.tier == MonsterTier.VEILKIN:
+                monster.startle(1.5)
+
+# Rift Step — unlocks G2 (Coral Skyland carved wound scene)
+# Blink 200 px in held direction, passes through hitboxes and terrain
+# NOT a dodge — no i-frames, doesn't cancel animations
+func use_rift_step(direction: Vector2) -> void:
+    if not GameState.rift_step_unlocked: return
+    if GameState.rift_step_cooldown_elapsed < Constants.RIFT_STEP_COOLDOWN: return
+    GameState.rift_step_cooldown_elapsed = 0.0
+    Events.rift_step_used.emit(direction)
+    var dest := player.global_position + direction.normalized() * Constants.RIFT_STEP_DISTANCE
+    # Tween position directly — bypasses collision for 1 frame (blink)
+    var tween := create_tween()
+    tween.tween_property(player, "global_position", dest, 0.05)
+
+# Rift Seal — unlocks G4 (Sovereign stirs scene)
+# Charge 2 s → release beam → 4 s vulnerability window (×1.5 damage) on target
+func charge_rift_seal() -> void:
+    if not GameState.rift_seal_unlocked: return
+    if GameState.rift_seal_cooldown_elapsed < Constants.RIFT_SEAL_COOLDOWN: return
+    Events.rift_seal_charged.emit()
+    # Visual: arm charges violet-gold for 2 s
+
+func release_rift_seal(target: Node) -> void:
+    GameState.rift_seal_cooldown_elapsed = 0.0
+    Events.rift_seal_released.emit(target.global_position)
+    if target and target.has_method("apply_vulnerability"):
+        target.apply_vulnerability(Constants.RIFT_SEAL_VULN_MULT, Constants.RIFT_SEAL_VULN_DURATION)
+```
+
+### Constants needed (add to Constants.gd):
+
+```gdscript
+const RIFT_PULSE_RADIUS     := 300.0
+const RIFT_PULSE_DURATION   := 20.0
+const RIFT_PULSE_COOLDOWN   := 45.0
+const RIFT_STEP_DISTANCE    := 200.0
+const RIFT_STEP_COOLDOWN    := 18.0
+const RIFT_SEAL_COOLDOWN    := 180.0   # 3 minutes
+const RIFT_SEAL_VULN_MULT   := 1.5
+const RIFT_SEAL_VULN_DURATION := 4.0
+```
+
+### Unlock triggers (call in story scene scripts):
+
+```gdscript
+# After first Rift encounter (Act I, Ancient Canopy)
+GameState.rift_pulse_unlocked = true
+Events.rift_shard_ability_unlocked.emit("rift_pulse")
+
+# Coral Skyland carved wound scene (Act II, G2)
+GameState.rift_step_unlocked = true
+Events.rift_shard_ability_unlocked.emit("rift_step")
+
+# Sovereign stirs (Act IV, Elder Sky Ruins)
+GameState.rift_seal_unlocked = true
+Events.rift_shard_ability_unlocked.emit("rift_seal")
+```
+
+---
+
+## 15c. Friendship System
+
+### File: `scripts/systems/FriendshipSystem.gd` (autoload)
+
+```gdscript
+extends Node
+
+const MAX_LEVEL := 5
+const FRIENDSHIP_QUEST_LEVEL := 3   # personal quest unlocks here
+const FRIENDSHIP_CLOSE_LEVEL := 5   # close friend scene here
+
+func add_friendship(npc_id: String, amount: int = 1) -> void:
+    var current := GameState.friendship_bars.get(npc_id, 0)
+    var new_level := mini(current + amount, MAX_LEVEL)
+    if new_level == current: return
+    GameState.friendship_bars[npc_id] = new_level
+    Events.friendship_increased.emit(npc_id, new_level)
+    if new_level == FRIENDSHIP_QUEST_LEVEL:
+        _unlock_personal_quest(npc_id)
+    if new_level == FRIENDSHIP_CLOSE_LEVEL:
+        _trigger_close_friend_scene(npc_id)
+
+func get_level(npc_id: String) -> int:
+    return GameState.friendship_bars.get(npc_id, 0)
+
+func _unlock_personal_quest(npc_id: String) -> void:
+    var quest_id := npc_id + "_personal_quest"
+    Events.friendship_quest_unlocked.emit(npc_id, quest_id)
+    GuildSystem.add_board_quest(quest_id)
+
+func _trigger_close_friend_scene(npc_id: String) -> void:
+    # Load and play npc_id close friend scene
+    Events.dialogue_started.emit(npc_id + "_close_friend")
+```
+
+### Friendship gain events:
+
+| Trigger | NPC | Gain |
+|---------|-----|------|
+| Talk to NPC after returning from hunt | Any | +1 |
+| Complete NPC's personal quest | Quest-giver NPC | +1 |
+| Hit rank milestone they care about | Relevant NPC | +1 |
+| Clear a hunt they posted | Board-posting NPC | +1 |
+| Complete hunt with companion NPC | Companion NPC | +1 |
+| Share hunt debrief (post-companion hunt) | Companion NPC | +1 |
+
+Friendship bars persist in `GameState.friendship_bars` (saved/loaded by `SaveSystem`).
+
+### NPC IDs (canonical, use these everywhere):
+
+```
+yela  voss  suni  athe  doram  ryn  brix  nem  fen  sora
+aldis  karas  lira  cael  vyn  tae  ova  wren  pip  holt
+ignas  hessa  sable  mira
+```
+
+---
+
+## 15d. Guild Story Branches
+
+### File: `scripts/systems/GuildStorySystem.gd` (autoload)
+
+Three divergence points in the main story. Each plays a different scene variant based on `GameState.active_guild`. Scenes are short dialogue+ambient variations — not full quest rewrites.
+
+```gdscript
+extends Node
+
+func trigger_story_branch(scene_id: String) -> void:
+    var guild := GameState.active_guild
+    var branch_key := scene_id + "_" + guild
+    if GameState.seen_guild_branches.has(branch_key): return
+    GameState.seen_guild_branches.append(branch_key)
+    Events.guild_story_branch_triggered.emit(scene_id, guild)
+    _load_branch_dialogue(scene_id, guild)
+
+func _load_branch_dialogue(scene_id: String, guild: String) -> void:
+    var path := "res://resources/dialogue/branches/%s_%s.tres" % [scene_id, guild]
+    var db := load(path) as DialogueDB
+    if db:
+        DialogueSystem.play(db)
+```
+
+### Three scene IDs and trigger locations:
+
+| scene_id | Story beat | Where to call `trigger_story_branch()` |
+|----------|-----------|----------------------------------------|
+| `"scene1_rift_noticed"` | Act I — something's wrong, Ancient Canopy | On returning to Veilwatch after first Rift sighting |
+| `"scene2_carved_wound"` | Act II — the artificially cut Rift tear, Coral Skyland | On interacting with the carved wound |
+| `"scene3_reclamation_revealed"` | Act III — who's behind the disruptions | On completing the Act III investigation quest |
+
+### Dialogue resource paths:
+
+```
+resources/dialogue/branches/
+├── scene1_rift_noticed_wardens.tres
+├── scene1_rift_noticed_crimson_claw.tres
+├── scene1_rift_noticed_ironveil_crafters.tres
+├── scene1_rift_noticed_skyborn.tres
+├── scene1_rift_noticed_hollowroot_lodge.tres
+├── scene1_rift_noticed_ember_pact.tres
+├── scene1_rift_noticed_voidwalkers.tres
+├── scene2_carved_wound_*.tres    (same pattern, 7 guilds)
+└── scene3_reclamation_revealed_*.tres
+```
+
+---
+
+## 15e. Serath Relationship System
+
+### Tracking in GameState (already in §15 schema):
+
+```gdscript
+var serath_knowledge: int = 0
+var serath_pieces_found: Array[String] = []
+```
+
+### Five discoverable pieces and how they increment:
+
+| piece_id | Location | Implementation |
+|----------|----------|----------------|
+| `"three_letters"` | Sky Ruins archives — 3 Area2D interact points scattered in Act IV | `_on_letter_interact()` → check all 3 found → increment |
+| `"npc_memory"` | Merchant Athe dialogue — unlocked if player has asked Athe about older customers ≥3 times | `DialogueDB` flag check in Athe's dialogue tree |
+| `"journal_fragment"` | Reclamation base, Volcanic Abyss — interactable prop | `_on_journal_interact()` |
+| `"annotated_doc"` | Voss has partial copy (triggers hint); full copy in Sky Ruins archives | Voss dialogue at ★★★☆☆ + archive interact |
+| `"the_approach"` | Before final confrontation — walk toward Serath rather than attacking | Player position check in final boss scene; requires `serath_knowledge >= 3` to unlock |
+
+```gdscript
+# Call this from each discovery location
+func discover_serath_piece(piece_id: String) -> void:
+    if GameState.serath_pieces_found.has(piece_id): return
+    GameState.serath_pieces_found.append(piece_id)
+    GameState.serath_knowledge += 1
+    Events.serath_piece_found.emit(piece_id)
+    Events.serath_knowledge_increased.emit(GameState.serath_knowledge)
+```
+
+### Final scene gating (in final boss scene script):
+
+```gdscript
+func _load_serath_final_scene() -> void:
+    var score := GameState.serath_knowledge
+    var variant: String
+    if score >= 4:
+        variant = "full"        # Serath talks, turns back once, Voss reads margin note
+    elif score >= 2:
+        variant = "acknowledged"  # brief surprise, something like relief
+    else:
+        variant = "minimal"     # professional, efficient, done
+    DialogueSystem.play(load("res://resources/dialogue/serath_final_%s.tres" % variant))
 ```
 
 ---
@@ -1110,16 +1394,17 @@ Combat feel: player movement, light/heavy/dodge, Thornmane fight, HUD basics.
 Priority order:
 1. `EquipmentSystem.gd` + `SkillDB.gd` — stats update when gear changes
 2. `CraftingSystem.gd` — craft from material dict in GameState
-3. `SaveSystem.gd` — write/read JSON
+3. `SaveSystem.gd` — write/read JSON (include all new GameState fields: friendship_bars, serath_knowledge, rift_*_unlocked, active_guild)
 4. `Veilwatch.tscn` — simple hub, Doram functional (craft menu), Yela functional (quest board with 1 quest)
 5. `DialogueSystem.gd` — linear NPC dialogue via F/E key
 6. One full weapon tree for Sword & Shield (3 upgrades, requires Thornmane materials)
 7. One full Thornmane armor set (4 pieces, skills stack)
 8. Wire one quest: accept → hunt Thornmane → return → reward
+9. `RiftShard.gd` — implement Rift Pulse (the G1 ability only); wire unlock trigger after first Rift encounter
 
 ### Phase 3 — Biomes + Aerial
 
-**Goal:** Ancient Canopy playable, Coral Skyland aerial working, 2 more monsters.
+**Goal:** Ancient Canopy playable, Coral Skyland aerial working, 2 more monsters, Rift Step unlock.
 
 Priority order:
 1. `BiomeManager.gd` — scene load/unload
@@ -1129,23 +1414,29 @@ Priority order:
 5. `AerialPlayer.gd` — aerial physics mode
 6. `CoralSkyland.tscn` — updraft zones, Insect Glaive aerial
 7. Monster intro sequence system
+8. Carved Rift wound interact scene in Coral Skyland → triggers `rift_step_unlocked`
+9. Wire Rift Step into `RiftShard.gd` (ability already scripted, just needs the flag)
 
 ### Phase 4 — Guild Progression
 
-**Goal:** All Veilwatch NPCs, meal buffs, guild rank gates, quest board.
+**Goal:** All Veilwatch NPCs, meal buffs, guild rank gates, quest board, friendship system.
 
 1. All NPC scenes + dialogue resources
 2. `GuildSystem.gd` — rank tracking, quest state, faint counter
 3. `MealSystem.gd` — Chef Suni UI, buff application
 4. Quest board with rank-gated quest list
 5. Ryn companion AI (G2 unlock)
+6. `FriendshipSystem.gd` — friendship bars, friendship gain events, personal quests at ★★★☆☆
+7. `GuildStorySystem.gd` — 21 branch dialogue resources (3 scenes × 7 guilds)
+8. Guild Hall Evolution — milestone changes to Veilwatch.tscn triggered by rank/quest events
+9. Seasonal Events — calendar flag in GameState, event dialogue + board changes
 
 ### Phase 5 — Content (Remaining Biomes + Monsters)
 
 Build in this order (gates on Guild rank):
 - G2: Frosted Peaks + Velkhrath · Wildspire Waste + Diablorak
-- G3: Volcanic Abyss + Ashmaul · Rotten Hollow + Chaoskrel
-- G4: Elder Sky Ruins + Serath + Sovereign
+- G3: Volcanic Abyss + Ashmaul · Rotten Hollow + Chaoskrel · Serath discoverable piece: journal_fragment at Reclamation base
+- G4: Elder Sky Ruins + Serath + Sovereign · Rift Seal unlock scene · All 5 Serath discovery pieces wired · Three-tier final scene variants
 
 ### Phase 6 — Polish
 
