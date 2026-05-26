@@ -240,7 +240,6 @@ def generate_one(entry: dict, out_path: Path, dry_run: bool = False) -> bool:
                 number_of_images=1,
                 aspect_ratio=aspect,
                 output_mime_type="image/png",
-                safety_filter_level="BLOCK_ONLY_HIGH",
                 person_generation="ALLOW_ADULT",
             ),
         )
