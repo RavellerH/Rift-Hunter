@@ -1,1 +1,2 @@
-google-genai>=0.8.0
+# No external packages needed — uses only Python stdlib (urllib)
+# python >= 3.8

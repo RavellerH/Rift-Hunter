@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
 Rift Hunter — Asset Generator
-Reads PROMPTS.md, extracts every prompt, generates images via Google Imagen 3.
-Outputs to docs/assets/generated/<category>/<slug>.png
+Reads PROMPTS.md, extracts every prompt, generates images via Pollinations.ai
+(free, no API key, Flux-based). Outputs to docs/assets/generated/<category>/
 
 Setup:
-    pip install -r requirements-gen.txt
-    export GOOGLE_API_KEY=your_key_here     # DO NOT hardcode or commit the key
+    No installation needed — uses Python stdlib only.
 
 Usage:
     python generate_assets.py --list              # preview all prompts
@@ -22,6 +21,8 @@ import re
 import sys
 import time
 import argparse
+import urllib.parse
+import urllib.request
 from pathlib import Path
 
 # ── Config ───────────────────────────────────────────────────────────────────
@@ -29,15 +30,16 @@ from pathlib import Path
 PROMPTS_FILE = Path(__file__).parent / "PROMPTS.md"
 OUTPUT_DIR   = Path(__file__).parent / "docs" / "assets" / "generated"
 
-# Gemini 2.5 Flash Image — free tier, uses generate_content with IMAGE modality
-IMAGEN_MODEL = "gemini-2.5-flash-image"
+# Pollinations.ai — free, no API key, Flux-based image generation
+POLLINATIONS_URL = "https://image.pollinations.ai/prompt/{prompt}"
+POLLINATIONS_MODEL = "flux"   # options: flux, flux-realism, turbo
 
-# Aspect ratio hints added to prompt text (Gemini doesn't take aspect ratio params)
-ASPECT_HINTS = {
-    "reference": "wide landscape format (16:9 ratio)",
-    "portrait":  "square portrait format (1:1 ratio)",
-    "sprite":    "square format (1:1 ratio)",
-    "ui":        "wide landscape format (16:9 ratio)",
+# Output dimensions per asset type
+SIZES = {
+    "reference": (1344, 768),   # 16:9
+    "portrait":  (768,  768),   # 1:1
+    "sprite":    (768,  768),   # 1:1
+    "ui":        (1344, 768),   # 16:9
 }
 
 # Pixel art prefix appended to sprite prompts
@@ -184,7 +186,7 @@ def parse_prompts(md_path: Path) -> list[dict]:
             counter += 1
 
         ptype    = _prompt_type(title, body, raw)
-        size_key = ptype if ptype in ASPECT_HINTS else "reference"
+        size_key = ptype if ptype in SIZES else "reference"
 
         results.append({
             "id":       slug,
@@ -201,61 +203,38 @@ def parse_prompts(md_path: Path) -> list[dict]:
 
 # ── Generation ────────────────────────────────────────────────────────────────
 
-def _get_client():
-    try:
-        from google import genai
-    except ImportError:
-        print("  ✗  Install google-genai: pip install -r requirements-gen.txt")
-        sys.exit(1)
-    api_key = os.environ.get("GOOGLE_API_KEY")
-    if not api_key:
-        print("  ✗  Set GOOGLE_API_KEY environment variable first.")
-        sys.exit(1)
-    return genai.Client(api_key=api_key)
-
-
 def generate_one(entry: dict, out_path: Path, dry_run: bool = False) -> bool:
-    aspect = ASPECT_HINTS.get(entry["size_key"], "1:1")
+    w, h = SIZES.get(entry["size_key"], (768, 768))
 
     prompt = entry["prompt"]
     if entry["type"] == "sprite":
         prompt = SPRITE_PREFIX + prompt
-    prompt = f"{prompt} Output in {aspect}."
 
     if dry_run:
         print(f"    [DRY RUN]  {entry['title']}")
-        print(f"               model  : {IMAGEN_MODEL}  aspect: {aspect}")
+        print(f"               model  : pollinations/{POLLINATIONS_MODEL}  {w}×{h}")
         print(f"               prompt : {prompt[:120]}{'…' if len(prompt) > 120 else ''}")
         return True
 
     print(f"  → {entry['title']}", end="", flush=True)
 
     try:
-        from google.genai import types
-        client = _get_client()
-
-        response = client.models.generate_content(
-            model=IMAGEN_MODEL,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                response_modalities=["IMAGE", "TEXT"],
-            ),
+        encoded = urllib.parse.quote(prompt, safe="")
+        url = (
+            f"https://image.pollinations.ai/prompt/{encoded}"
+            f"?width={w}&height={h}&model={POLLINATIONS_MODEL}&nologo=true&enhance=false"
         )
-
-        img_bytes = None
-        for part in response.candidates[0].content.parts:
-            if part.inline_data is not None:
-                img_bytes = part.inline_data.data
-                break
-
-        if not img_bytes:
-            print("  ✗  No image in response (may have been filtered)")
-            return False
+        req = urllib.request.Request(url, headers={"User-Agent": "RiftHunter-AssetGen/1.0"})
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            img_bytes = resp.read()
 
         out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_bytes(img_bytes)
+        # Pollinations returns JPEG; save with correct extension
+        suffix = ".jpg" if img_bytes[:3] == b"\xff\xd8\xff" else ".png"
+        final_path = out_path.with_suffix(suffix)
+        final_path.write_bytes(img_bytes)
 
-        print(f"  ✓  → {out_path.relative_to(Path.cwd())}")
+        print(f"  ✓  → {final_path.relative_to(Path.cwd())}")
         return True
 
     except Exception as e:
@@ -281,11 +260,7 @@ def main():
                         help="Regenerate even if output file already exists")
     args = parser.parse_args()
 
-    if not args.dry_run and not os.environ.get("GOOGLE_API_KEY"):
-        print("Error: set GOOGLE_API_KEY first.")
-        print("  export GOOGLE_API_KEY=your_key_here")
-        print("  Get a key at: aistudio.google.com")
-        sys.exit(1)
+    # Pollinations.ai requires no API key
 
     prompts = parse_prompts(PROMPTS_FILE)
 
