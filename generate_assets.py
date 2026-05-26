@@ -222,8 +222,6 @@ def generate_one(entry: dict, out_path: Path, dry_run: bool = False) -> bool:
     if entry["type"] == "sprite":
         prompt = SPRITE_PREFIX + prompt
 
-    negative = entry["negative"] or None
-
     if dry_run:
         print(f"    [DRY RUN]  {entry['title']}")
         print(f"               model  : {IMAGEN_MODEL}")
@@ -238,20 +236,16 @@ def generate_one(entry: dict, out_path: Path, dry_run: bool = False) -> bool:
 
         client = _get_client()
 
-        cfg_kwargs = dict(
-            number_of_images=1,
-            aspect_ratio=aspect,
-            output_mime_type="image/png",
-            safety_filter_level="BLOCK_ONLY_HIGH",
-            person_generation="ALLOW_ADULT",
-        )
-        if negative:
-            cfg_kwargs["negative_prompt"] = negative
-
         response = client.models.generate_images(
             model=IMAGEN_MODEL,
             prompt=prompt,
-            config=types.GenerateImagesConfig(**cfg_kwargs),
+            config=types.GenerateImagesConfig(
+                number_of_images=1,
+                aspect_ratio=aspect,
+                output_mime_type="image/png",
+                safety_filter_level="BLOCK_ONLY_HIGH",
+                person_generation="ALLOW_ADULT",
+            ),
         )
 
         if not response.generated_images:
