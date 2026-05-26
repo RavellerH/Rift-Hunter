@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 """
 Rift Hunter — Asset Generator
-Reads PROMPTS.md, extracts every prompt, generates images via Replicate (Flux Dev).
+Reads PROMPTS.md, extracts every prompt, generates images via Google Imagen 3.
 Outputs to docs/assets/generated/<category>/<slug>.png
 
-Usage:
+Setup:
     pip install -r requirements-gen.txt
-    export REPLICATE_API_TOKEN=r8_xxxxxxxxxxxxxxxxxxxx
+    export GOOGLE_API_KEY=your_key_here     # DO NOT hardcode or commit the key
+
+Usage:
     python generate_assets.py --list              # preview all prompts
-    python generate_assets.py --dry-run           # preview without generating
+    python generate_assets.py --dry-run           # test without API calls
     python generate_assets.py                     # generate everything
     python generate_assets.py --category player   # one category only
-    python generate_assets.py --id male_hunter_reference_sheet  # one prompt only
+    python generate_assets.py --id male_hunter_reference_sheet
+    python generate_assets.py --overwrite         # regenerate existing files
 """
 
 import os
@@ -19,7 +22,6 @@ import re
 import sys
 import time
 import argparse
-import urllib.request
 from pathlib import Path
 
 # ── Config ───────────────────────────────────────────────────────────────────
@@ -27,15 +29,16 @@ from pathlib import Path
 PROMPTS_FILE = Path(__file__).parent / "PROMPTS.md"
 OUTPUT_DIR   = Path(__file__).parent / "docs" / "assets" / "generated"
 
-# Replicate model — Flux Dev is closest to Midjourney quality, handles pixel art well
-MODEL = "black-forest-labs/flux-dev"
+# Google Imagen 3 — Google AI Studio (api.ai.google.dev)
+IMAGEN_MODEL = "imagen-3.0-generate-001"
 
-# Output dimensions per asset type
-SIZES = {
-    "reference": {"width": 1344, "height": 768},   # 16:9 — monster/character design sheets
-    "portrait":  {"width": 768,  "height": 768},   # 1:1  — NPC dialogue headshots
-    "sprite":    {"width": 768,  "height": 768},   # 1:1  — sprite sheet attempts
-    "ui":        {"width": 1344, "height": 768},   # 16:9 — UI concepts and screens
+# Imagen 3 aspect ratios per asset type
+# Supported: "1:1", "3:4", "4:3", "9:16", "16:9"
+ASPECT_RATIOS = {
+    "reference": "16:9",
+    "portrait":  "1:1",
+    "sprite":    "1:1",
+    "ui":        "16:9",
 }
 
 # Pixel art prefix appended to sprite prompts
@@ -182,7 +185,7 @@ def parse_prompts(md_path: Path) -> list[dict]:
             counter += 1
 
         ptype    = _prompt_type(title, body, raw)
-        size_key = ptype if ptype in SIZES else "reference"
+        size_key = ptype if ptype in ASPECT_RATIOS else "reference"
 
         results.append({
             "id":       slug,
@@ -199,60 +202,65 @@ def parse_prompts(md_path: Path) -> list[dict]:
 
 # ── Generation ────────────────────────────────────────────────────────────────
 
-def generate_one(entry: dict, out_path: Path, dry_run: bool = False) -> bool:
+def _get_client():
     try:
-        import replicate
+        from google import genai
     except ImportError:
-        print("  ✗  Install replicate: pip install replicate")
+        print("  ✗  Install google-genai: pip install -r requirements-gen.txt")
         sys.exit(1)
+    api_key = os.environ.get("GOOGLE_API_KEY")
+    if not api_key:
+        print("  ✗  Set GOOGLE_API_KEY environment variable first.")
+        sys.exit(1)
+    return genai.Client(api_key=api_key)
 
-    size = SIZES[entry["size_key"]]
+
+def generate_one(entry: dict, out_path: Path, dry_run: bool = False) -> bool:
+    aspect = ASPECT_RATIOS.get(entry["size_key"], "1:1")
 
     prompt = entry["prompt"]
     if entry["type"] == "sprite":
         prompt = SPRITE_PREFIX + prompt
 
-    negative = entry["negative"] or (
-        "photorealistic, 3D render, blurry, soft edges, watermark, "
-        "extra limbs, deformed, low quality, jpeg artifacts"
-    )
+    negative = entry["negative"] or None
 
     if dry_run:
         print(f"    [DRY RUN]  {entry['title']}")
-        print(f"               model  : {MODEL}")
-        print(f"               size   : {size['width']}×{size['height']}")
+        print(f"               model  : {IMAGEN_MODEL}")
+        print(f"               aspect : {aspect}")
         print(f"               prompt : {prompt[:120]}{'…' if len(prompt) > 120 else ''}")
         return True
 
     print(f"  → {entry['title']}", end="", flush=True)
 
     try:
-        output = replicate.run(
-            MODEL,
-            input={
-                "prompt":           prompt,
-                "negative_prompt":  negative,
-                "width":            size["width"],
-                "height":           size["height"],
-                "num_inference_steps": 28,
-                "guidance_scale":   3.5,
-                "output_format":    "png",
-                "output_quality":   95,
-            },
+        from google.genai import types
+
+        client = _get_client()
+
+        cfg_kwargs = dict(
+            number_of_images=1,
+            aspect_ratio=aspect,
+            output_mime_type="image/png",
+            safety_filter_level="BLOCK_ONLY_HIGH",
+            person_generation="ALLOW_ADULT",
+        )
+        if negative:
+            cfg_kwargs["negative_prompt"] = negative
+
+        response = client.models.generate_images(
+            model=IMAGEN_MODEL,
+            prompt=prompt,
+            config=types.GenerateImagesConfig(**cfg_kwargs),
         )
 
-        # Replicate returns a list — first item is the image URL or FileOutput
-        if not output:
-            print("  ✗  No output returned")
+        if not response.generated_images:
+            print("  ✗  No images returned (prompt may have been filtered)")
             return False
 
-        img = output[0]
+        img_bytes = response.generated_images[0].image.image_bytes
         out_path.parent.mkdir(parents=True, exist_ok=True)
-
-        if hasattr(img, "read"):
-            out_path.write_bytes(img.read())
-        else:
-            urllib.request.urlretrieve(str(img), out_path)
+        out_path.write_bytes(img_bytes)
 
         print(f"  ✓  → {out_path.relative_to(Path.cwd())}")
         return True
@@ -266,7 +274,7 @@ def generate_one(entry: dict, out_path: Path, dry_run: bool = False) -> bool:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Generate Rift Hunter assets via Replicate Flux Dev"
+        description="Generate Rift Hunter assets via Google Imagen 3"
     )
     parser.add_argument("--dry-run",  action="store_true",
                         help="Print prompts without calling the API")
@@ -280,10 +288,10 @@ def main():
                         help="Regenerate even if output file already exists")
     args = parser.parse_args()
 
-    if not args.dry_run and not os.environ.get("REPLICATE_API_TOKEN"):
-        print("Error: set REPLICATE_API_TOKEN first.")
-        print("  export REPLICATE_API_TOKEN=r8_xxxxxxxxxxxx")
-        print("  Get a token at: https://replicate.com/account/api-tokens")
+    if not args.dry_run and not os.environ.get("GOOGLE_API_KEY"):
+        print("Error: set GOOGLE_API_KEY first.")
+        print("  export GOOGLE_API_KEY=your_key_here")
+        print("  Get a key at: aistudio.google.com")
         sys.exit(1)
 
     prompts = parse_prompts(PROMPTS_FILE)
