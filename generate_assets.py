@@ -29,15 +29,15 @@ from pathlib import Path
 PROMPTS_FILE = Path(__file__).parent / "PROMPTS.md"
 OUTPUT_DIR   = Path(__file__).parent / "docs" / "assets" / "generated"
 
-# Imagen 4 — available on your AI Studio key
-IMAGEN_MODEL = "imagen-4.0-generate-001"
+# Gemini 2.5 Flash Image — free tier, uses generate_content with IMAGE modality
+IMAGEN_MODEL = "gemini-2.5-flash-image"
 
-# Aspect ratios supported by Imagen 4
+# Aspect ratio hints added to prompt text (Gemini doesn't take aspect ratio params)
 ASPECT_HINTS = {
-    "reference": "16:9",
-    "portrait":  "1:1",
-    "sprite":    "1:1",
-    "ui":        "16:9",
+    "reference": "wide landscape format (16:9 ratio)",
+    "portrait":  "square portrait format (1:1 ratio)",
+    "sprite":    "square format (1:1 ratio)",
+    "ui":        "wide landscape format (16:9 ratio)",
 }
 
 # Pixel art prefix appended to sprite prompts
@@ -220,6 +220,7 @@ def generate_one(entry: dict, out_path: Path, dry_run: bool = False) -> bool:
     prompt = entry["prompt"]
     if entry["type"] == "sprite":
         prompt = SPRITE_PREFIX + prompt
+    prompt = f"{prompt} Output in {aspect}."
 
     if dry_run:
         print(f"    [DRY RUN]  {entry['title']}")
@@ -233,22 +234,24 @@ def generate_one(entry: dict, out_path: Path, dry_run: bool = False) -> bool:
         from google.genai import types
         client = _get_client()
 
-        response = client.models.generate_images(
+        response = client.models.generate_content(
             model=IMAGEN_MODEL,
-            prompt=prompt,
-            config=types.GenerateImagesConfig(
-                number_of_images=1,
-                aspect_ratio=aspect,
-                output_mime_type="image/png",
-                person_generation="ALLOW_ADULT",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_modalities=["IMAGE", "TEXT"],
             ),
         )
 
-        if not response.generated_images:
-            print("  ✗  No image returned (may have been filtered)")
+        img_bytes = None
+        for part in response.candidates[0].content.parts:
+            if part.inline_data is not None:
+                img_bytes = part.inline_data.data
+                break
+
+        if not img_bytes:
+            print("  ✗  No image in response (may have been filtered)")
             return False
 
-        img_bytes = response.generated_images[0].image.image_bytes
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_bytes(img_bytes)
 
