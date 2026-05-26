@@ -29,16 +29,15 @@ from pathlib import Path
 PROMPTS_FILE = Path(__file__).parent / "PROMPTS.md"
 OUTPUT_DIR   = Path(__file__).parent / "docs" / "assets" / "generated"
 
-# Google Imagen 3 — Google AI Studio (api.ai.google.dev)
-IMAGEN_MODEL = "imagen-3.0-generate-001"
+# Gemini 2.0 Flash image generation — free tier, available on all AI Studio keys
+IMAGEN_MODEL = "gemini-2.0-flash-preview-image-generation"
 
-# Imagen 3 aspect ratios per asset type
-# Supported: "1:1", "3:4", "4:3", "9:16", "16:9"
-ASPECT_RATIOS = {
-    "reference": "16:9",
-    "portrait":  "1:1",
-    "sprite":    "1:1",
-    "ui":        "16:9",
+# Aspect ratio hints appended to prompts (Gemini doesn't accept aspect ratio params)
+ASPECT_HINTS = {
+    "reference": "wide landscape 16:9 format",
+    "portrait":  "square 1:1 format",
+    "sprite":    "square 1:1 format",
+    "ui":        "wide landscape 16:9 format",
 }
 
 # Pixel art prefix appended to sprite prompts
@@ -185,7 +184,7 @@ def parse_prompts(md_path: Path) -> list[dict]:
             counter += 1
 
         ptype    = _prompt_type(title, body, raw)
-        size_key = ptype if ptype in ASPECT_RATIOS else "reference"
+        size_key = ptype if ptype in ASPECT_HINTS else "reference"
 
         results.append({
             "id":       slug,
@@ -216,16 +215,16 @@ def _get_client():
 
 
 def generate_one(entry: dict, out_path: Path, dry_run: bool = False) -> bool:
-    aspect = ASPECT_RATIOS.get(entry["size_key"], "1:1")
+    aspect_hint = ASPECT_HINTS.get(entry["size_key"], "square 1:1 format")
 
     prompt = entry["prompt"]
     if entry["type"] == "sprite":
         prompt = SPRITE_PREFIX + prompt
+    prompt = f"{prompt} [{aspect_hint}]"
 
     if dry_run:
         print(f"    [DRY RUN]  {entry['title']}")
         print(f"               model  : {IMAGEN_MODEL}")
-        print(f"               aspect : {aspect}")
         print(f"               prompt : {prompt[:120]}{'…' if len(prompt) > 120 else ''}")
         return True
 
@@ -236,23 +235,24 @@ def generate_one(entry: dict, out_path: Path, dry_run: bool = False) -> bool:
 
         client = _get_client()
 
-        response = client.models.generate_images(
+        response = client.models.generate_content(
             model=IMAGEN_MODEL,
-            prompt=prompt,
-            config=types.GenerateImagesConfig(
-                number_of_images=1,
-                aspect_ratio=aspect,
-                output_mime_type="image/png",
-                safety_filter_level="BLOCK_ONLY_HIGH",
-                person_generation="ALLOW_ADULT",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_modalities=["IMAGE", "TEXT"],
             ),
         )
 
-        if not response.generated_images:
-            print("  ✗  No images returned (prompt may have been filtered)")
+        img_bytes = None
+        for part in response.candidates[0].content.parts:
+            if part.inline_data is not None:
+                img_bytes = part.inline_data.data
+                break
+
+        if not img_bytes:
+            print("  ✗  No image in response (may have been filtered)")
             return False
 
-        img_bytes = response.generated_images[0].image.image_bytes
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_bytes(img_bytes)
 
