@@ -29,6 +29,29 @@ The Hunter has no name, no backstory, no spoken dialogue. NPCs call you "Hunter,
 
 This is intentional. The world has enough personality that the player doesn't need a character to arrive with it.
 
+### Character Creation
+
+Offered once at the main menu before the first hunt.
+
+**Gender:** Male or Female. Each has a distinct visual identity:
+- **Male Hunter** — heavier plate armor, warrior build, dark navy and burnt sienna palette
+- **Female Hunter** — lighter leather and cloth scout armor, agile build, tawny and forest green palette
+
+Same moveset, same stats, same story. The difference is entirely aesthetic — and different enough that a second playthrough feels visually fresh.
+
+**Appearance presets (both genders):**
+
+| Option | Choices |
+|--------|---------|
+| Skin tone | 4 — warm light through deep warm dark |
+| Hair style | 4 — short, medium-swept, long, braided |
+| Hair color | 4 — near-black, auburn, ash blonde, silver-white |
+| Eye color | 3 — warm brown, clear blue, forest green |
+
+No sliders, no full editor. Enough to feel like yours. The Rift Shard is always in the left palm — that never changes.
+
+Guild selection is **not** part of character creation — it happens when you arrive at Veilwatch, after the intro hunt.
+
 ---
 
 ## Rift Shard — Resonance Abilities

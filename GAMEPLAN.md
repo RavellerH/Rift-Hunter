@@ -1018,6 +1018,13 @@ signal serath_piece_found(piece_id: String)
 ```gdscript
 extends Node
 
+# Character creation (set once at game start, never changes)
+var player_gender: String = ""          # "male" or "female"
+var player_skin_tone: int = 0           # 0–3 (light to dark)
+var player_hair_style: int = 0          # 0–3 (short, medium, long, braided)
+var player_hair_color: int = 0          # 0–3 (dark, auburn, light, silver)
+var player_eye_color: int = 0           # 0–2 (brown, blue, green)
+
 # Player
 var player_hp: float = Constants.BASE_HP
 var player_stamina: float = Constants.BASE_STAMINA

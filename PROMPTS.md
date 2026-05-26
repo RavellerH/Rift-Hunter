@@ -41,18 +41,25 @@ of crystallized Void energy — embedded in their left palm under scar tissue. T
 violet-blue glow through the skin. Practical armor designed for mobility, crafted from monster parts.
 Anime protagonist energy — determined, capable, ready for whatever comes next.
 
+**Two versions:** Male Hunter (heavy plate warrior build) and Female Hunter (lighter leather scout build).
+Both carry the Rift Shard in the left palm. Both are equally capable — different aesthetic, same role.
+
+**Character creation presets (both genders):** 4 skin tones (light to dark), 3–4 hair styles,
+3–4 hair colors (dark, auburn, light, silver), 3 eye colors (brown, blue, green).
+Generate each reference sheet with the medium-tone preset as the visual anchor.
+
 ---
 
-## 1 — Hunter Reference Sheet (Midjourney)
+## 1 — Male Hunter Reference Sheet (Midjourney)
 
-**Purpose:** Master visual reference. Use this as the ControlNet source for all subsequent sprite work.
+**Purpose:** Master visual reference for the male Hunter. Use as ControlNet source for all male sprite work.
 
 ```
-full character reference sheet of a lone hunter warrior, front view center, left side view, 
+full character reference sheet of a lone hunter warrior (MALE), front view center, left side view, 
 right side view, three-quarter view, back view, all on dark charcoal background with subtle 
 grid lines. anime pixel art style, 2.5D side-scroller ARPG.
 
-Character design: young adult hunter, lithe and athletic build, practical layered armor 
+Character design: young adult male hunter, lean athletic build, practical layered plate armor 
 combining dark leather pauldrons, chest plate with etched Guild insignia, wrapped bracers, 
 knee-high boots. Sword and round shield on back. Left hand shows glowing violet-blue scar 
 across palm — Rift Shard crystal barely visible under healed skin, faint luminescence. 
@@ -60,23 +67,51 @@ Dark traveling cloak, worn at edges. Determined expression. Medium-length dark h
 a few wind-swept strands. Subtle Rift energy faint glow at left hand in all poses.
 
 Color palette: dark navy armor, burnt sienna leather, silver trim, violet Rift glow accent.
-Consistent across all five angles. Style: Monster Hunter meets Hollow Knight meets dark 
-anime RPG. Clean linework, visible pixel texture, rich shadows.
+Consistent across all five angles. Style: Monster Hunter meets Hollow Knight meets vibrant
+adventure anime RPG. Clean linework, visible pixel texture, rich shadows.
 
 --style raw --ar 16:9 --v 6
 ```
 
 ---
 
-## 2 — Hunter Sprite Sheet: Idle + Walk + Run (Stable Diffusion)
+## 2 — Female Hunter Reference Sheet (Midjourney)
+
+**Purpose:** Master visual reference for the female Hunter. Use as ControlNet source for all female sprite work.
+
+```
+full character reference sheet of a lone hunter (FEMALE), front view center, left side view, 
+right side view, three-quarter view, back view, all on dark charcoal background with subtle 
+grid lines. anime pixel art style, 2.5D side-scroller ARPG.
+
+Character design: young adult female hunter, lithe and nimble build, agile scout-style armor — 
+layered tawny leather jacket over forest-green cloth undershirt, light fitted pauldron on right 
+shoulder only, leather bracers, slim knee-high boots. Lightweight and mobile — 
+fabric-dominant, no heavy plate. A shortbow on her back as a secondary alongside her main weapon.
+Left hand shows glowing violet-blue scar across palm — Rift Shard crystal barely visible under 
+healed skin, faint luminescence. Light hood resting at collar (not raised), worn at edges.
+Expression: warm, sharp-eyed, quietly confident. 
+Medium-length hair with a small braid behind left ear.
+
+Color palette: tawny leather, forest green cloth, copper trim, warm amber accents, 
+violet Rift glow accent at left hand. Lighter and warmer than the male armor palette.
+Consistent across all five angles. Style: Monster Hunter meets Genshin Impact ranger 
+meets vibrant adventure anime. Clean linework, visible pixel texture, rich warm shadows.
+
+--style raw --ar 16:9 --v 6
+```
+
+---
+
+## 3 — Male Hunter Sprite Sheet: Idle + Walk + Run (Stable Diffusion)
 
 **Purpose:** Core movement animation strip. Import into Aseprite, clean up timing, export to Godot.
 
 ```
 pixel art sprite sheet, single character, white background, horizontal strip layout.
-48x48 pixels per frame. 
+48x48 pixels per frame. MALE hunter in dark navy plate armor.
 
-Row 1 (4 frames) — IDLE ANIMATION: hunter standing facing right in 3/4 profile. 
+Row 1 (4 frames) — IDLE: hunter standing facing right in 3/4 profile. 
 Subtle breathing, chest rises, cloak sways slightly. Frames: neutral stance, 
 slight chest expand, peak breath, return. Left hand loosely at side with faint violet glow.
 
@@ -86,21 +121,52 @@ on back visible. Arms swing naturally. Cloak moves with momentum.
 Row 3 (8 frames) — RUN: forward lean, faster arm pump, cloak streams back, 
 right hand near weapon hilt. Urgency without desperation.
 
-Dark fantasy ARPG hunter character, anime pixel art style, 48x48 per frame, 
-clean single-pixel outlines, dark navy and leather armor, violet Rift shard glow on left hand.
+vibrant adventure ARPG male hunter, dark navy and leather plate armor, 
+violet Rift shard glow on left hand. Anime pixel art style, 48x48 per frame, 
+clean single-pixel outlines.
 NEGATIVE: photorealistic, blurry, extra frames, inconsistent character, 
 multiple characters, random objects
 ```
 
 ---
 
-## 3 — Hunter Sprite Sheet: Combat Animations (Stable Diffusion)
+## 4 — Female Hunter Sprite Sheet: Idle + Walk + Run (Stable Diffusion)
 
-**Purpose:** Full combat animation sheet. One sheet per weapon type — start with Sword & Shield.
+**Purpose:** Core movement animation strip for female Hunter.
+
+```
+pixel art sprite sheet, single character, white background, horizontal strip layout.
+48x48 pixels per frame. FEMALE hunter in tawny leather + forest green scout armor.
+
+Row 1 (4 frames) — IDLE: hunter standing facing right in 3/4 profile. 
+Subtle breathing. Light hood at collar shifts slightly. Shortbow on back visible.
+Left hand loosely at side with faint violet glow.
+Frames: neutral stance, slight breath rise, peak, return.
+
+Row 2 (8 frames) — WALK: smooth nimble walk cycle facing right, 
+lighter step than a plate-armored warrior. Shortbow bounces subtly on back. 
+Arms swing naturally, fluid.
+
+Row 3 (8 frames) — RUN: forward lean, athletic sprint, 
+right hand near weapon hilt, faster and lighter than the male run. 
+Hood lifts slightly. Hair moves with speed.
+
+vibrant adventure ARPG female hunter, tawny leather + forest green cloth scout armor, 
+shortbow on back, violet Rift shard glow on left hand. 
+Anime pixel art style, 48x48 per frame, clean single-pixel outlines.
+NEGATIVE: photorealistic, blurry, extra frames, inconsistent character, 
+multiple characters, revealing outfit
+```
+
+---
+
+## 5 — Male Hunter Sprite Sheet: Combat Animations (Stable Diffusion)
+
+**Purpose:** Full combat animation sheet for male Hunter — Sword & Shield.
 
 ```
 pixel art sprite sheet, single character facing right, white background, horizontal strip.
-48x48 pixels per frame. Hunter in Sword & Shield combat stance.
+48x48 pixels per frame. MALE hunter in dark navy plate, Sword & Shield combat stance.
 
 Row 1 (6 frames) — LIGHT ATTACK 1: quick forward horizontal slash, sword drawn right to left.
 Frames: draw, extend, contact flash (white impact pixel on frame 3), follow-through, recovery.
@@ -132,22 +198,107 @@ NEGATIVE: photorealistic, blurry, inconsistent scale, extra characters
 
 ---
 
-## 4 — Hunter Portrait (Midjourney — for UI / dialogue box)
+## 6 — Female Hunter Sprite Sheet: Combat Animations (Stable Diffusion)
 
-**Purpose:** HUD corner portrait and dialogue box headshot.
+**Purpose:** Full combat animation sheet for female Hunter — Sword & Shield (same moveset, agile style).
 
 ```
-close-up portrait painting of a lone hunter, anime dark fantasy RPG style. 
-Face: young adult, sharp determined eyes, slight battle weariness, 
+pixel art sprite sheet, single character facing right, white background, horizontal strip.
+48x48 pixels per frame. FEMALE hunter in tawny leather scout armor, Sword & Shield combat stance.
+
+Row 1 (6 frames) — LIGHT ATTACK 1: quick forward slash, lighter and faster than male version.
+Frames: draw, extend, contact flash, follow-through, recovery. More fluid arc.
+
+Row 2 (6 frames) — LIGHT ATTACK 2: rising diagonal slash. 
+Frames: wind-up, rising slash, apex with brief impact, return. Uses momentum efficiently.
+
+Row 3 (8 frames) — LIGHT ATTACK 3 (COMBO FINISHER): spinning cut with full rotation, 
+agile rather than powerful. Rift Shard in left hand pulses violet on impact frame.
+
+Row 4 (4 frames) — HEAVY CHARGE: low crouch, sword pulled back, 
+amber charge energy building at blade — tighter and more coiled than male version.
+
+Row 5 (8 frames) — HEAVY RELEASE: forward dash lunge, quick and sharp, 
+shockwave burst on impact. Precision strike rather than brute force.
+
+Row 6 (8 frames) — DODGE ROLL: nimble side-roll, faster arc than male dodge.
+Frames 3-6: white ghost outline (i-frame indicator). Hood lifts on roll.
+
+Row 7 (4 frames) — HURT: sharp recoil, pain expression, white body flash.
+Row 8 (8 frames) — DEATH: stagger, catch self, collapse, still.
+
+NEGATIVE: photorealistic, blurry, inconsistent scale, extra characters, revealing outfit
+```
+
+---
+
+## 7 — Male Hunter Portrait (Midjourney — for UI / dialogue box)
+
+**Purpose:** HUD corner portrait and dialogue box headshot for male Hunter.
+
+```
+close-up portrait of a male hunter, vibrant adventure anime RPG style. 
+Face: young adult male, sharp determined eyes, slight battle readiness, 
 one faint scar across cheekbone. Dark hair. Small violet crystal glow 
 barely visible at lower frame edge (the Rift Shard in left hand off-frame).
 
-Background: dark blurred stone wall with faint violet Rift energy traces.
-Style: NPC portrait style — Hollow Knight dialogue meets Nier Automata character art.
-Rich shadows, single strong rim light from left. Painterly but with digital precision.
-Expression: calm focus before a fight.
+Background: blurred stone wall with faint warm lantern light and violet Rift energy traces.
+Style: NPC portrait style — Monster Hunter meets Genshin Impact character art.
+Rich shadows, single strong rim light from left. Painterly digital precision.
+Expression: calm focus, ready for the next hunt.
 
 --style raw --ar 1:1 --v 6
+```
+
+---
+
+## 8 — Female Hunter Portrait (Midjourney — for UI / dialogue box)
+
+**Purpose:** HUD corner portrait and dialogue box headshot for female Hunter.
+
+```
+close-up portrait of a female hunter, vibrant adventure anime RPG style. 
+Face: young adult female, warm sharp eyes, bright and aware, confident expression. 
+Small braid visible at left ear. Tawny leather pauldron visible at shoulder.
+Light hood at collar. Small violet crystal glow barely visible at lower frame edge 
+(the Rift Shard in left hand off-frame).
+
+Background: warm blurred wood and stone — guild hall interior, lantern glow from right.
+Style: NPC portrait — Genshin Impact meets My Time at Sandrock character art.
+Warm lighting, rich colors. Painterly digital precision.
+Expression: slight smile, genuinely ready for this. Capable without being tough.
+
+--style raw --ar 1:1 --v 6
+```
+
+---
+
+## 9 — Character Creation Screen (Midjourney — UI concept art)
+
+**Purpose:** Reference for the character creation screen layout and feel.
+
+```
+character creation screen UI mockup for an anime adventure ARPG, 
+warm and inviting visual design. 
+
+Left side: full-body character preview — two versions side by side, 
+male (dark navy plate armor, sword and shield) and female 
+(tawny leather scout armor, shortbow on back), both facing slightly toward each other.
+Both have the same faint violet glow at left palm (Rift Shard).
+
+Right side: preset selection panels — 
+four skin tone circles (warm light to deep warm dark), 
+four hair style silhouettes (short, medium-swept, long, braided), 
+four hair color swatches (near-black, auburn, ash blonde, silver-white), 
+three eye color dots (warm brown, clear blue, forest green).
+
+Bottom: guild selection teaser — six colored guild insignia icons, 
+grayed out with "Choose at Veilwatch" label.
+
+Art style: Genshin Impact meets Monster Hunter — warm, inviting, 
+vibrant fantasy color palette. Gold and navy UI accents.
+
+--style raw --ar 16:9 --v 6
 ```
 
 ---
