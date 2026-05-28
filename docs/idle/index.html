@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rift Hunter: Veilwatch Idle</title>
+  <meta name="description" content="An idle game set in the world of Rift Hunter. Hunt Veilborn, join a guild, reveal the monsters of Aethara.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── Guild Select Overlay ───────────────────────────────────────────────── -->
+<div id="guild-select">
+  <h2>Choose Your Guild</h2>
+  <p>Every hunter in Veilwatch pledges to a guild. Your choice shapes your upgrades and playstyle — choose wisely.</p>
+  <div id="guild-grid"></div>
+</div>
+
+<!-- ── Modal ──────────────────────────────────────────────────────────────── -->
+<div id="modal" onclick="if(event.target===this)closeModal()"></div>
+
+<!-- ── Toast ──────────────────────────────────────────────────────────────── -->
+<div id="toast"></div>
+
+<!-- ── Game Layout ─────────────────────────────────────────────────────────── -->
+<div class="game-wrap">
+
+  <!-- Header / Resource Bar -->
+  <header>
+    <div class="game-title">◈ RIFT HUNTER: VEILWATCH</div>
+
+    <div class="resources">
+      <div class="res-item">
+        <span class="res-label">Rift Shards</span>
+        <span class="res-value res-shards" id="res-shards">0</span>
+      </div>
+      <div class="res-item">
+        <span class="res-label">Materials</span>
+        <span class="res-value res-mats" id="res-mats">0</span>
+      </div>
+      <div class="res-item">
+        <span class="res-label">Guild Tokens</span>
+        <span class="res-value res-tokens" id="res-tokens">0</span>
+      </div>
+      <div class="res-item">
+        <span class="res-label">Passive</span>
+        <span class="res-value res-rate" id="res-rate">+0/s</span>
+      </div>
+      <div class="res-item">
+        <span class="res-label">Per Click</span>
+        <span class="res-value res-click" id="res-click">+1</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="reset-btn" onclick="resetGame()">Reset</button>
+    </div>
+  </header>
+
+  <!-- Left Panel: Hunt + Guild + Upgrades -->
+  <aside class="left-panel">
+
+    <!-- Hunt Button -->
+    <div class="hunt-area">
+      <div class="hunter-portrait">
+        <!-- Swap src to real asset when available -->
+        <img src="../assets/generated/player/7_male_hunter_portrait_midjourney_for_ui_dialogue_box.jpg"
+             onerror="this.style.display='none'; this.parentElement.textContent='⚔️'"
+             alt="Hunter">
+      </div>
+      <button id="hunt-btn">⚔ HUNT</button>
+    </div>
+
+    <!-- Guild -->
+    <div class="panel-section">
+      <div class="panel-title">Guild</div>
+      <div id="guild-area"></div>
+    </div>
+
+    <!-- Upgrades -->
+    <div class="panel-section">
+      <div class="panel-title">Upgrades</div>
+      <div id="upgrades-list"></div>
+    </div>
+
+  </aside>
+
+  <!-- Center Panel: Monster Codex -->
+  <main class="center-panel">
+    <div class="codex-header">
+      <h2>Monster Codex</h2>
+      <p>Veilborn encountered across Aethara. Click to reveal a registered entry.</p>
+    </div>
+    <div id="codex-grid"></div>
+  </main>
+
+  <!-- Right Panel: Quests -->
+  <aside class="right-panel">
+    <div class="panel-section">
+      <div class="panel-title">Active Quests</div>
+      <div id="quests-list"></div>
+    </div>
+  </aside>
+
+  <!-- Footer -->
+  <footer>
+    <span>Rift Hunter: Veilwatch Idle — promotional demo</span>
+    <span>
+      <a href="https://github.com/ravellerh/rift-hunter" target="_blank">Full game in development →</a>
+    </span>
+  </footer>
+
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
